@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Révisions Finance de marché</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+/* Layout: sticky top bar with three views (Cours, Connaissances, Quiz et exos); course view = chapter list + reading column */
+:root{
+  --bg:#f3f6f5;--surface:#ffffff;--surface2:#e8eeec;--fg:#13221f;--muted:#566763;--line:#d3ddda;
+  --accent:#0f5c52;--accent-fg:#ffffff;--hi:#a85f00;--hi-bg:#fbf0d9;
+  --good:#12704a;--good-bg:#dff2e8;--bad:#b3261e;--bad-bg:#fbe4e1;
+  --display:'Newsreader',Georgia,serif;--body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1514;--surface:#141f1d;--surface2:#1b2a27;--fg:#e4eeec;--muted:#93a7a2;--line:#27393a;
+  --accent:#5fcdb9;--accent-fg:#06201b;--hi:#f0b44d;--hi-bg:#33280f;
+  --good:#5fd29a;--good-bg:#12352a;--bad:#ff8f86;--bad-bg:#3b1c1a;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1514;--surface:#141f1d;--surface2:#1b2a27;--fg:#e4eeec;--muted:#93a7a2;--line:#27393a;
+  --accent:#5fcdb9;--accent-fg:#06201b;--hi:#f0b44d;--hi-bg:#33280f;
+  --good:#5fd29a;--good-bg:#12352a;--bad:#ff8f86;--bad-bg:#3b1c1a;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 24px;padding-block:10px 0}
+.brand{font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;padding-bottom:8px}
+.brand small{font-family:var(--body);font-size:.78rem;font-weight:400;color:var(--muted);margin-left:8px}
+nav{display:flex;gap:2px;max-width:100%;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:8px 10px 9px;font-weight:500;color:var(--muted);white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+main{padding-block:28px 64px}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.01em;text-wrap:balance;line-height:1.2;margin:0}
+h2{font-size:1.9rem}
+h3{font-size:1.25rem}
+.lead{color:var(--muted);margin:6px 0 0}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.ghost{background:none}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+select,input[type=text]{font:inherit;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:7px 10px;min-width:0}
+.stat{font-size:.88rem;color:var(--muted)}
+.stat b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* Cours */
+.course{display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px;align-items:start}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 72px);display:flex;flex-direction:column;gap:2px}
+.toc button{text-align:left;background:none;border:0;border-left:2px solid var(--line);padding:7px 12px;color:var(--muted);display:flex;gap:8px;justify-content:space-between}
+.toc button[aria-current="true"]{border-left-color:var(--accent);color:var(--fg);font-weight:600}
+.toc .done{color:var(--good);font-size:.85rem}
+.chap{min-width:0;max-width:70ch}
+.chap h2{margin-bottom:4px}
+.chap h3{margin:28px 0 8px}
+.chap p,.chap ul{margin:10px 0}
+.chap ul{padding-left:1.2em}
+.chap li{margin:4px 0}
+.formula{font-family:var(--mono);font-size:.95rem;background:var(--surface2);border-radius:6px;padding:12px 14px;margin:12px 0;overflow-x:auto;white-space:nowrap}
+.callout{background:var(--hi-bg);border-left:3px solid var(--hi);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+.tablebox{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.95rem}
+th,td{text-align:left;border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.chapfoot{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;padding-top:18px;border-top:1px solid var(--line)}
+.chapfoot .sp{flex:1}
+@media (max-width:820px){
+  .course{grid-template-columns:minmax(0,1fr);gap:18px}
+  .toc{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  .toc button{border:1px solid var(--line);border-radius:999px;white-space:nowrap;padding:6px 12px}
+  .toc button[aria-current="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+  .toc .done{color:inherit}
+}
+
+/* Connaissances */
+.deckbar{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;margin:18px 0}
+.deckbar label{display:flex;gap:6px;align-items:center;font-size:.92rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-height:280px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;max-width:720px}
+.card .tag{font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.card .face{font-family:var(--display);font-size:1.6rem;line-height:1.3;font-weight:500;text-wrap:balance}
+.card.back .face{font-family:var(--body);font-size:1.08rem;line-height:1.6;font-weight:400}
+.card .actions{display:flex;flex-wrap:wrap;gap:10px}
+.progress{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;max-width:720px}
+.progress i{display:block;height:100%;background:var(--accent)}
+.empty{padding:28px;border:1px dashed var(--line);border-radius:10px;max-width:720px;color:var(--muted)}
+
+/* Quiz */
+.subtabs{display:flex;gap:8px;margin:18px 0}
+.subtabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-weight:500}
+.subtabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.qbox{max-width:720px}
+.qmeta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.qtext{font-family:var(--display);font-size:1.45rem;line-height:1.3;font-weight:500;margin:0 0 16px;text-wrap:balance}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 14px;line-height:1.45}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.good{background:var(--good-bg);border-color:var(--good)}
+.opt.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.explain{margin-top:14px;padding:12px 14px;background:var(--surface2);border-radius:8px}
+.verdict{font-weight:600}
+.verdict.good{color:var(--good)}.verdict.bad{color:var(--bad)}
+.score{font-family:var(--display);font-size:3rem;line-height:1;margin:8px 0}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px;align-items:start}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ex h3{font-size:1.1rem}
+.ex .chip{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.ex p{margin:0}
+.fields{display:grid;gap:8px}
+.field{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field label{flex:1 1 150px;font-size:.92rem}
+.field input{width:130px;font-family:var(--mono);text-align:right}
+.field .u{color:var(--muted);font-size:.9rem;min-width:2ch}
+.field input.good{border-color:var(--good);background:var(--good-bg)}
+.field input.bad{border-color:var(--bad);background:var(--bad-bg)}
+.sol{background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:.94rem}
+.sol .formula{margin:8px 0 0;background:var(--surface)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.card,.qbox{animation:rise .18s ease-out}}
+@keyframes rise{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.evtop{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;margin-top:18px}
+.evcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.evpts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;color:var(--muted);font-size:.92rem}
+.evlist{display:grid;gap:12px;margin-top:12px}
+.evrow{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;min-width:0}
+.evh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px}
+.evd{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted);font-size:.88rem}
+.chip2{background:var(--surface2);border-radius:6px;padding:4px 10px;font-size:.88rem;color:var(--fg)}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="brand">Finance de marché<small>révisions du partiel</small></div>
+  <nav role="tablist" aria-label="Rubriques">
+    <button role="tab" id="tab-cours" data-view="cours" aria-selected="true">Cours</button>
+    <button role="tab" id="tab-connaissances" data-view="connaissances" aria-selected="false">Connaissances</button>
+    <button role="tab" id="tab-quiz" data-view="quiz" aria-selected="false">Quiz et exos</button>
+    <button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false">Évaluation</button>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <section id="view-cours"></section>
+  <section id="view-connaissances" hidden></section>
+  <section id="view-quiz" hidden></section>
+  <section id="view-evaluation" hidden></section>
+</main>
+
+<script>
+"use strict";
+/* ---------- stockage léger (par navigateur) ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem("fdm:"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("fdm:"+k,JSON.stringify(v))}catch(e){}}
+};
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fr=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:d});
+const frFix=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ---------- données : chapitres ---------- */
+const CH=[
+{id:1,t:"Évaluation, titres, système financier",html:`
+<p class="lead">Le cadre du cours, ce qu’on achète quand on finance une entreprise, et qui fait circuler l’épargne.</p>
+<div class="callout"><b>Évaluation.</b> 2 contrôles continus (40 %) et 1 contrôle terminal (60 %). Le 1er CC a lieu le 6 novembre : questions de cours et peut-être de petits exercices. Le 2e CC a lieu à la dernière séance : épreuve pratique. Le contrôle terminal est un examen sur ordinateur : travail sur des données de marché. <i>(Ton premier document indiquait le 17 octobre et le 5 décembre ; le 6 novembre vient du document le plus récent.)</i></div>
+<h3>Plan du cours</h3>
+<ul><li>Généralités sur les marchés financiers</li><li>Théorie du pricing et théorie des marchés efficients</li><li>Mécanique financière : capitalisation et actualisation</li><li>Le risque en finance</li><li>Instruments financiers : obligations, actions, options (partie encore vide dans tes notes)</li></ul>
+<h3>Action et obligation</h3>
+<div class="tablebox"><table><tr><th></th><th>Action</th><th>Obligation</th></tr>
+<tr><td>Nature</td><td>Part de capital, titre de propriété : financement par capitaux propres</td><td>Titre de dette : financement par la dette</td></tr>
+<tr><td>Rémunération</td><td>Dividende variable et plus-value. Elle ne se rembourse pas, elle se revend</td><td>Coupon (intérêts), fixe ou variable (indexé). Capital remboursé</td></tr>
+<tr><td>Risque</td><td>Élevé : remboursé en dernier</td><td>Modéré à faible : prioritaire sur l’action</td></tr></table></div>
+<div class="callout">Le double objectif de l’investisseur : que le temps pendant lequel il prête ses fonds lui rapporte de l’argent (il renonce à les utiliser), et que le risque pris lui rapporte une rémunération proportionnelle au risque.</div>
+<h3>Le système financier</h3>
+<p>Il met en relation les agents économiques <b>excédentaires</b> en ressources (AEEF, souvent les ménages) et les agents <b>déficitaires</b> (AEBF : entreprises, État, administrations).</p>
+<div class="formula">AEEF → système financier → AEBF</div>
+<ul><li><b>Marché financier</b> = finance directe. <b>Système bancaire</b> = finance indirecte.</li>
+<li><b>Infrastructure de marché :</b> CCP (chambre de compensation, sécurise les transactions) et Euronext.</li>
+<li><b>Autorités :</b> AMF (Autorité des marchés financiers), Banque de France, ACPR. Le Trésor fait aussi partie du système.</li></ul>`},
+{id:2,t:"Finance directe, indirecte, ALM",html:`
+<p class="lead">Deux façons de faire circuler l’épargne vers l’investissement.</p>
+<h3>Finance directe</h3>
+<p>La finance des marchés : l’offre et la demande de fonds se rencontrent directement. L’agent excédentaire est contractuellement en relation avec celui qui a besoin de financement et détient un droit direct. Exemples : souscrire à une augmentation de capital d’une entreprise cotée, souscrire à un emprunt obligataire.</p>
+<p>L’<b>intermédiaire financier</b> (CIF, EI, PSI, y compris une banque quand elle conseille et exécute des ordres) est un simple <b>courtier</b> : conseil, exécution d’ordres, mise en relation. Il n’accorde pas de financement et ne collecte pas de ressources : <b>rien n’apparaît à son bilan</b>, seule sa commission figure au compte de résultat.</p>
+<h3>Finance indirecte</h3>
+<p>La finance intermédiée par le système bancaire. La banque achète des titres (actions, obligations) ou accorde des crédits, et se finance par ses propres titres de dette, une augmentation de capital ou la collecte de dépôts. Elle sert d’<b>écran</b> : prêteurs et emprunteurs ne sont pas en relation contractuelle. Elle opère une <b>transformation</b> : ressources collectées à court terme, emplois à long terme.</p>
+<div class="tablebox"><table><tr><th>Actif (emplois)</th><th>Passif (ressources)</th></tr><tr><td>Instruments financiers achetés, crédits, dépôts auprès de la banque centrale</td><td>Dépôts des ménages et des entreprises, émission de dettes (obligations), actionnaires, refinancement auprès de la banque centrale</td></tr></table></div>
+<p>Ne pas confondre l’<b>intermédiation financière</b> (finance indirecte) et l’<b>activité d’intermédiaire financier</b> (finance directe).</p>
+<h3>Marge d’intermédiation</h3>
+<p>Les ressources ont un coût, les emplois rapportent. Exemple : ressources de 100 avec 10 d’intérêts payés, coût = 10 %. Emplois de 100 qui rapportent 12, rendement = 12 %. Marge d’intermédiation = 12 % − 10 % = <b>2 %</b>.</p>
+<h3>Désintermédiation et économie d’endettement</h3>
+<ul><li>En Europe, la <b>désintermédiation</b> est de plus en plus forte : une part croissante du financement des entreprises vient directement des marchés (nouveaux titres, billets de trésorerie, obligations, augmentation de capital).</li>
+<li>Quand les marchés sont peu développés, c’est l’<b>économie d’endettement</b> : entreprises très endettées auprès des banques, elles-mêmes endettées auprès de la banque centrale.</li>
+<li>Risque en économie d’endettement : risque de bilan et de solvabilité de l’emprunteur. Si l’entreprise ne génère plus assez de cash flows pour payer ses intérêts, effet boule de neige sur la banque.</li>
+<li>Risque en économie de marchés : risque sur la valeur du titre, volatilité du titre.</li></ul>
+<div class="callout">Prêt de 10 M€ à 5 % : en courtage, la banque ne perd que sa rémunération (500 K€) ; en intermédiation, elle risque 10 M€. L’intermédiaire est souvent plus rémunérateur, et la banque est attirée par les métiers de service.</div>
+<h3>ALM : gestion actif-passif (Asset Liability Management)</h3>
+<p>Adossement du bilan : gérer les risques de taux et de liquidité, éviter le décalage de maturité (dettes à rembourser à court terme, actifs qui ne rapportent qu’à long terme), équilibrer rentabilité et solvabilité dans le cadre de Bâle.</p>
+<h3>OPCVM, théoriciens, marchéisation</h3>
+<ul><li><b>OPCVM (SICAV, FCP) :</b> la banque conçoit le fonds, le dote d’actifs (actions, obligations) et émet des parts. Uniquement en actions : OPCVM <b>dynamique</b>.</li>
+<li><b>Gurley et Shaw (1960) :</b> premiers économistes à avoir théorisé la finance directe et indirecte. <b>Hicks :</b> distinction entre l’économie d’endettement et l’économie de marchés financiers.</li>
+<li><b>Marchéisation :</b> les crédits aux ménages et aux PME sont surtout dispensés par les banques, mais les marchés influencent leurs prix : la banque doit s’aligner pour ne pas perdre ses clients.</li></ul>`},
+{id:3,t:"Marchés primaire, secondaire, dérivés",html:`
+<p class="lead">Où les titres sont créés, échangés et dérivés.</p>
+<div class="tablebox"><table><tr><th>Marché</th><th>Rôle</th><th>À retenir</th></tr>
+<tr><td>Primaire</td><td>Émission, création des titres (le neuf, l’argent frais, <i>new money</i>)</td><td>L’entreprise y lève des fonds : c’est le seul marché où elle se finance</td></tr>
+<tr><td>Secondaire</td><td>Transactions ultérieures (l’occasion)</td><td>Changement de propriétaire, sans création de titre ni cash pour l’entreprise. Liquidité et cotation</td></tr>
+<tr><td>Dérivés</td><td>Valeur dépendant d’un sous-jacent</td><td>« Marché sur un marché », effet de levier</td></tr></table></div>
+<h3>Fonctions du marché secondaire</h3>
+<ul><li>L’investisseur pense à sa sortie avant d’entrer. La sortie est facile pour un titre à court terme (on attend le remboursement). Pour un actionnaire, la seule sortie est de vendre à un autre investisseur.</li>
+<li>Le marché secondaire assure la <b>liquidité</b> et la <b>cotation</b>. Il relaie ou refinance les investissements initiaux.</li>
+<li>C’est un <b>jeu à somme nulle</b> entre investisseurs. Il ne finance pas le développement économique. Une entreprise qui a émis des obligations est sûre de ses fonds selon l’échéancier du contrat.</li></ul>
+<h3>Liquidité</h3>
+<p>Aptitude d’un bien à être transformé rapidement en cash, sans perte de valeur. C’est aussi pouvoir transiger au prix affiché sans perturber le marché.</p>
+<h3>Produits dérivés</h3>
+<ul><li>Sous-jacents possibles : obligation, action, matière première agricole, énergétique ou minière, indice boursier.</li>
+<li>Deux familles : <b>contrats à terme</b> (engagement ferme d’acheter ou vendre à l’échéance à un prix fixé) et <b>options</b> (un droit, sans obligation).</li>
+<li><b>Effet de levier :</b> une mise de fonds limitée (le prix de l’option) donne une position bien plus importante.</li>
+<li>Ils permettent de transférer un risque à un tiers, de se couvrir avant de spéculer. Produits standardisés, très liquides.</li></ul>`},
+{id:4,t:"Les six fonctions du système financier",html:`
+<p class="lead">Typologie de Merton et Bodie.</p>
+<p>Un système financier réunit marchés financiers et intermédiaires financiers. Son but : fournir de la liquidité aux projets les plus rentables compte tenu des risques anticipés. Rentabilité et risque sont liés. Le marché permet aussi de transformer un revenu présent en revenu futur, pour une consommation future plus grande, et de créer pour l’emprunteur une ressource immédiate contre un intérêt à payer.</p>
+<ul><li><b>1. Faciliter les transactions :</b> règlement et compensation (chèques, carte, virement, paiement mobile).</li>
+<li><b>2. Mettre en commun les fonds</b> pour de grands projets, et subdiviser le capital des entreprises : l’investisseur accède à l’épargne de millions de personnes et peut diversifier. L’entrepreneur est incité à être performant. L’épargnant détient ses actifs sous forme plus liquide que l’immobilier.</li>
+<li><b>3. Répartir les ressources</b> dans le temps, l’espace et entre secteurs : un jeune ménage emprunte pour se loger, un futur retraité épargne, un secteur mature finance un secteur en fort développement.</li>
+<li><b>4. Gérer le risque :</b> il est imprudent de tout investir dans une seule entreprise. Les intermédiaires créent des produits d’épargne collective (SICAV, FCP) qui diversifient.</li>
+<li><b>5. Fournir une information sur les prix</b> à très faible coût : taux d’intérêt et prix des actifs guident les décisions d’épargne et d’investissement.</li>
+<li><b>6. Limiter les problèmes d’incitation</b> (asymétrie d’information, théorie de l’agence) : l’investisseur qui confie ses fonds à un gestionnaire espère qu’il les gère au mieux de ses intérêts. Un mauvais gestionnaire est sanctionné par le marché, qui lui retire ses clients : discipline de marché, alignement des intérêts.</li></ul>`},
+{id:5,t:"Les banques",html:`
+<p class="lead">Du modèle historique à la banque universelle, et ce qui a changé depuis 2008.</p>
+<h3>Historique</h3>
+<ul><li><b>Banque commerciale :</b> collecte l’épargne des clients et prête aux entreprises.</li>
+<li><b>Banque d’affaires :</b> conseil (M&A, gestion de fortune), intermédiaire pour le placement d’actions ou d’obligations, sans toucher à son bilan.</li>
+<li>Années 1990 : rapprochements en <b>banques universelles</b>. Exemples : BNP et Paribas, Chase Manhattan et JP Morgan, Bank of America et Merrill Lynch.</li>
+<li><b>Glass-Steagall Act (Banking Act)</b> : loi américaine qui interdisait le rapprochement banques commerciales / banques d’affaires. Abrogée en 1999. Ton cours indique « 1890 » pour sa date ; elle date en réalité de 1933, à vérifier avec ton enseignant.</li>
+<li><b>Crise de 2008 :</b> volonté politique de séparer à nouveau activités de dépôts et de marchés, pour protéger l’épargne. Réalisée partiellement : les banques doivent cantonner leurs activités spéculatives pour compte propre dans des structures séparées. En France, à la suite de l’élection présidentielle de 2012, une loi a imposé des filiales ségréguées et l’identification des activités spéculatives.</li></ul>
+<h3>Les trois départements</h3>
+<div class="tablebox"><table><tr><th>Département</th><th>Particularités</th></tr>
+<tr><td>Banque de détail (<i>retail banking</i>)</td><td>Particuliers, professionnels, PME. Millions de clients, dimension quasi industrielle, produits standardisés. La diversification des profils élimine une partie du risque. Très concurrentiel, marges faibles après frais généraux et coût du risque (provisions pour créances douteuses). Services annexes : encaissement de chèques, virements, paiement électronique, crédit à la consommation, assurance</td></tr>
+<tr><td>BFI (<i>corporate and investment banking</i>)</td><td>Le plus rentable. Quelques milliers de grandes entreprises, services sophistiqués sur mesure</td></tr>
+<tr><td>Gestion d’actifs</td><td>Clients institutionnels (assureurs, <i>family offices</i>) et particuliers fortunés. SICAV, FCP, produits structurés ; elle recourt à la BFI pour obtenir des instruments de couverture</td></tr></table></div>
+<h3>Services spécialisés de la banque de détail</h3>
+<ul><li><b>Affacturage :</b> l’entreprise cède ses factures à un factor pour être payée à l’avance.</li>
+<li><b>Crédit-bail :</b> la banque achète un bien et le loue à l’entrepreneur ; à la fin, option d’achat à la valeur résiduelle.</li></ul>
+<h3>Les services de la BFI</h3>
+<ul><li><b>ECM</b> (Equity Capital Market) : introduction en bourse, augmentations de capital, titres convertibles en actions (OCA).</li>
+<li><b>DCM</b> (Debt Capital Market) : émission d’obligations.</li>
+<li><b>M&amp;A</b> (Mergers and Acquisitions) : conseil en fusions-acquisitions et valorisation, pas de financement.</li>
+<li><b>Crédits syndiqués :</b> un pool de banques prête, une banque est chef de file.</li>
+<li><b>Financements spécialisés :</b> LBO (<i>leveraged buy-out</i>, levier).</li>
+<li><b>Marchés spécialisés :</b> change, taux d’intérêt, matières premières.</li></ul>
+<h3>Autres acteurs, crise de 2020, réglementation</h3>
+<ul><li>Acteurs spécialisés : conseil en fusion-acquisition (Lazard, Rothschild, Hottinger), néobanque (Revolut), banque régionale (Crédit Mutuel Arkéa).</li>
+<li>La crise sanitaire de 2020 montre à nouveau, après 2008, le rôle central des banques. Elles fournissent des liquidités et sont un indicateur de l’aversion au risque. Leur métier de base : apprécier le risque et le repackager en éliminant le risque diversifiable.</li>
+<li>Les comités de Bâle imposent aux banques au moins 8 % de fonds propres sur les crédits accordés. Pour optimiser, certains groupes sortent les risques de leur bilan par la <b>titrisation</b>, vers des structures non régulées.</li></ul>`},
+{id:6,t:"Marchés efficients (Fama)",html:`
+<p class="lead">Un premier cadre théorique : les prix disent-ils tout ?</p>
+<p>« Efficient » vient d’une idée d’optimisation. Un marché efficient est un marché où le prix des titres reflète à tout moment toute l’information pertinente disponible : il intègre instantanément les conséquences des événements passés et toutes les anticipations sur les événements futurs. Il est donc impossible de prévoir les variations futures.</p>
+<ul><li>Seule une information nouvelle, totalement imprévue, modifie le prix. Son apparition étant imprévisible, les changements de prix sont <b>aléatoires</b> : <b>marche au hasard</b> (processus stochastique). D’où les profils d’ingénieurs sur les marchés.</li>
+<li>L’ajustement est quasi instantané car la concurrence entre investisseurs est très forte. Le prix dépend de la rentabilité et du risque perçus.</li>
+<li>On parle aussi de théorie des marchés en équilibre ou des marchés parfaits.</li></ul>
+<h3>Les trois formes (Eugene Fama, Université de Chicago, prix Nobel d’économie 2013)</h3>
+<div class="tablebox"><table><tr><th>Forme</th><th>Les prix intègrent</th><th>Conséquence</th></tr>
+<tr><td>Faible</td><td>Les données historiques</td><td>Analyse technique (chartiste) inutile : on ne prévoit pas les rentabilités futures par des modèles statistiques</td></tr>
+<tr><td>Semi-forte</td><td>+ toutes les informations publiques (rapports, presse, prospectus, annonces)</td><td>Analyse fondamentale inutile aussi. Seuls les initiés (dirigeants) pourraient faire mieux. Aucun effet sur le prix avant ni le lendemain de l’annonce</td></tr>
+<tr><td>Forte</td><td>+ informations privées ou privilégiées</td><td>Même les initiés ne peuvent pas faire mieux. Vrai si les autorités de marché répriment le délit d’initié</td></tr></table></div>
+<p>Les trois niveaux de Fama s’appuient sur : la capacité à prévoir les cours futurs, la réponse des marchés à des événements ponctuels, l’influence des informations privilégiées.</p>`},
+{id:7,t:"Finance comportementale",html:`
+<p class="lead">Les investisseurs sont-ils rationnels ? Les contestations de l’efficience.</p>
+<h3>Thaler et Kahneman (années 1980)</h3>
+<p>Ils testent l’efficience et mettent en évidence des anomalies : volatilité excessive des marchés, instabilité des cours, « bruit » autour de la valeur fondamentale.</p>
+<ul><li><b>Dual listing :</b> deux sociétés jumelles, mêmes flux de dividendes, cotées sur deux marchés, affichent des cours différents. Impossible sur un marché efficient.</li>
+<li><b>Anomalies calendaires :</b> rendement plus faible le lundi, meilleure rentabilité en janvier.</li>
+<li><b>Anomalie météorologique :</b> rentabilité meilleure quand il fait beau que quand il pleut.</li></ul>
+<h3>Quatre familles d’anomalies</h3>
+<ul><li><b>Fondamentales (contredisent la forme semi-forte) :</b> effet <i>taille</i> (petites capitalisations plus rentables, même ajusté du bêta) et effet <i>valeur</i> (actions décotées, faible PER ou fort book-to-market, surperforment les actions de croissance).</li>
+<li><b>Techniques (contredisent la forme faible) :</b> <b>momentum</b> (Jegadeesh et Titman, 1993) à 3-12 mois : les gagnants continuent de gagner. <b>Retour à la moyenne</b> (De Bondt et Thaler, 1985) à 3-5 ans : les perdants finissent par surperformer.</li>
+<li><b>Calendaires :</b> effet janvier (ventes fiscales en décembre puis rachats, surtout petites capitalisations), effet week-end ou lundi.</li>
+<li><b>Comportementales :</b> sur-réaction aux mauvaises nouvelles (krachs injustifiés), sous-réaction aux résultats réguliers (fenêtres d’arbitrage), <b>bulles spéculatives</b> : bulle internet des années 2000, « exubérance irrationnelle ».</li></ul>
+<h3>Rationalité remise en cause</h3>
+<p>La finance comportementale s’appuie sur la psychologie et les neurosciences. Les décisions sont influencées par l’environnement et les circonstances.</p>
+<ul><li><b>Gain et perte :</b> les choix diffèrent. Être sûr de gagner 50 ou avoir une chance sur deux de gagner 100 : on assure un gain certain. À l’inverse, on prend des risques quand la probabilité de perte est forte.</li></ul>
+<h3>Mimétisme (André Orléan)</h3>
+<ul><li><b>Normatif :</b> conformisme.</li><li><b>Informationnel :</b> on imite ceux qui sont supposés mieux informés.</li><li><b>Autoréférentiel :</b> on prévoit le comportement majoritaire pour l’imiter. La bonne décision dépend de l’action collective : <b>prophétie autoréalisatrice</b>, principe même d’une bulle spéculative.</li></ul>
+<p>Le <b>program trading</b> (ordres pré-programmés, par exemple vendre à partir d’un seuil de perte) accentue le mimétisme : effet boule de neige. <b>Flash crash de Stockholm, 2 mai 2022</b> : l’indice perd plus de 8 % en quelques minutes à cause d’une erreur de saisie (<i>fat finger</i>) d’un opérateur d’une grande banque américaine.</p>`},
+{id:8,t:"Comportements des investisseurs",html:`
+<p class="lead">Trois façons d’aborder le risque.</p>
+<div class="tablebox"><table><tr><th>Comportement</th><th>Définition</th></tr>
+<tr><td>Couverture (<i>hedge</i>)</td><td>Se protéger contre un risque. Concept général : financer du long terme par du long terme (adossement des maturités)</td></tr>
+<tr><td>Spéculation</td><td>Accepter un risque : prendre position, parier sur l’évolution future du prix d’un actif, sans en tirer de revenu régulier</td></tr>
+<tr><td>Arbitrage</td><td>Pas de risque ni d’avis spéculatif : tirer parti des écarts de prix d’un même titre entre marchés (il « screene » les marchés)</td></tr></table></div>
+<ul><li>Le <b>spéculateur</b> a un rôle utile : si les besoins de ressources sont à long terme et l’épargne à court terme, quelqu’un doit emprunter à court terme pour placer à long terme. Il fait une <b>transformation des échéances</b>, sans adossement.</li>
+<li>L’<b>arbitragiste</b> contribue à la liquidité, réduit le déséquilibre initial, assure l’égalité des prix entre marchés au même moment et rend les marchés plus efficients.</li>
+<li>Les algorithmes rendent l’arbitrage plus rare et plus complexe.</li>
+<li><b>Limites de l’arbitrage</b> (Shleifer et Vishny, 1997) : l’arbitragiste est théoriquement le garant de l’efficience, mais la finance comportementale a montré que son pouvoir n’est pas absolu.</li></ul>`},
+{id:9,t:"Capitalisation, actualisation, VAN, TRA",html:`
+<p class="lead">Un euro aujourd’hui vaut plus qu’un euro demain. Cinq idées à savoir refaire.</p>
+<p>Acheter un titre est un acte intéressé : on renonce à une satisfaction immédiate pour une satisfaction future supérieure, d’où une exigence de rentabilité. Différer une dépense la réduit, accélérer une recette l’accroît. Il existe un taux d’intérêt de l’argent même en l’absence de risque.</p>
+<h3>Capitalisation</h3>
+<div class="formula">V<sub>n</sub> = V<sub>0</sub> × (1 + t)<sup>n</sup>&nbsp;&nbsp;&nbsp;t = (V<sub>n</sub> / V<sub>0</sub>)<sup>1/n</sup> − 1</div>
+<p>Exemple : 100 000 € investis fin 2013, revendus 10 ans plus tard 1,8 M€, sans apport ni dividende. La plus-value est de 1,7 M€, soit +1 700 %. Diviser par 10 pour obtenir 170 % par an est faux : le taux annuel suppose que les revenus sont réinvestis (capitalisés) et produisent à leur tour des revenus. On cherche le taux d’un placement équivalent : 100 000 × (1 + i)<sup>10</sup> = 1 800 000, donc (1 + i)<sup>10</sup> = 18 et i = 18<sup>1/10</sup> − 1 ≈ <b>33,5 %</b>.</p>
+<ul><li>La croissance est exponentielle, pas linéaire.</li>
+<li>Tripler son capital en 16 ans, le doubler en 10 ans ou demander 7,177 centimes par euro investi : même idée (7,177 % par an pour doubler en 10 ans).</li>
+<li>Seuls comptent les flux de trésorerie effectifs, au moment où ils sont touchés et non acquis : le moindre décalage change le taux.</li></ul>
+<h3>Actualisation</h3>
+<p>Chercher la valeur d’aujourd’hui d’une somme future. C’est déprécier le futur : on applique aux flux futurs un coefficient d’actualisation inférieur à 1. Cela permet de comparer des flux à des dates différentes.</p>
+<div class="formula">V<sub>0</sub> = V<sub>n</sub> / (1 + t)<sup>n</sup></div>
+<ul><li>Exemple : 1 000 € dans 5 ans avec un coefficient de 0,6 valent 600 €. Entre A (1 000 € dans 5 ans) et B (650 € aujourd’hui), on choisit B.</li>
+<li>110 € dans un an : avec 10 % exigés le prix maximal est 100 € ; avec 11 % exigés, 110 / 1,11 ≈ 99,1 €. Plus l’exigence est forte, plus le prix baisse.</li>
+<li>Autre exemple : 5 000 / 1,06 ≈ 4 717 (ton cours écrit 4 716).</li>
+<li>L’actualisation est l’inverse de la capitalisation.</li></ul>
+<h3>Valeur actuelle et VAN d’un titre</h3>
+<p>Posséder un titre, c’est avoir le droit de percevoir une suite de cash flows (dividendes, intérêts, remboursement). La valeur actuelle est la somme actualisée de ces flux ; le titre a aussi un prix de marché V<sub>0</sub>.</p>
+<div class="formula">VA = Σ F<sub>i</sub> / (1 + t)<sup>i</sup>&nbsp;&nbsp;&nbsp;VAN = VA − V<sub>0</sub></div>
+<div class="tablebox"><table><tr><th>VAN</th><th>Décision</th></tr>
+<tr><td>&gt; 0</td><td>Projet positif : on investit</td></tr>
+<tr><td>= 0</td><td>Projet neutre : valeur d’équilibre du titre</td></tr>
+<tr><td>&lt; 0</td><td>Projet négatif : on n’investit pas (prix de marché supérieur à la valeur actuelle : si on baisse son exigence de rentabilité, le prix acceptable augmente)</td></tr></table></div>
+<ul><li>Exemple de ton cours : 7 flux de 10, 20, 7, 19, 7, 10 et 45 actualisés à 5 % : somme actualisée ≈ 94,27 (dans ton tableau).</li>
+<li><b>Équilibre :</b> si VA et valeur de marché divergent, les arbitragistes et les financiers qui cherchent une VAN positive ramènent la VAN à 0. Sur un marché efficient à l’équilibre : VAN = 0, VA = V<sub>0</sub> : le prix est la somme actualisée des flux futurs.</li>
+<li><b>Trois lectures de la VAN :</b> valeur créée par l’investissement (coût 100, VAN 10 : on s’enrichit de 10) ; supplément maximal que l’investisseur accepte de payer (jusqu’à 10 de plus pour un actif de 100, valeur actuelle 110) ; écart entre valeur actuelle (110) et valeur de marché (100).</li>
+<li>Titre A : flux de 5 000, 4 000, 5 000, 4 000, puis 5 000 + 100 000 aux années 1 à 5, taux d’actualisation 6 %.</li></ul>
+<h3>Taux de rentabilité actuariel (TRA)</h3>
+<p>Le taux d’actualisation qui annule la VAN : on cherche t tel que VAN = 0, soit VA = V<sub>0</sub>.</p>
+<div class="formula">Σ F<sub>i</sub> / (1 + t)<sup>i</sup> − V<sub>0</sub> = 0</div>
+<ul><li>Exemple : V<sub>0</sub> = 2, flux annuel constant de 0,8 pendant 5 ans : TRA ≈ 29 % (28,65 % exactement).</li>
+<li><b>Critère de choix :</b> si TRA &gt; ou = rentabilité exigée, l’investisseur achète. À l’équilibre sur un marché efficient, TRA = rentabilité exigée du marché, et VAN = 0.</li></ul>`},
+{id:10,t:"Taux facial, équivalent, proportionnel",html:`
+<p class="lead">Dans la vie courante on parle de taux d’intérêt plutôt que de TRA. Quatre taux à ne pas confondre.</p>
+<h3>Taux facial</h3>
+<p>Taux de l’emprunt, utilisé pour calculer les intérêts proportionnellement au temps écoulé et au capital emprunté. Exemple : 100 € à 10 % sur 4 ans, 10 % par an.</p>
+<h3>Taux équivalent (actuariel)</h3>
+<p>Si les intérêts sont versés plusieurs fois dans l’année, le montant total est le même mais l’échéancier diffère. Exemple : prêt de 100 le 1er janvier n, intérêts semestriels : 5 € le 1er juillet n, puis 100 + 5 € le 1er janvier n+1. Payer 5 € six mois plus tôt rend ce prêt plus cher que payer 10 € à la fin de l’année. Le taux effectif n’est donc pas 10 % : il est supérieur.</p>
+<p>Deux taux relatifs à des périodes différentes sont équivalents si la valeur future d’une même somme à une même date est la même. Les 5 € reçus le 1er juillet peuvent être capitalisés six mois à 10 % : au total le preneur a touché 10,25 €. Le taux équivalent est le véritable coût du prêt.</p>
+<div class="formula">1 + t = (1 + t<sub>a</sub> / n)<sup>n</sup>&nbsp;&nbsp;&nbsp;t = (1 + t<sub>a</sub> / n)<sup>n</sup> − 1</div>
+<ul><li>t<sub>a</sub> : taux apparent ou facial. t : taux actuariel. n : nombre de versements par an.</li>
+<li>Semestriel : t = (1 + 10 % / 2)² − 1 = 0,1025 = <b>10,25 %</b>.</li>
+<li>Mensuel : 5 % par an versé chaque mois : t = (1 + 5 / (100 × 12))<sup>12</sup> − 1 = 0,0512 = <b>5,12 %</b>.</li>
+<li>L’année est la base de référence en finance : on compare des taux annuels.</li></ul>
+<h3>Taux proportionnel</h3>
+<p>Deux taux sont proportionnels quand ils sont dans le même rapport que les périodes auxquelles ils s’appliquent. 10 % par an est proportionnel à 5 % par semestre et à 2,5 % par trimestre. Mais 5 % par semestre n’est pas équivalent à 10 % par an. Le taux proportionnel ne sert qu’à calculer les cash flows.</p>`},
+{id:11,t:"Rentabilité, risque, bêta",html:`
+<p class="lead">Mesurer ce qu’un titre rapporte et ce qu’il fait risquer.</p>
+<h3>Le risque en finance</h3>
+<p>Incertitude sur le montant des flux futurs actualisés et sur la valeur future des titres. L’investisseur ne connaît pas avec certitude le prix auquel il pourra céder, ni les flux jusqu’à la vente. Il cherche à réduire le caractère aléatoire des flux. Le simple fait de percevoir des flux incertains réduit la valeur du titre.</p>
+<ul><li><b>Risques économiques</b> (liés à l’activité de l’entreprise) : industriels et commerciaux, crédit, réglementaire, inflation (prix des matières premières), escroquerie, conjoncturel (bourse euphorique ou krach).</li>
+<li><b>Risques financiers</b> (sphère financière, pas forcément corrélés à l’entreprise) : climatique, taux d’intérêt, liquidité, change, systémique, conjoncturel.</li></ul>
+<div class="callout"><b>Volatilité = risque :</b> plus un titre est volatil, plus il est risqué. Le risque d’un titre se mesure par la volatilité de sa valeur, donc de sa rentabilité, par la variance ou l’écart-type.</div>
+<h3>Rendement et rentabilité</h3>
+<p>La rentabilité est la rémunération des fonds (intérêts, dividende) plus la plus-value ou moins-value si on vend le titre.</p>
+<div class="formula">Univers certain : r = F<sub>1</sub> / V<sub>0</sub> + (V<sub>1</sub> − V<sub>0</sub>) / V<sub>0</sub></div>
+<div class="formula">rendement = revenu annuel / cours moyen annuel</div>
+<div class="formula">rentabilité = (revenu annuel + plus ou moins-value) / cours moyen annuel</div>
+<p>F<sub>1</sub> : intérêt ou dividende ; V<sub>0</sub> : valeur de marché à la date 0 ; V<sub>1</sub> − V<sub>0</sub> : plus ou moins-value latente.</p>
+<h3>Espérance de rentabilité (univers incertain)</h3>
+<div class="formula">E(R) = Σ P<sub>i</sub> × r<sub>i</sub></div>
+<p>Titre A : 12 chances sur 100 de −22 %, 74 de +6 %, 14 de +16 % : E(R) = −0,0264 + 0,0444 + 0,0224 = 0,0404 ≈ <b>4 %</b>.</p>
+<h3>Variance et écart-type</h3>
+<div class="formula">Var(r) = (1/n) Σ (r<sub>i</sub> − r̄)²&nbsp;&nbsp;&nbsp;σ = √Var(r)</div>
+<ol><li>Calculer la moyenne des rentabilités.</li><li>Calculer l’écart de chaque rentabilité à la moyenne.</li><li>Prendre le carré de chacun (neutralise les signes).</li><li>Faire la somme, puis la moyenne des carrés : la variance.</li><li>Prendre la racine : l’écart-type.</li></ol>
+<p>Exemple de ton Excel (titre A, 10 jours : 5, −2, 6, 12, −4, 15, 10, −1, 2, −6 %) : moyenne 3,70 %, variance 0,45 % (0,0045), écart-type <b>6,74 %</b>. L’écart-type mesure la dispersion moyenne des rentabilités autour de la moyenne, donc le risque.</p>
+<h3>Risque de marché et risque spécifique</h3>
+<ul><li><b>Risque de marché (systématique) :</b> lié à la variation du marché dans son ensemble, non diversifiable. Lié à l’économie, aux taux, à l’inflation. Exemple : hausse des coûts de l’énergie, qui touche plus Air France que d’autres.</li>
+<li><b>Risque spécifique (intrinsèque) :</b> propre à l’entreprise, diversifiable. Exemple : incendie de locaux, signature d’un contrat. Les deux risques sont indépendants.</li></ul>
+<h3>Sensibilité et bêta</h3>
+<p>La <b>sensibilité</b> au marché (bêta) caractérise le risque systématique ; elle est différente de la <b>volatilité</b>. Modèle de régression linéaire simple, explicatif : la droite minimise la somme des écarts entre elle et les observations, caractérisée par son coefficient directeur β.</p>
+<div class="formula">r<sub>j,t</sub> = α<sub>j</sub> + β × r<sub>M,t</sub> + ε<sub>j,t</sub></div>
+<ul><li>ε : terme d’erreur. β : sensibilité de la rentabilité du titre à celle du marché, propre à chaque titre.</li>
+<li>Quand le marché varie de 1 %, la rentabilité du titre varie de β % : β &gt; 1 amplifie les variations.</li></ul>
+<div class="formula">β<sub>j</sub> = Cov(R<sub>j</sub>, R<sub>M</sub>) / Var(R<sub>M</sub>)&nbsp;&nbsp;&nbsp;Cov = (1/n) Σ (r<sub>i</sub> − r̄)(r<sub>M,i</sub> − r̄<sub>M</sub>)</div>
+<div class="formula">risque de marché d’un titre = β × σ(R<sub>M</sub>)</div>
+<ul><li>β du marché = 1. Selon ton cours : β des obligations entre 0 et 0,5, β des actions &gt; 0,5, β négatif : cas écarté.</li>
+<li>Le β évolue dans le temps : sensibilité du secteur à la conjoncture, structure des coûts (plus de coûts fixes, plus de point mort élevé), visibilité de l’entreprise sur ses performances, structure financière.</li></ul>
+<h3>Risque d’un portefeuille (début)</h3>
+<p>L’objectif est de comparer rentabilité et risque de plusieurs actifs pour constituer un portefeuille. L’investisseur rationnel cherche à maximiser sa rentabilité et à minimiser son risque : à rentabilité égale, il choisit le moins risqué ; à risque équivalent, le plus rentable.</p>
+<div class="tablebox"><table><tr><th></th><th>Sanofi</th><th>Stellantis</th></tr><tr><td>Rentabilité</td><td>6 %</td><td>13 %</td></tr><tr><td>Écart-type σ</td><td>10 %</td><td>17 %</td></tr></table></div>
+<p>On ne peut pas détenir 100 % de l’un ou de l’autre : on construit un portefeuille avec des pondérations. Exemple : w<sub>SA</sub> = 70 % donc w<sub>ST</sub> = 100 % − 70 % = 30 %. La rentabilité du portefeuille tient compte de ces pondérations. Le calcul du risque du portefeuille et la tarification MEDAF restent à venir (vides dans tes notes).</p>`},
+{id:12,t:"Partie Excel (CAC 40, Sanofi)",html:`
+<p class="lead">Utile pour le 2e CC (épreuve pratique) et pour le contrôle terminal sur ordinateur.</p>
+<h3>1. Préparer les données</h3>
+<ul><li>On travaille sur les rentabilités du CAC 40, en rentabilités <b>hebdomadaires</b>.</li><li>Rédiger une mini-description du sujet.</li><li>Remettre les données dans l’ordre chronologique et nettoyer les cellules (garder seulement celles utiles).</li></ul>
+<h3>2. Analyser les données : formules à connaître</h3>
+<div class="formula">=MAX(plage)&nbsp;&nbsp;=MIN(plage)&nbsp;&nbsp;=MOYENNE(plage)&nbsp;&nbsp;écart-type</div>
+<div class="formula">rentabilité hebdomadaire = (valeur d’arrivée − valeur de départ) / valeur de départ = cellule n / cellule n−1 − 1</div>
+<ul><li><b>Cellules mauvaises :</b> Cmd+F, onglet Remplacer, chercher l’information fausse (par exemple un espace) et la remplacer par rien, puis « remplacer tout ».</li></ul>
+<h3>3. Représentation graphique</h3>
+<ul><li>Insertion, sélectionner les données (date et clôture ajustée), graphique.</li><li>Attribuer une couleur différente à chaque cours. Pour changer la couleur : clic sur le graphique, clic droit, format de la série de données, icône stylo.</li></ul>
+<h3>4 à 6. Document Word, exploitation, suite</h3>
+<ul><li>Faire un document Word avec un tableau, puis exploiter les données.</li>
+<li>Préparer la rentabilité du marché (CAC 40) et la rentabilité d’une entreprise (Sanofi) pour les comparer.</li></ul>
+<h3>Comparer marché et entreprise</h3>
+<div class="tablebox"><table><tr><th></th><th>Rentabilité du marché</th><th>Rentabilité Sanofi</th></tr><tr><td>t<sub>0</sub></td><td>2 %</td><td>2,5 %</td></tr><tr><td>t<sub>10</sub></td><td>−4 %</td><td>−5 %</td></tr></table></div>
+<p>Le CAC 40 recule de 4 %, l’entreprise de 5 % : variation dans le même sens, corrélation positive, le titre amplifie les variations du marché. On trace un nuage de points (abscisse : marché, ordonnée : titre) : t<sub>0</sub> (2 ; 2,5) et t<sub>10</sub> (−4 ; −5), puis la droite de régression dont la pente est le bêta.</p>`},
+{id:13,t:"Auteurs et dates",html:`
+<p class="lead">Tous les noms et toutes les dates de tes cours, du plus ancien au plus récent.</p>
+<h3>Chronologie</h3>
+<div class="tablebox"><table><tr><th>Date</th><th>Auteur ou événement</th><th>Ce qu’il faut retenir</th></tr>
+<tr><td>1890 ou 1933</td><td>Glass-Steagall Act (Banking Act)</td><td>Loi américaine séparant banques commerciales et banques d’affaires. Ton cours indique 1890 ; la date réelle est 1933, à vérifier</td></tr>
+<tr><td>1960</td><td>Gurley et Shaw</td><td>Premiers économistes à théoriser la finance directe et indirecte</td></tr>
+<tr><td>Années 1980</td><td>Thaler et Kahneman</td><td>Anomalies qui contredisent l’efficience : volatilité, dual listing, calendaires, météo</td></tr>
+<tr><td>1985</td><td>De Bondt et Thaler</td><td>Retour à la moyenne à 3-5 ans</td></tr>
+<tr><td>Années 1990</td><td>Rapprochements bancaires</td><td>BNP et Paribas ; Chase Manhattan et JP Morgan ; Bank of America et Merrill Lynch : banques universelles</td></tr>
+<tr><td>1993</td><td>Jegadeesh et Titman</td><td>Effet momentum à 3-12 mois</td></tr>
+<tr><td>1997</td><td>Shleifer et Vishny</td><td>Limites de l’arbitrage</td></tr>
+<tr><td>1999</td><td>Abrogation du Glass-Steagall Act</td><td>Permet les banques universelles</td></tr>
+<tr><td>Années 2000</td><td>Bulle internet</td><td>« Exubérance irrationnelle » : prix déconnectés de la valeur fondamentale</td></tr>
+<tr><td>2008</td><td>Crise financière</td><td>Volonté de scinder les groupes bancaires, cantonner les activités spéculatives</td></tr>
+<tr><td>2012</td><td>Élection présidentielle en France</td><td>Loi sur les filiales ségréguées et l’identification des activités spéculatives</td></tr>
+<tr><td>2013</td><td>Eugene Fama (Univ. de Chicago)</td><td>Prix Nobel d’économie ; trois formes d’efficience</td></tr>
+<tr><td>2020</td><td>Crise sanitaire</td><td>Rôle central des banques, indicateur d’aversion au risque</td></tr>
+<tr><td>2 mai 2022</td><td>Flash crash de Stockholm</td><td>Indice en baisse de plus de 8 % en quelques minutes, erreur de saisie (<i>fat finger</i>)</td></tr></table></div>
+<h3>Auteurs par thème, sans date</h3>
+<div class="tablebox"><table><tr><th>Auteur</th><th>Contribution</th></tr>
+<tr><td>Hicks</td><td>Distinction économie d’endettement / économie de marchés financiers</td></tr>
+<tr><td>Merton et Bodie</td><td>Six fonctions du système financier</td></tr>
+<tr><td>Fama</td><td>Trois degrés d’efficience : faible, semi-forte, forte</td></tr>
+<tr><td>André Orléan</td><td>Mimétisme : normatif, informationnel, autoréférentiel</td></tr>
+<tr><td>Thaler et Kahneman</td><td>Finance comportementale : biais face au gain et à la perte</td></tr></table></div>
+<h3>Chiffres des exemples</h3>
+<ul><li>100 000 € investis fin 2013, 1,8 M€ dix ans plus tard : 33,5 % par an.</li><li>Comités de Bâle : 8 % de fonds propres minimum sur les crédits.</li><li>Marge d’intermédiation : 12 % − 10 % = 2 %.</li><li>Doubler en 10 ans : 7,177 % par an.</li></ul>`}
+];
+
+
+/* remap des anciens numéros de chapitre vers les 13 chapitres */
+function rch(ch,txt){txt=(txt||"").toLowerCase();
+ if(ch===4)return /banque|glass|bâle|bale|bfi/.test(txt)?5:4;
+ if(ch===5)return /fama|efficien|marche au hasard|marche aléatoire/.test(txt)?6:7;
+ if(ch===6)return 8; if(ch===7)return /taux|équivalent|proportionnel|facial/.test(txt)?10:9; if(ch===8)return 11; return ch;}
+const EXTRA_CARDS=[
+[44,1,"Comment sont répartis les contrôles ?","2 contrôles continus (40 %) et 1 contrôle terminal (60 %). 1er CC le 6 novembre (cours, petits exercices), 2e CC à la dernière séance (épreuve pratique), terminal sur ordinateur avec données de marché."],
+[45,1,"Qui sont les AEEF et les AEBF ?","Agents économiques à excédent de ressources (souvent les ménages) et à besoin de financement (entreprises, État). Le système financier les met en relation."],
+[46,1,"Quelles infrastructures et autorités encadrent les marchés ?","CCP (chambre de compensation) et Euronext ; AMF, Banque de France, ACPR et le Trésor."],
+[47,2,"Que figure-t-il au bilan d’un intermédiaire financier en finance directe ?","Rien : il est un simple courtier (conseil, exécution d’ordres, mise en relation). Seule sa commission apparaît au compte de résultat."],
+[48,2,"Qu’est-ce que l’économie d’endettement (Hicks) ?","Entreprises très endettées auprès des banques, elles-mêmes endettées auprès de la banque centrale. Risque de bilan et de solvabilité, effet boule de neige. À opposer à l’économie de marchés financiers."],
+[49,2,"Qui a théorisé la finance directe et indirecte ?","Gurley et Shaw (1960). Hicks distingue économie d’endettement et économie de marchés financiers."],
+[50,2,"Qu’est-ce que l’ALM ?","Asset Liability Management : gestion actif-passif, adossement du bilan, gestion des risques de taux et de liquidité, équilibre rentabilité-solvabilité (Bâle)."],
+[51,3,"Quelle différence entre marché primaire et secondaire ?","Primaire : émission de titres neufs, argent frais pour l’entreprise. Secondaire : revente entre investisseurs, liquidité et cotation, jeu à somme nulle, sans cash pour l’entreprise."],
+[52,3,"Qu’est-ce que l’effet de levier d’une option ?","Une mise limitée (le prix de l’option) donne une exposition bien plus importante au sous-jacent."],
+[53,4,"Citer les six fonctions du système financier (Merton et Bodie).","Faciliter les transactions ; mettre en commun les fonds ; répartir les ressources dans le temps, l’espace et les secteurs ; gérer le risque ; fournir l’information sur les prix ; limiter les problèmes d’incitation."],
+[54,5,"Qu’était le Glass-Steagall Act ?","Loi américaine séparant banques commerciales et banques d’affaires, abrogée en 1999 (date de la loi : 1933, ton cours dit 1890 : à vérifier). Elle a précédé les banques universelles."],
+[55,5,"Quels sont les trois départements d’une banque universelle ?","Banque de détail, BFI (banque de financement et d’investissement, la plus rentable), gestion d’actifs."],
+[56,5,"ECM, DCM, M&A : que signifient-ils ?","Equity Capital Market (introductions en bourse, augmentations de capital), Debt Capital Market (obligations), Mergers and Acquisitions (conseil en fusions-acquisitions)."],
+[57,5,"Quel est le minimum de fonds propres imposé par Bâle ?","Au moins 8 % des crédits accordés. Certains groupes sortent les risques par titrisation."],
+[58,5,"Affacturage et crédit-bail ?","Affacturage : l’entreprise cède ses factures à un factor pour être payée à l’avance. Crédit-bail : la banque achète un bien et le loue, avec option d’achat à la valeur résiduelle."],
+[59,6,"Quelles sont les trois formes d’efficience de Fama ?","Faible (prix = données historiques), semi-forte (+ informations publiques), forte (+ informations privées). Fama, Université de Chicago, Nobel 2013."],
+[60,6,"Pourquoi les prix suivent-ils une marche au hasard ?","Seule une information nouvelle imprévisible modifie le prix : les variations sont aléatoires et on ne peut pas prévoir les cours futurs."],
+[61,7,"Quelles sont les quatre familles d’anomalies ?","Fondamentales (taille, valeur), techniques (momentum, retour à la moyenne), calendaires (janvier, lundi), comportementales (sur et sous-réaction, bulles)."],
+[62,7,"Momentum et retour à la moyenne : auteurs et horizons ?","Momentum : Jegadeesh et Titman (1993), 3-12 mois. Retour à la moyenne : De Bondt et Thaler (1985), 3-5 ans."],
+[63,7,"Que sont les trois types de mimétisme (André Orléan) ?","Normatif (conformisme), informationnel (imiter les mieux informés), autoréférentiel (anticiper la majorité) : prophétie autoréalisatrice, principe d’une bulle."],
+[64,7,"Que s’est-il passé le 2 mai 2022 à Stockholm ?","Flash crash : l’indice perd plus de 8 % en quelques minutes à cause d’une erreur de saisie (fat finger). Illustre le program trading et l’effet boule de neige."],
+[65,8,"Quelles sont les limites de l’arbitrage ?","Shleifer et Vishny (1997) : l’arbitragiste, garant théorique de l’efficience, n’a pas un pouvoir absolu."],
+[66,9,"Quelle est la bonne réponse : +1 700 % en 10 ans donne 170 % par an ?","Faux : le taux annuel suppose la capitalisation. 100 000 € → 1,8 M€ en 10 ans : 18^(1/10) − 1 ≈ 33,5 % par an."],
+[67,9,"Que donnent les trois lectures de la VAN ?","Valeur créée par l’investissement ; supplément maximal acceptable ; écart entre valeur actuelle et valeur de marché."],
+[68,9,"Que vaut la VAN à l’équilibre d’un marché efficient ?","Zéro : VA = V0, le prix est la somme actualisée des flux. Les arbitragistes ramènent la VAN à 0 ; TRA = rentabilité exigée."],
+[69,10,"Taux facial, équivalent, proportionnel : différences ?","Facial : taux de l’emprunt. Équivalent : coût réel annuel, (1 + ta/n)ⁿ − 1. Proportionnel : même rapport que les périodes, sert à calculer les cash flows, non équivalent."],
+[70,10,"Quel est le taux équivalent de 5 % par an versé mensuellement ?","(1 + 0,05/12)¹² − 1 ≈ 5,12 %."],
+[71,10,"Quel est le taux équivalent de 10 % avec intérêts semestriels ?","(1 + 0,10/2)² − 1 = 10,25 %."],
+[72,11,"Risque de marché ou spécifique ?","Marché : systématique, non diversifiable (taux, inflation, énergie). Spécifique : propre à l’entreprise, diversifiable (incendie, contrat). Les deux sont indépendants."],
+[73,11,"Rendement ou rentabilité ?","Rendement = revenu annuel / cours moyen. Rentabilité = (revenu + plus ou moins-value) / cours moyen."],
+[74,11,"Comment calculer variance et écart-type ?","Moyenne ; écart à la moyenne ; carrés ; moyenne des carrés = variance ; racine = écart-type. Exemple Excel : moyenne 3,70 %, variance 0,45 %, σ 6,74 %."],
+[75,11,"Sensibilité ou volatilité ?","La sensibilité (bêta) mesure le risque systématique ; la volatilité mesure la dispersion totale. Ce sont deux notions différentes."],
+[76,11,"Que dit ton cours sur les valeurs de bêta ?","Marché = 1 ; obligations entre 0 et 0,5 ; actions > 0,5 ; bêta négatif écarté. Le bêta évolue dans le temps (secteur, coûts fixes, visibilité, structure financière)."],
+[77,11,"Que fait l’investisseur rationnel ?","À rentabilité égale, il choisit le moins risqué ; à risque équivalent, le plus rentable. Il construit un portefeuille avec des pondérations (ex. 70 % / 30 %)."],
+[78,12,"Quelle formule Excel pour la rentabilité hebdomadaire ?","Cellule n / cellule n−1 − 1 : (valeur d’arrivée − valeur de départ) / valeur de départ. Fonctions : MAX, MIN, MOYENNE, écart-type."],
+[79,12,"Comment corriger des cellules mal formatées dans Excel ?","Cmd+F, onglet Remplacer, chercher l’élément fautif (ex. un espace), remplacer par rien, « remplacer tout »."],
+[80,13,"Date : 1960 ?","Gurley et Shaw : théorie de la finance directe et indirecte."],
+[81,13,"Date : 1985, 1993, 1997 ?","1985 De Bondt et Thaler (retour à la moyenne) ; 1993 Jegadeesh et Titman (momentum) ; 1997 Shleifer et Vishny (limites de l’arbitrage)."],
+[82,13,"Date : 1999, 2008, 2012, 2013 ?","1999 abrogation du Glass-Steagall ; 2008 crise financière ; 2012 loi française sur les filiales ségréguées ; 2013 Nobel de Fama."],
+[83,13,"Date : 2020 et 2 mai 2022 ?","2020 : crise sanitaire, rôle central des banques. 2 mai 2022 : flash crash de Stockholm."]
+];
+const EXTRA_QCM=[
+[1,"Quelle pondération pour le contrôle terminal ?",["60 %","40 %","50 %","100 %"],0,"2 CC = 40 %, terminal = 60 %."],
+[2,"Un intermédiaire financier en finance directe…",["n’a rien à son bilan, seulement une commission","porte les crédits à son bilan","collecte des dépôts","transforme les échéances"],0,"Il agit en courtier."],
+[2,"Qui a théorisé finance directe et indirecte en 1960 ?",["Gurley et Shaw","Fama","Merton et Bodie","Orléan"],0,"Gurley et Shaw (1960)."],
+[3,"Sur le marché secondaire, l’entreprise…",["ne reçoit aucun cash","lève des fonds","émet des titres","est remboursée"],0,"Il y a changement de propriétaire, sans création de titre."],
+[4,"Combien de fonctions du système financier chez Merton et Bodie ?",["6","3","4","8"],0,"Six fonctions."],
+[5,"Le Glass-Steagall Act a été abrogé en…",["1999","1933","2008","2012"],0,"Abrogé en 1999 ; il date de 1933."],
+[5,"Quel département bancaire est le plus rentable ?",["BFI","Banque de détail","Gestion d’actifs","Affacturage"],0,"La banque de financement et d’investissement."],
+[5,"Fonds propres minimum selon Bâle ?",["8 %","4 %","12 %","20 %"],0,"Au moins 8 % des crédits."],
+[6,"Quelle forme d’efficience rend l’analyse technique inutile ?",["Faible","Semi-forte","Forte","Aucune"],0,"Les prix intègrent les données historiques."],
+[6,"Qui a reçu le Nobel d’économie en 2013 pour l’efficience ?",["Eugene Fama","Kahneman","Thaler","Hicks"],0,"Fama, Université de Chicago."],
+[7,"Momentum : auteurs et horizon ?",["Jegadeesh et Titman, 1993, 3-12 mois","De Bondt et Thaler, 1985, 3-5 ans","Fama, 2013, 1 an","Shleifer et Vishny, 1997, 1 mois"],0,"Le retour à la moyenne est De Bondt et Thaler."],
+[7,"Le mimétisme autoréférentiel conduit à…",["une prophétie autoréalisatrice","l’efficience forte","un arbitrage sans risque","une VAN nulle"],0,"Principe d’une bulle spéculative."],
+[7,"Le flash crash de Stockholm (2 mai 2022) est dû à…",["une erreur de saisie","une crise sanitaire","une loi bancaire","un défaut souverain"],0,"Fat finger, baisse de plus de 8 %."],
+[8,"Qui a étudié les limites de l’arbitrage ?",["Shleifer et Vishny (1997)","Gurley et Shaw (1960)","Jegadeesh et Titman (1993)","Fama (2013)"],0,"Leur pouvoir n’est pas absolu."],
+[9,"VAN > 0 signifie…",["on investit","on n’investit pas","valeur d’équilibre","TRA nul"],0,"Projet positif."],
+[9,"Le TRA est le taux qui…",["annule la VAN","maximise la VAN","double le capital","égale le taux facial"],0,"VAN = 0."],
+[10,"5 % annuel versé mensuellement : taux équivalent ?",["5,12 %","5,00 %","5,50 %","4,88 %"],0,"(1 + 0,05/12)¹² − 1."],
+[10,"10 % par an est proportionnel à…",["2,5 % par trimestre","2,4 % par trimestre","5,12 % par semestre","10,25 % par trimestre"],0,"Même rapport que les périodes."],
+[11,"Risque diversifiable ?",["Spécifique","De marché","Systématique","Aucun"],0,"Le risque spécifique se diversifie."],
+[11,"β des obligations selon le cours ?",["entre 0 et 0,5","1","supérieur à 1","négatif"],0,"Actions > 0,5 ; marché = 1."],
+[11,"Écart-type des rentabilités 5, −2, 6, 12, −4, 15, 10, −1, 2, −6 % ?",["≈ 6,74 %","≈ 3,70 %","≈ 0,45 %","≈ 10 %"],0,"Moyenne 3,70 %, variance 0,45 %, σ 6,74 %."],
+[12,"Formule Excel de la rentabilité hebdomadaire ?",["cellule n / cellule n−1 − 1","cellule n − cellule n−1","cellule n × cellule n−1","MOYENNE(plage)"],0,"(arrivée − départ) / départ."],
+[13,"Qui en 1985 a documenté le retour à la moyenne ?",["De Bondt et Thaler","Jegadeesh et Titman","Hicks","Merton"],0,"3-5 ans."],
+[13,"Date de la crise qui a conduit à vouloir scinder les banques ?",["2008","1999","2020","2012"],0,"Crise de 2008."]
+];
+const EXTRA_EXOS=[
+{ch:10,t:"Taux mensuel équivalent",make(){
+  const ta=pick([3,4,5,6,8,12]);const t=(Math.pow(1+ta/100/12,12)-1)*100;
+  return {text:`Un taux de ${ta} % par an est versé chaque mois. Quel est le taux annuel équivalent ?`,
+    fields:[{label:"Taux équivalent",ans:t,tol:.02,unit:"%",d:3}],
+    sol:`t = (1 + ta / 12)¹² − 1`,calc:`(1 + ${ta/100} / 12)^12 − 1 = ${frFix(t,3)} %`};}},
+{ch:11,t:"Moyenne, variance, écart-type",make(){
+  const r=Array.from({length:6},()=>pick([-6,-4,-2,0,2,4,6,8,10,12]));
+  const m=r.reduce((a,b)=>a+b,0)/r.length;const v=r.reduce((a,b)=>a+(b-m)*(b-m),0)/r.length;
+  return {text:`Rentabilités sur 6 jours : ${r.join(" %, ")} %. Calcule la moyenne et l’écart-type (variance divisée par n).`,
+    fields:[{label:"Moyenne",ans:m,tol:.05,unit:"%",d:2},{label:"Écart-type σ",ans:Math.sqrt(v),tol:.1,unit:"%",d:2}],
+    sol:`σ = √( (1/n) Σ (ri − r̄)² )`,calc:`moyenne = ${frFix(m)} %, variance = ${frFix(v)}, σ = ${frFix(Math.sqrt(v))} %`};}},
+{ch:11,t:"Rendement et rentabilité d’un titre",make(){
+  const V0=pick([50,80,100,120]),F=pick([3,4,5,6]),V1=V0+pick([-10,-5,5,10,15]);
+  const r=(F+V1-V0)/V0*100;
+  return {text:`Un titre coté ${V0} € verse un dividende de ${F} € et vaut ${V1} € un an plus tard. Quelle est la rentabilité ?`,
+    fields:[{label:"Rentabilité",ans:r,tol:.05,unit:"%",d:2}],
+    sol:`r = F / V0 + (V1 − V0) / V0`,calc:`(${F} + ${V1} − ${V0}) / ${V0} = ${frFix(r)} %`};}},
+{ch:9,t:"Doubler son capital",make(){
+  const n=pick([5,8,10,12,15]);const t=(Math.pow(2,1/n)-1)*100;
+  return {text:`Quel taux annuel faut-il pour doubler un capital en ${n} ans ?`,
+    fields:[{label:"Taux annuel",ans:t,tol:.02,unit:"%",d:3}],
+    sol:`t = 2^(1/n) − 1`,calc:`2^(1/${n}) − 1 = ${frFix(t,3)} %`};}}
+];
+
+/* ---------- données : cartes (id, chapitre, question, réponse) ---------- */
+const CARDS=[
+[1,1,"Qu’est-ce qu’une action ?","Une part de capital : l’actionnaire est copropriétaire. Rémunération par dividendes et plus-value, non garantie. Risque élevé : il est remboursé en dernier."],
+[2,1,"Qu’est-ce qu’une obligation ?","Un titre de créance : l’investisseur est prêteur, perçoit des coupons et récupère le capital à l’échéance. Risque modéré à faible, prioritaire sur l’action."],
+[3,1,"Quel est le double objectif de l’investisseur ?","Que le temps pendant lequel il prête ses fonds lui rapporte de l’argent, et que le risque pris soit rémunéré."],
+[4,1,"Ressources à 10 %, emplois à 12 % : marge d’intermédiation ?","12 % − 10 % = 2 %. C’est l’écart entre le rendement des emplois et le coût des ressources."],
+[5,2,"Finance directe ou indirecte ?","Directe : marchés, relation contractuelle entre agent excédentaire et déficitaire. Indirecte : la banque s’interpose comme écran et transforme les dépôts en crédits."],
+[6,2,"Courtier ou intermédiaire financier : différence comptable ?","Le courtier (CIF, EI, PSI) touche une commission au compte de résultat et n’a rien au bilan. La banque intermédiaire a des ressources au passif et des emplois à l’actif."],
+[7,2,"Désintermédiation et économie d’endettement ?","Désintermédiation : part croissante du financement des entreprises obtenue sur les marchés. Économie d’endettement : l’endettement bancaire domine, les banques s’endettent auprès de la banque centrale."],
+[8,2,"À quoi sert l’ALM ?","À gérer actifs et passifs : risques de taux et de liquidité, éviter le décalage de maturité, équilibrer rentabilité et solvabilité (Bâle)."],
+[9,2,"Qu’est-ce qu’un décalage de maturité ?","Des dettes à rembourser à court terme alors que les actifs ne rapportent qu’à long terme."],
+[10,2,"Qu’est-ce qu’un OPCVM ?","Un fonds conçu par une banque (SICAV, FCP), doté d’actifs et financé par l’émission de parts. Dynamique s’il n’investit qu’en actions."],
+[11,2,"Qui sont Gurley, Shaw et Hicks ?","Gurley et Shaw : distinction finance directe / indirecte. Hicks : économie de marchés financiers."],
+[12,2,"Qu’est-ce que la marchéisation ?","L’influence des marchés financiers sur les prix des banques, qui doivent s’ajuster pour ne pas perdre leurs clients."],
+[13,3,"Marché primaire et marché secondaire ?","Primaire : émission (le neuf), seul marché où l’entreprise se finance. Secondaire : occasion, apporte liquidité et cotation, sans financement nouveau."],
+[14,3,"Définir la liquidité.","L’aptitude d’un bien à être transformé rapidement en cash, sans perte de valeur."],
+[15,3,"Qu’est-ce qu’un produit dérivé ?","Un produit dont la valeur dépend d’un sous-jacent. Deux familles : contrats à terme et options."],
+[16,3,"Contrat à terme ou option ?","Contrat à terme : engagement ferme d’acheter ou vendre à l’échéance à un prix fixé. Option : un droit, sans obligation."],
+[17,3,"Pourquoi les dérivés ont-ils un effet de levier ?","Une mise de fonds limitée permet de prendre une position bien plus importante sur le sous-jacent."],
+[18,4,"Les six fonctions du système financier (Merton et Bodie) ?","Transactions, mise en commun des fonds, allocation dans le temps et l’espace, gestion du risque, information sur les prix, limitation des problèmes d’incitation."],
+[19,4,"Les trois métiers d’une banque universelle ?","Banque de détail, banque de financement et d’investissement (BFI), gestion d’actifs."],
+[20,4,"Que font l’ECM et le DCM ?","ECM : marchés d’actions (introduction en bourse, augmentation de capital). DCM : marchés de dette (émissions obligataires). Ce sont des activités de BFI."],
+[21,4,"Glass-Steagall Act ?","Loi américaine séparant banques commerciales et banques d’affaires. Abrogée en 1999, d’où les banques universelles."],
+[22,5,"Qu’est-ce qu’un marché efficient ?","Un marché où le prix reflète à tout moment toute l’information disponible. Seule une information imprévue le modifie : les variations sont aléatoires."],
+[23,5,"Les trois formes d’efficience (Fama) ?","Faible : historique (analyse technique inutile). Semi-forte : + information publique (analyse fondamentale inutile). Forte : + information privée."],
+[24,5,"Que remet en cause la finance comportementale ?","La rationalité des investisseurs et l’efficience des marchés (Thaler, Kahneman)."],
+[25,5,"Les quatre familles d’anomalies ?","Fondamentales (taille, valeur), techniques (momentum, retour à la moyenne), calendaires (janvier, week-end), comportementales (sur-réaction, bulles)."],
+[26,5,"Comment réagit-on face à un gain ou à une perte probable ?","Face à un gain, on préfère le certain (50 sûrs plutôt qu’une chance sur deux de 100). Face à une perte probable, on prend des risques."],
+[27,5,"Les trois mimétismes d’Orléan ?","Normatif : conformité. Informationnel : on imite les mieux informés supposés. Autoréférentiel : on anticipe le comportement majoritaire (prophéties autoréalisatrices, bulles)."],
+[28,5,"Flash crash de Stockholm ?","2 mai 2022 : indice en baisse de plus de 8 % en quelques minutes à cause d’une erreur de saisie, amplifiée par le program trading."],
+[29,6,"Couverture, spéculation, arbitrage ?","Couverture : se protéger d’un risque. Spéculation : parier sur l’évolution d’un actif. Arbitrage : exploiter sans risque les écarts de prix entre marchés."],
+[30,6,"Quel est le rôle utile du spéculateur ?","Il assume un risque et transforme les échéances : emprunter à court terme pour placer à long terme."],
+[31,6,"Apport et limites de l’arbitrage ?","Il égalise les prix et rend les marchés plus efficients. Ses limites : Shleifer et Vishny (1997) ; les algorithmes le rendent plus rare."],
+[32,7,"Formules de capitalisation et de taux de rentabilité ?","Vn = V0 × (1 + t)ⁿ et t = (Vn / V0)^(1/n) − 1."],
+[33,7,"100 000 € deviennent 1,8 M€ en 10 ans : taux annuel ?","t = 18^(1/10) − 1 ≈ 33,5 % par an (et non 170 %)."],
+[34,7,"110 € dans un an, 11 % exigés : prix maximal ?","110 / 1,11 ≈ 99,1 €. Avec 10 % exigés : 100 €."],
+[35,7,"Règle de décision selon la VAN ?","VAN = VA − V0. VAN > 0 : on investit. VAN = 0 : neutre, valeur d’équilibre. VAN < 0 : on n’investit pas."],
+[36,7,"Qu’est-ce que le TRA ?","Le taux qui annule la VAN : Σ Fi / (1 + t)ⁱ = V0. On achète si TRA ≥ rentabilité exigée."],
+[37,7,"10 % avec intérêts semestriels : taux annuel équivalent ?","(1 + 0,10 / 2)² − 1 = 10,25 %. Le 5 % semestriel n’est que proportionnel."],
+[38,7,"Taux pour doubler son capital en 10 ans ?","2^(1/10) − 1 ≈ 7,177 % par an."],
+[39,8,"Rendement ou rentabilité ?","Rendement : revenu / cours. Rentabilité : (revenu + plus ou moins-value) / cours."],
+[40,8,"−22 % (12 %), +6 % (74 %), +16 % (14 %) : espérance ?","E(R) = Σ Pi × ri = −2,64 + 4,44 + 2,24 = 4,04 %."],
+[41,8,"Variance et écart-type ?","Variance : moyenne pondérée des carrés des écarts à l’espérance. Écart-type : sa racine carrée. Mesure du risque d’un titre."],
+[42,8,"Risque systématique ou spécifique ?","Systématique : lié au marché, non diversifiable. Spécifique : propre à l’entreprise, diversifiable."],
+[43,8,"Définir le bêta.","β = Cov(Rj, RM) / Var(RM), sensibilité du titre au marché. Le marché vaut 1 ; β > 1 amplifie les variations. Risque de marché = β × σ(RM)."]
+].map(([id,ch,q,a])=>({id,ch:rch(ch,q+" "+a),q,a})).concat(EXTRA_CARDS.map(([id,ch,q,a])=>({id,ch,q,a})));
+
+/* ---------- données : QCM [chapitre, question, choix, bonne réponse, explication] ---------- */
+const QCM=[
+[1,"Qu’est-ce qui distingue une action d’une obligation ?",["L’action est une part de capital, l’obligation un titre de créance","L’action est un prêt, l’obligation une part de capital","Les deux sont des parts de capital","Les deux versent un coupon fixe"],0,"L’actionnaire est copropriétaire et passe en dernier. L’obligataire est créancier et reçoit des coupons."],
+[1,"Ressources à 10 %, emplois à 12 % : quelle est la marge d’intermédiation ?",["2 %","12 %","22 %","10 %"],0,"12 % − 10 % = 2 %."],
+[2,"Quelle définition de la finance indirecte est correcte ?",["La banque s’interpose entre prêteurs et emprunteurs et transforme les dépôts","Prêteur et emprunteur signent un contrat direct","Le financement est public","Le courtier perçoit une commission"],0,"En finance directe, c’est la relation contractuelle directe. En finance indirecte, la banque fait écran."],
+[2,"Que cherche à éviter l’ALM ?",["Le décalage de maturité entre dettes courtes et actifs longs","Le délit d’initié","La hausse des dividendes","Les fusions-acquisitions"],0,"Elle gère aussi les risques de taux et de liquidité."],
+[2,"Que désigne la désintermédiation ?",["La part croissante du financement des entreprises obtenue sur les marchés","La disparition des banques","Le financement par la banque centrale","La hausse des crédits bancaires"],0,"À l’opposé, l’économie d’endettement est dominée par le crédit bancaire."],
+[2,"Quand un OPCVM est-il dit dynamique ?",["Quand il n’investit qu’en actions","Quand il est à taux variable","Quand il est coté","Quand il est géré par une banque d’affaires"],0,"Les investisseurs achètent des parts de SICAV ou de FCP."],
+[3,"Que permet le marché secondaire ?",["Liquidité et cotation, sans financement nouveau","Émettre de nouveaux titres","Financer directement l’entreprise","Fixer les taux directeurs"],0,"Seul le marché primaire apporte de l’argent frais à l’entreprise."],
+[3,"Différence entre contrat à terme et option ?",["Le contrat à terme est un engagement ferme, l’option un droit","Le contrat à terme est un droit, l’option un engagement","Aucune","L’option ne porte que sur des actions"],0,"À l’échéance, le contrat à terme oblige à acheter ou vendre au prix fixé."],
+[3,"Qu’est-ce que la liquidité ?",["La capacité à transformer un bien en cash rapidement et sans perte de valeur","Le montant de cash d’une banque","La rentabilité d’un titre","Le volume de dettes"],0,"Rapidité et absence de perte de valeur."],
+[4,"Laquelle n’est PAS une fonction du système financier selon Merton et Bodie ?",["Fixer le taux directeur","Gestion du risque","Information sur les prix","Transactions"],0,"Les six fonctions : transactions, mise en commun, allocation, gestion du risque, information, incitations."],
+[4,"Que fait la BFI ?",["Des services sur mesure pour de grandes entreprises (ECM, DCM, fusions-acquisitions)","Des crédits standardisés pour les particuliers","La gestion de SICAV pour les particuliers","La supervision des banques"],0,"La banque de détail vise des millions de clients avec des produits standardisés."],
+[4,"Que s’est-il passé en 1999 pour le Glass-Steagall Act ?",["Il a été abrogé","Il a été adopté","Il a été renforcé","Il a été étendu à l’Europe"],0,"Cette loi séparait banques commerciales et banques d’affaires."],
+[5,"Efficience semi-forte : que devient l’analyse fondamentale ?",["Inutile, car l’information publique est déjà dans les prix","Indispensable","Utile seulement pour les initiés","Remplacée par l’analyse technique"],0,"Faible : historique. Semi-forte : + information publique. Forte : + information privée."],
+[5,"Quelle forme d’efficience rend l’analyse technique inutile ?",["La forme faible, et donc aussi les suivantes","Seulement la forme forte","Aucune","Seulement la semi-forte"],0,"Si les prix intègrent déjà l’historique, lire des graphiques n’apporte rien."],
+[5,"Face à un gain probable, que préfèrent les investisseurs selon la finance comportementale ?",["Un gain certain plus faible","Un pari risqué","Ne rien faire","Vendre à découvert"],0,"En revanche, face à une perte probable, ils prennent des risques."],
+[5,"Que caractérise le mimétisme autoréférentiel ?",["On anticipe le comportement majoritaire pour l’imiter, ce qui crée des bulles","On suit le groupe par conformité","On imite des mieux informés","On refuse de suivre le marché"],0,"Il produit des prophéties autoréalisatrices."],
+[6,"Quel comportement exploite sans risque les écarts de prix entre marchés ?",["L’arbitrage","La spéculation","La couverture","La titrisation"],0,"L’arbitragiste égalise les prix et rend les marchés plus efficients."],
+[6,"Quel est le rôle utile du spéculateur ?",["Assumer un risque et transformer les échéances","Éliminer le risque","Fixer les prix","Garantir l’égalité des prix"],0,"Il emprunte à court terme pour placer à long terme."],
+[7,"Un titre verse 110 € dans un an. Prix maximal pour une rentabilité exigée de 10 % ?",["100 €","99,1 €","110 €","121 €"],0,"110 / 1,10 = 100 €. Pour 11 % : 110 / 1,11 ≈ 99,1 €."],
+[7,"10 % avec intérêts semestriels : taux annuel équivalent ?",["10,25 %","10 %","5 %","20 %"],0,"(1 + 0,10 / 2)² − 1 = 10,25 %."],
+[7,"VAN = 0 signifie…",["Projet neutre : le prix est la valeur actuelle des flux","Projet très rentable","Projet à rejeter","Le TRA est nul"],0,"VAN > 0 : on investit. VAN < 0 : on rejette."],
+[7,"Quand achète-t-on selon le TRA ?",["Si TRA ≥ rentabilité exigée","Si TRA ≤ rentabilité exigée","Si TRA = 0","Toujours"],0,"Le TRA est le taux qui annule la VAN."],
+[8,"Un titre a un bêta de 1,4. Que cela signifie-t-il ?",["Il amplifie les variations du marché","Il les amortit","Il est sans risque","Il est indépendant du marché"],0,"Bêta du marché = 1. Au-dessus de 1, le titre bouge davantage que le marché."],
+[8,"Quel risque est diversifiable ?",["Le risque spécifique","Le risque systématique","Les deux","Aucun"],0,"Le risque de marché reste présent quel que soit le portefeuille."],
+[8,"−22 % (12 %), +6 % (74 %), +16 % (14 %) : espérance de rentabilité ?",["≈ 4 %","0 %","≈ 6 %","≈ 16 %"],0,"E(R) = −2,64 + 4,44 + 2,24 = 4,04 %."]
+].map(([ch,q,o,a,e])=>({ch:rch(ch,q+" "+o.join(" ")),q,o,a,e})).concat(EXTRA_QCM.map(([ch,q,o,a,e])=>({ch,q,o,a,e})));
+
+/* ---------- exercices de calcul (variantes aléatoires) ---------- */
+const EXOS=[
+{ch:7,t:"Capitalisation",make(){
+  const V0=pick([10000,20000,50000]),t=pick([3,4,5,6,8]),n=pick([3,4,5,6,8,10]);
+  const Vn=V0*Math.pow(1+t/100,n);
+  return {text:`On place ${fr(V0)} € à ${t} % par an, intérêts capitalisés, pendant ${n} ans.`,
+    fields:[{label:"Capital final",ans:Vn,tol:1,unit:"€",d:2}],
+    sol:`Vn = V0 × (1 + t)ⁿ`,calc:`${fr(V0)} × 1,${String(t).padStart(2,"0")}^${n} = ${frFix(Vn)} €`};}},
+{ch:7,t:"Taux de rentabilité",make(){
+  const V0=pick([50000,100000,200000]),k=pick([1.6,1.8,2,2.5,3]),n=pick([4,5,8,10]);
+  const Vn=V0*k,t=(Math.pow(Vn/V0,1/n)-1)*100;
+  return {text:`Un capital de ${fr(V0)} € vaut ${fr(Vn)} € après ${n} ans, sans apport ni dividende. Quel est le taux annuel ?`,
+    fields:[{label:"Taux annuel",ans:t,tol:.1,unit:"%",d:2}],
+    sol:`t = (Vn / V0)^(1/n) − 1`,calc:`(${fr(Vn)} / ${fr(V0)})^(1/${n}) − 1 = ${frFix(t)} %`};}},
+{ch:7,t:"Actualisation",make(){
+  const Vn=pick([5000,10000,20000]),t=pick([4,5,6,8,9]),n=pick([2,3,4,5,6]);
+  const V0=Vn/Math.pow(1+t/100,n);
+  return {text:`Un investissement versera ${fr(Vn)} € dans ${n} ans. La rentabilité exigée est de ${t} %. Quel prix maximal payer aujourd’hui ?`,
+    fields:[{label:"Valeur actuelle",ans:V0,tol:1,unit:"€",d:2}],
+    sol:`V0 = Vn / (1 + t)ⁿ`,calc:`${fr(Vn)} / 1,${String(t).padStart(2,"0")}^${n} = ${frFix(V0)} €`};}},
+{ch:7,t:"VA, VAN et décision",make(){
+  const F=[pick([3000,4000,5000]),pick([4000,5000,6000]),pick([100000,105000,110000])],t=pick([5,6,7,8]);
+  const VA=F[0]/(1+t/100)+F[1]/Math.pow(1+t/100,2)+F[2]/Math.pow(1+t/100,3);
+  const V0=Math.round(VA/1000)*1000+pick([-3000,2000,4000]);
+  const VAN=VA-V0;
+  return {text:`Un titre verse ${fr(F[0])} €, ${fr(F[1])} € puis ${fr(F[2])} € aux années 1, 2 et 3. Il coûte ${fr(V0)} € et la rentabilité exigée est de ${t} %.`,
+    fields:[{label:"Valeur actuelle (VA)",ans:VA,tol:2,unit:"€",d:2},{label:"VAN",ans:VAN,tol:2,unit:"€",d:2},{label:"Investir ? (1 = oui, 0 = non)",ans:VAN>0?1:0,tol:0,unit:"",d:0}],
+    sol:`VA = Σ Fi / (1 + t)ⁱ puis VAN = VA − V0. On investit si la VAN est positive.`,calc:`VA = ${frFix(VA)} €, VAN = ${frFix(VAN)} €`};}},
+{ch:7,t:"Taux équivalent",make(){
+  const n=pick([2,4]),ta=pick([6,8,10,12]);
+  const t=(Math.pow(1+ta/100/n,n)-1)*100;
+  return {text:`Un prêt est annoncé à ${ta} % par an avec des intérêts ${n===2?"semestriels":"trimestriels"}. Quel est le taux annuel équivalent ?`,
+    fields:[{label:"Taux équivalent",ans:t,tol:.02,unit:"%",d:3}],
+    sol:`t = (1 + ta / n)ⁿ − 1`,calc:`(1 + ${ta / 100} / ${n})^${n} − 1 = ${frFix(t,3)} %`};}},
+{ch:7,t:"TRA d’un zéro-coupon",make(){
+  const P=pick([80,85,90,95]),n=pick([2,3,4,5]),F=100;
+  const t=(Math.pow(F/P,1/n)-1)*100;
+  return {text:`Un titre coûte ${P} € et rembourse ${F} € dans ${n} ans, sans coupon. Quel est son TRA ?`,
+    fields:[{label:"TRA",ans:t,tol:.1,unit:"%",d:2}],
+    sol:`On cherche t tel que P = F / (1 + t)ⁿ, soit t = (F / P)^(1/n) − 1`,calc:`(${F} / ${P})^(1/${n}) − 1 = ${frFix(t)} %`};}},
+{ch:1,t:"Marge d’intermédiation",make(){
+  const r=pick([2,3,4,5]),m=pick([1.5,2,2.5,3]),e=r+m,enc=pick([50,100,200]);
+  return {text:`Une banque collecte ${enc} M€ de ressources à ${fr(r)} % et les prête à ${fr(e)} %.`,
+    fields:[{label:"Marge d’intermédiation",ans:m,tol:.01,unit:"%",d:2},{label:"Marge annuelle",ans:enc*m/100,tol:.01,unit:"M€",d:2}],
+    sol:`marge = taux des emplois − taux des ressources`,calc:`${fr(e)} % − ${fr(r)} % = ${fr(m)} %, soit ${fr(enc)} × ${fr(m)} % = ${fr(enc*m/100)} M€`};}},
+{ch:8,t:"Espérance et écart-type",make(){
+  const P=pick([[20,50,30],[10,60,30],[25,50,25],[15,70,15]]),r=[-pick([10,15,20]),pick([4,6,8]),pick([12,16,20])];
+  const E=P.reduce((s,p,i)=>s+p/100*r[i],0);
+  const sd=Math.sqrt(P.reduce((s,p,i)=>s+p/100*Math.pow(r[i]-E,2),0));
+  return {text:`Un titre rapporte ${r[0]} % (probabilité ${P[0]} %), ${r[1]} % (${P[1]} %) ou ${r[2]} % (${P[2]} %).`,
+    fields:[{label:"Espérance E(R)",ans:E,tol:.05,unit:"%",d:2},{label:"Écart-type σ",ans:sd,tol:.1,unit:"%",d:2}],
+    sol:`E(R) = Σ Pi × ri puis σ = √( Σ Pi × (ri − E)² )`,calc:`E(R) = ${frFix(E)} %, σ = ${frFix(sd)} %`};}},
+{ch:8,t:"Bêta et risque de marché",make(){
+  const sM=pick([10,12,15,20]),b=pick([.6,.8,1.2,1.4,1.6]);
+  const varM=Math.pow(sM/100,2),cov=b*varM;
+  return {text:`La volatilité du marché est de ${sM} % (variance ${varM.toFixed(4).replace(".",",")}). La covariance entre le titre et le marché vaut ${cov.toFixed(5).replace(".",",")}.`,
+    fields:[{label:"Bêta",ans:b,tol:.01,unit:"",d:2},{label:"Risque de marché du titre",ans:b*sM,tol:.1,unit:"%",d:2}],
+    sol:`β = Cov(Rj, RM) / Var(RM) puis risque de marché = β × σ(RM)`,calc:`β = ${fr(b)}, risque de marché = ${fr(b)} × ${sM} % = ${fr(b*sM)} %`};}}
+].map(e=>Object.assign(e,{ch:e.t==="Taux équivalent"?10:e.t==="Marge d’intermédiation"?2:rch(e.ch,"")})).concat(EXTRA_EXOS);
+
+/* ---------- navigation ---------- */
+const VIEWS=["cours","connaissances","quiz","evaluation"];
+function showView(v){
+  if(!VIEWS.includes(v))v="cours";
+  VIEWS.forEach(n=>{$("#view-"+n).hidden=n!==v;$("#tab-"+n).setAttribute("aria-selected",String(n===v))});
+  if(v==="evaluation")renderEval();
+  store.set("view",v);
+}
+function go(v){location.hash=v;}
+addEventListener("hashchange",()=>showView(location.hash.slice(1)));
+document.querySelectorAll("nav [data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
+
+/* ---------- vue Cours ---------- */
+const cours={cur:store.get("chap",1),read:store.get("read",{})};
+function renderCours(){
+  const c=CH.find(x=>x.id===cours.cur)||CH[0];
+  const i=CH.indexOf(c);
+  $("#view-cours").innerHTML=`
+  <div class="course">
+    <aside class="toc" aria-label="Chapitres">${CH.map(x=>`<button data-ch="${x.id}" ${x.id===c.id?'aria-current="true"':""}><span>${x.id}. ${esc(x.t)}</span>${cours.read[x.id]?'<span class="done" aria-label="lu">lu</span>':""}</button>`).join("")}</aside>
+    <article class="chap">
+      <h2>${c.id}. ${esc(c.t)}</h2>
+      ${c.html}
+      <div class="chapfoot">
+        <button class="btn" id="c-prev" ${i===0?"disabled":""}>Précédent</button>
+        <button class="btn" id="c-next" ${i===CH.length-1?"disabled":""}>Suivant</button>
+        <span class="sp"></span>
+        <button class="btn" id="c-cards">Réviser en cartes</button>
+        <button class="btn" id="c-quiz">Quiz du chapitre</button>
+        <button class="btn ${cours.read[c.id]?"":"primary"}" id="c-read">${cours.read[c.id]?"Marquer comme non lu":"Marquer comme lu"}</button>
+      </div>
+    </article>
+  </div>`;
+  document.querySelectorAll(".toc [data-ch]").forEach(b=>b.addEventListener("click",()=>setChap(+b.dataset.ch)));
+  $("#c-prev").onclick=()=>setChap(CH[i-1].id);
+  $("#c-next").onclick=()=>setChap(CH[i+1].id);
+  $("#c-read").onclick=()=>{cours.read[c.id]=!cours.read[c.id];store.set("read",cours.read);renderCours();renderStats()};
+  $("#c-cards").onclick=()=>{fc.ch=String(c.id);fc.only=false;fc.build();renderCards();go("connaissances")};
+  $("#c-quiz").onclick=()=>{qz.ch=String(c.id);qz.sub="qcm";qz.start();renderQuiz();go("quiz")};
+}
+function setChap(id){cours.cur=id;store.set("chap",id);renderCours();scrollTo({top:0})}
+
+/* ---------- vue Connaissances ---------- */
+const fc={ch:"all",only:false,known:store.get("known",{}),deck:[],i:0,flip:false,
+  build(){
+    let d=CARDS.filter(c=>fc.ch==="all"||String(c.ch)===fc.ch);
+    if(fc.only)d=d.filter(c=>!fc.known[c.id]);
+    fc.deck=d;fc.i=0;fc.flip=false;
+  }};
+function renderCards(){
+  const total=fc.deck.length,c=fc.deck[fc.i];
+  const knownAll=CARDS.filter(x=>fc.known[x.id]).length;
+  const chInDeck=CARDS.filter(x=>fc.ch==="all"||String(x.ch)===fc.ch);
+  const knownIn=chInDeck.filter(x=>fc.known[x.id]).length;
+  $("#view-connaissances").innerHTML=`
+  <h2>Connaissances</h2>
+  <p class="lead">${CARDS.length} cartes pour apprendre les définitions et les formules. Lis la question, réponds de tête, retourne la carte, puis dis si tu savais.</p>
+  <div class="deckbar">
+    <select id="f-ch" aria-label="Chapitre"><option value="all">Tous les chapitres</option>${CH.map(x=>`<option value="${x.id}" ${String(x.id)===fc.ch?"selected":""}>${x.id}. ${esc(x.t)}</option>`).join("")}</select>
+    <label><input type="checkbox" id="f-only" ${fc.only?"checked":""}> Seulement celles pas encore sues</label>
+    <button class="btn" id="f-shuffle">Mélanger</button>
+    <button class="btn ghost" id="f-reset">Tout remettre à zéro</button>
+  </div>
+  <p class="stat"><b>${knownIn}</b> sues sur <b>${chInDeck.length}</b> dans cette sélection · <b>${knownAll}</b> sur <b>${CARDS.length}</b> au total</p>
+  <div class="progress" aria-hidden="true"><i style="width:${chInDeck.length?knownIn/chInDeck.length*100:0}%"></i></div>
+  <div style="height:16px"></div>
+  ${c?`
+  <div class="card ${fc.flip?"back":""}" id="card" aria-live="polite">
+    <div class="tag">Chapitre ${c.ch} · carte ${fc.i+1} sur ${total}${fc.known[c.id]?" · sue":""}</div>
+    <div class="face">${fc.flip?esc(c.a):esc(c.q)}</div>
+    <div class="actions">
+      ${fc.flip?`<button class="btn primary" id="k-yes">Je savais</button><button class="btn" id="k-no">À revoir</button>`:`<button class="btn primary" id="k-flip">Retourner la carte</button>`}
+      <button class="btn ghost" id="k-prev" ${fc.i===0?"disabled":""}>Précédente</button>
+      <button class="btn ghost" id="k-next" ${fc.i>=total-1?"disabled":""}>Suivante</button>
+    </div>
+  </div>`:`<div class="empty">${fc.only?"Toutes les cartes de cette sélection sont sues. Décoche le filtre pour les revoir.":"Aucune carte dans cette sélection."}</div>`}`;
+  $("#f-ch").onchange=e=>{fc.ch=e.target.value;fc.build();renderCards()};
+  $("#f-only").onchange=e=>{fc.only=e.target.checked;fc.build();renderCards()};
+  $("#f-shuffle").onclick=()=>{fc.deck=shuffle(fc.deck);fc.i=0;fc.flip=false;renderCards()};
+  $("#f-reset").onclick=()=>{fc.known={};store.set("known",fc.known);fc.build();renderCards();renderStats()};
+  if(c){
+    const nxt=()=>{if(fc.i<total-1){fc.i++;fc.flip=false;renderCards()}else{fc.flip=false;renderCards()}};
+    const mark=v=>{fc.known[c.id]=v;store.set("known",fc.known);renderStats();
+      if(fc.only&&v){fc.deck.splice(fc.i,1);if(fc.i>=fc.deck.length)fc.i=Math.max(0,fc.deck.length-1);fc.flip=false;renderCards()}else nxt()};
+    const flip=$("#k-flip");if(flip)flip.onclick=()=>{fc.flip=true;renderCards()};
+    const y=$("#k-yes");if(y)y.onclick=()=>mark(true);
+    const n=$("#k-no");if(n)n.onclick=()=>mark(false);
+    $("#k-prev").onclick=()=>{fc.i--;fc.flip=false;renderCards()};
+    $("#k-next").onclick=()=>{fc.i++;fc.flip=false;renderCards()};
+  }
+}
+
+/* ---------- vue Quiz et exos ---------- */
+const qz={sub:"qcm",ch:"all",pool:[],i:0,score:0,chosen:null,done:false,best:store.get("best",{}),
+  start(){
+    QCM.forEach(q=>{delete q._o});
+    qz.pool=shuffle(QCM.filter(q=>qz.ch==="all"||String(q.ch)===qz.ch));
+    qz.i=0;qz.score=0;qz.chosen=null;qz.done=false;
+  }};
+function renderQuiz(){
+  const el=$("#view-quiz");
+  const bestAll=qz.best.all;
+  el.innerHTML=`
+  <h2>Quiz et exos</h2>
+  <p class="lead">Des QCM pour tester le cours, et des exercices de calcul avec des chiffres qui changent à chaque variante.</p>
+  <div class="subtabs" role="tablist">
+    <button role="tab" data-sub="qcm" aria-selected="${qz.sub==="qcm"}">QCM</button>
+    <button role="tab" data-sub="exos" aria-selected="${qz.sub==="exos"}">Exercices de calcul</button>
+  </div>
+  <div id="q-body"></div>`;
+  el.querySelectorAll("[data-sub]").forEach(b=>b.onclick=()=>{qz.sub=b.dataset.sub;renderQuiz()});
+  if(qz.sub==="qcm")renderQcm();else renderExos();
+}
+function chapSelect(id,val){return `<select id="${id}" aria-label="Chapitre"><option value="all">Tous les chapitres</option>${CH.map(x=>`<option value="${x.id}" ${String(x.id)===val?"selected":""}>${x.id}. ${esc(x.t)}</option>`).join("")}</select>`}
+function renderQcm(){
+  const b=$("#q-body");
+  const top=`<div class="row" style="margin-bottom:18px">${chapSelect("q-ch",qz.ch)}<button class="btn" id="q-restart">Recommencer</button>${qz.best[qz.ch]!=null?`<span class="stat">Meilleur score : <b>${qz.best[qz.ch]} %</b></span>`:""}</div>`;
+  if(!qz.pool.length)qz.start();
+  if(!qz.pool.length){b.innerHTML=top+`<div class="empty">Aucune question pour ce chapitre.</div>`;bindQcmTop();return}
+  if(qz.done){
+    const pct=Math.round(qz.score/qz.pool.length*100);
+    b.innerHTML=top+`<div class="qbox"><p class="stat">Terminé</p><div class="score num">${qz.score} / ${qz.pool.length}</div><p>${pct} % de bonnes réponses. ${pct>=80?"Ce chapitre est solide.":pct>=50?"Relis les explications des erreurs et recommence.":"Reprends le cours de ce chapitre puis les cartes."}</p><button class="btn primary" id="q-again">Rejouer</button></div>`;
+    bindQcmTop();$("#q-again").onclick=()=>{qz.start();renderQcm()};return;
+  }
+  const q=qz.pool[qz.i];
+  if(!q._o)q._o=shuffle(q.o.map((t,k)=>({t,ok:k===q.a})));
+  const answered=qz.chosen!==null;
+  b.innerHTML=top+`<div class="qbox">
+    <div class="qmeta"><span>Question ${qz.i+1} sur ${qz.pool.length} · chapitre ${q.ch}</span><span>Score : <b class="num">${qz.score}</b></span></div>
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts">${q._o.map((o,k)=>`<button class="opt ${answered?(o.ok?"good":(qz.chosen===k?"bad":"")):""}" data-k="${k}" ${answered?"disabled":""}>${esc(o.t)}</button>`).join("")}</div>
+    ${answered?`<div class="explain"><span class="verdict ${q._o[qz.chosen].ok?"good":"bad"}">${q._o[qz.chosen].ok?"Bonne réponse.":"Pas tout à fait."}</span> ${esc(q.e)}</div>
+    <div style="margin-top:14px"><button class="btn primary" id="q-next">${qz.i+1<qz.pool.length?"Question suivante":"Voir le score"}</button></div>`:""}
+  </div>`;
+  bindQcmTop();
+  b.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
+    const k=+btn.dataset.k;qz.chosen=k;if(q._o[k].ok){qz.score++;ev.qcm[q.q]=1;saveEv()}renderQcm();
+  });
+  const nx=$("#q-next");if(nx)nx.onclick=()=>{
+    if(qz.i+1<qz.pool.length){qz.i++;qz.chosen=null}else{
+      qz.done=true;const pct=Math.round(qz.score/qz.pool.length*100);
+      if(qz.best[qz.ch]==null||pct>qz.best[qz.ch]){qz.best[qz.ch]=pct;store.set("best",qz.best)}renderStats()}
+    renderQcm();
+  };
+}
+function bindQcmTop(){
+  $("#q-ch").onchange=e=>{qz.ch=e.target.value;qz.start();renderQcm()};
+  $("#q-restart").onclick=()=>{qz.start();renderQcm()};
+}
+
+const exs={ch:"all",items:[]};
+function newEx(e){return {e,d:e.make(),res:null}}
+function buildExos(){exs.items=EXOS.filter(e=>exs.ch==="all"||String(e.ch)===exs.ch).map(newEx)}
+function parseNum(s){const n=parseFloat(String(s).replace(/\s| |%|€/g,"").replace(",","."));return isNaN(n)?null:n}
+function renderExos(){
+  const b=$("#q-body");
+  if(!exs.items.length)buildExos();
+  b.innerHTML=`<div class="row" style="margin-bottom:18px">${chapSelect("x-ch",exs.ch)}<button class="btn" id="x-all">Nouvelles variantes</button></div>
+  <div class="exgrid">${exs.items.map((it,k)=>`
+    <div class="ex" id="ex-${k}">
+      <span class="chip">Chapitre ${it.e.ch}</span>
+      <h3>${esc(it.e.t)}</h3>
+      <p>${esc(it.d.text)}</p>
+      <div class="fields">${it.d.fields.map((f,j)=>`<div class="field"><label for="ex-${k}-${j}">${esc(f.label)}</label><input type="text" inputmode="decimal" autocomplete="off" id="ex-${k}-${j}" ${it.res?"disabled":""} value="${esc(it.res?it.res.vals[j]:((it.draft&&it.draft[j])||""))}" class="${it.res?(it.res.ok[j]?"good":"bad"):""}"><span class="u">${esc(f.unit)}</span></div>`).join("")}</div>
+      <div class="row"><button class="btn primary" data-check="${k}" ${it.res?"disabled":""}>Vérifier</button><button class="btn ghost" data-new="${k}">Nouvelle variante</button></div>
+      ${it.res?`<div class="sol"><b>${it.res.ok.every(Boolean)?"Juste.":"À corriger."}</b> ${esc(it.d.sol)}<div class="formula">${esc(it.d.calc)}</div></div>`:""}
+    </div>`).join("")}</div>`;
+  $("#x-ch").onchange=e=>{exs.ch=e.target.value;buildExos();renderExos()};
+  $("#x-all").onclick=()=>{buildExos();renderExos()};
+  b.querySelectorAll("[data-check]").forEach(btn=>btn.onclick=()=>{
+    exs.items.forEach((o,kk)=>{if(!o.res)o.draft=o.d.fields.map((f,j)=>$("#ex-"+kk+"-"+j).value)});
+    const k=+btn.dataset.check,it=exs.items[k];
+    const vals=it.d.fields.map((f,j)=>$("#ex-"+k+"-"+j).value);
+    const ok=it.d.fields.map((f,j)=>{const n=parseNum(vals[j]);return n!==null&&Math.abs(n-f.ans)<=f.tol});
+    it.res={vals,ok};if(ok.every(Boolean)){ev.exo[it.e.t]=(ev.exo[it.e.t]||0)+1;saveEv()}renderExos();
+  });
+  b.querySelectorAll("[data-new]").forEach(btn=>btn.onclick=()=>{const k=+btn.dataset.new;exs.items[k]=newEx(exs.items[k].e);renderExos()});
+}
+
+/* ---------- évaluation : points, niveaux, auto-évaluation, examen blanc ---------- */
+const ev={qcm:store.get("evq",{}),exo:store.get("evx",{}),self:store.get("evs",{}),mock:store.get("evm",[])};
+function saveEv(){store.set("evq",ev.qcm);store.set("evx",ev.exo);store.set("evs",ev.self);store.set("evm",ev.mock)}
+const LEVELS=[[0,"Débutant"],[25,"En progression"],[50,"Intermédiaire"],[70,"Avancé"],[88,"Expert"]];
+const lvl=p=>LEVELS.filter(l=>p>=l[0]).pop()[1];
+function chapStats(c){
+  const cards=CARDS.filter(x=>x.ch===c.id),qs=QCM.filter(x=>x.ch===c.id),xs=EXOS.filter(x=>x.ch===c.id);
+  const parts=[];
+  parts.push({k:"Lu",v:cours.read[c.id]?1:0,n:"cours"});
+  if(cards.length)parts.push({k:"Cartes sues",v:cards.filter(x=>fc.known[x.id]).length/cards.length,n:cards.filter(x=>fc.known[x.id]).length+"/"+cards.length});
+  if(qs.length)parts.push({k:"QCM réussis",v:qs.filter(x=>ev.qcm[x.q]).length/qs.length,n:qs.filter(x=>ev.qcm[x.q]).length+"/"+qs.length});
+  if(xs.length)parts.push({k:"Exercices réussis",v:xs.filter(x=>ev.exo[x.t]).length/xs.length,n:xs.filter(x=>ev.exo[x.t]).length+"/"+xs.length});
+  const pct=Math.round(parts.reduce((s,p)=>s+p.v,0)/parts.length*100);
+  return {parts,pct};
+}
+function points(){
+  const read=CH.filter(c=>cours.read[c.id]).length*10;
+  const cards=CARDS.filter(x=>fc.known[x.id]).length*2;
+  const q=Object.keys(ev.qcm).length*5;
+  const x=Object.values(ev.exo).reduce((s,n)=>s+Math.min(n,3)*10,0);
+  const m=ev.mock.length?Math.max(...ev.mock.map(r=>r.note))*5:0;
+  const max=CH.length*10+CARDS.length*2+QCM.length*5+EXOS.length*30+100;
+  return {read,cards,q,x,m,total:read+cards+q+x+m,max};
+}
+const SELF=[["bas","À revoir"],["moy","Moyen"],["haut","Maîtrisé"]];
+const mock={on:false,pool:[],i:0,score:0,chosen:null,done:false,t0:0,tick:null,wrong:[]};
+function mockStart(){
+  mock.pool=shuffle(QCM).slice(0,20).map(q=>Object.assign({},q,{_o:shuffle(q.o.map((t,k)=>({t,ok:k===q.a})))}));
+  Object.assign(mock,{on:true,i:0,score:0,chosen:null,done:false,t0:Date.now(),wrong:[]});
+}
+const fmtT=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+" min "+String(s%60).padStart(2,"0")+" s"};
+function renderEval(){
+  const el=$("#view-evaluation");clearInterval(mock.tick);
+  const P=points(),stats=CH.map(c=>({c,s:chapStats(c)})),glob=Math.round(stats.reduce((s,x)=>s+x.s.pct,0)/stats.length);
+  const best=ev.mock.length?Math.max(...ev.mock.map(r=>r.note)):null;
+  let h=`<h2>Évaluation</h2><p class="lead">Un score de points, un niveau global, une note par chapitre et un examen blanc noté sur 20. Tout se met à jour quand tu lis, révises les cartes, fais les QCM et les exercices.</p>
+  <div class="evtop"><div class="evcard"><span class="stat">Niveau global</span><div class="score num">${glob} %</div><b>${lvl(glob)}</b></div>
+  <div class="evcard"><span class="stat">Points</span><div class="score num">${P.total}</div><span class="stat">sur ${P.max}</span></div>
+  <div class="evcard"><span class="stat">Meilleur examen blanc</span><div class="score num">${best===null?"–":fr(best,1)+" / 20"}</div><span class="stat">${ev.mock.length} passage${ev.mock.length>1?"s":""}</span></div></div>
+  <div class="evpts"><span>Cours lus <b class="num">${P.read}</b></span><span>Cartes sues <b class="num">${P.cards}</b></span><span>QCM <b class="num">${P.q}</b></span><span>Exercices <b class="num">${P.x}</b></span><span>Examen blanc <b class="num">${P.m}</b></span></div>
+  <p class="stat" style="margin-top:6px">Barème : 10 pts par chapitre lu, 2 par carte sue, 5 par QCM réussi (une fois), 10 par exercice juste (3 fois maximum), 5 × la meilleure note à l’examen blanc.</p>
+  <h3 style="margin-top:28px">Mes chapitres</h3><p class="lead">Note objective (mesurée) et auto-évaluation (ton ressenti). Un écart signale un chapitre à retravailler.</p><div class="evlist">`;
+  stats.forEach(({c,s})=>{
+    const sv=ev.self[c.id],warn=sv==="haut"&&s.pct<50?"Tu te sens sûr, mais les résultats disent le contraire : reviens dessus.":sv==="bas"&&s.pct>=70?"Tu doutes, mais tes résultats sont bons.":"";
+    h+=`<div class="evrow"><div class="evh"><b>${c.id}. ${esc(c.t)}</b><span class="num">${s.pct} % · ${lvl(s.pct)}</span></div>
+    <div class="progress" style="max-width:none"><i style="width:${s.pct}%"></i></div>
+    <div class="evd">${s.parts.map(p=>`<span>${p.k}${p.k==="Lu"?" : "+(p.v?"oui":"non"):" : "+p.n}</span>`).join("")}</div>
+    <div class="row" role="group" aria-label="Auto-évaluation chapitre ${c.id}"><span class="stat">Mon ressenti :</span>${SELF.map(([k,t])=>`<button class="btn ${sv===k?"primary":"ghost"}" data-self="${c.id}:${k}">${t}</button>`).join("")}<button class="btn ghost" data-open="${c.id}">Réviser</button></div>
+    ${warn?`<div class="explain">${warn}</div>`:""}</div>`;
+  });
+  h+=`</div><h3 style="margin-top:28px">Examen blanc</h3><div id="ev-mock"></div>`;
+  if(ev.mock.length)h+=`<h3 style="margin-top:28px">Historique</h3><div class="evd" style="gap:8px">${ev.mock.slice(-8).reverse().map(r=>`<span class="chip2">${r.date} · <b class="num">${fr(r.note,1)} / 20</b> · ${r.dur}</span>`).join("")}</div><div style="margin-top:10px"><button class="btn ghost" id="ev-reset">Réinitialiser toute l’évaluation</button></div>`;
+  el.innerHTML=h;renderMock();
+  el.querySelectorAll("[data-self]").forEach(b=>b.onclick=()=>{const[c,k]=b.dataset.self.split(":");ev.self[c]=ev.self[c]===k?undefined:k;saveEv();renderEval()});
+  el.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{cours.cur=+b.dataset.open;store.set("chap",cours.cur);renderCours();go("cours")});
+  const rs=$("#ev-reset");if(rs)rs.onclick=()=>{if(rs.dataset.sure){ev.qcm={};ev.exo={};ev.self={};ev.mock=[];saveEv();renderEval()}else{rs.dataset.sure=1;rs.textContent="Confirmer : effacer points, notes et historique"}};
+}
+function renderMock(){
+  const b=$("#ev-mock");if(!b)return;
+  if(!mock.on){b.innerHTML=`<div class="qbox"><p style="margin:0 0 12px">20 questions tirées au hasard dans tous les chapitres, sans correction pendant l’épreuve, chronométrées. Note finale sur 20, avec la liste des erreurs à revoir.</p><button class="btn primary" id="m-go">Lancer l’examen blanc</button></div>`;$("#m-go").onclick=()=>{mockStart();renderMock()};return}
+  if(mock.done){
+    const note=Math.round(mock.score/mock.pool.length*20*10)/10,dur=fmtT(mock.end-mock.t0);
+    b.innerHTML=`<div class="qbox"><p class="stat">Terminé en ${dur}</p><div class="score num">${fr(note,1)} / 20</div><p>${note>=16?"Très bien : tu es prêt.":note>=12?"Bien, il reste quelques points à consolider.":note>=10?"Moyen : retravaille les chapitres ci-dessous.":"Insuffisant pour l’instant : reprends le cours et les cartes."}</p>
+    ${mock.wrong.length?`<p><b>À revoir :</b></p>${mock.wrong.map(q=>`<div class="explain" style="margin-bottom:8px"><b>Ch. ${q.ch} · ${esc(q.q)}</b><br>Réponse : ${esc(q.o[q.a])}. ${esc(q.e)}</div>`).join("")}`:"<p>Aucune erreur.</p>"}
+    <button class="btn primary" id="m-go">Nouvel examen blanc</button></div>`;$("#m-go").onclick=()=>{mockStart();renderMock()};return}
+  const q=mock.pool[mock.i],ans=mock.chosen!==null;
+  b.innerHTML=`<div class="qbox"><div class="qmeta"><span>Question ${mock.i+1} sur ${mock.pool.length}</span><span class="num" id="m-t"></span></div>
+  <p class="qtext">${esc(q.q)}</p><div class="opts">${q._o.map((o,k)=>`<button class="opt ${ans&&mock.chosen===k?"good":""}" data-k="${k}" ${ans?"disabled":""}>${esc(o.t)}</button>`).join("")}</div>
+  ${ans?`<div style="margin-top:14px"><button class="btn primary" id="m-next">${mock.i+1<mock.pool.length?"Question suivante":"Terminer et voir la note"}</button></div>`:""}</div>`;
+  const tick=()=>{const t=$("#m-t");if(t)t.textContent=fmtT(Date.now()-mock.t0)};tick();mock.tick=setInterval(tick,1000);
+  b.querySelectorAll(".opt").forEach(x=>x.onclick=()=>{mock.chosen=+x.dataset.k;if(q._o[mock.chosen].ok){mock.score++;ev.qcm[q.q]=1}else mock.wrong.push(q);renderMock()});
+  const nx=$("#m-next");if(nx)nx.onclick=()=>{
+    if(mock.i+1<mock.pool.length){mock.i++;mock.chosen=null}else{
+      mock.done=true;mock.end=Date.now();clearInterval(mock.tick);
+      const note=Math.round(mock.score/mock.pool.length*20*10)/10;
+      ev.mock.push({note,date:new Date().toLocaleDateString("fr-FR"),dur:fmtT(mock.end-mock.t0)});saveEv();renderEval();return}
+    renderMock()};
+}
+function renderStats(){if(!$("#view-evaluation").hidden)renderEval()}
+
+/* ---------- init ---------- */
+renderCours();
+fc.build();renderCards();
+qz.start();renderQuiz();
+showView(location.hash.slice(1)||store.get("view","cours"));
+</script>
+
+</body>
+</html>
