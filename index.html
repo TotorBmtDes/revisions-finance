@@ -166,464 +166,472 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const fr=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:d});
 const frFix=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
 
-/* ---------- données : chapitres ---------- */
+/* ---------- données : chapitres (d'après les deux documents Word uniquement) ---------- */
 const CH=[
-{id:1,t:"Évaluation, titres, système financier",html:`
-<p class="lead">Le cadre du cours, ce qu’on achète quand on finance une entreprise, et qui fait circuler l’épargne.</p>
-<div class="callout"><b>Évaluation.</b> 2 contrôles continus (40 %) et 1 contrôle terminal (60 %). Le 1er CC a lieu le 6 novembre : questions de cours et peut-être de petits exercices. Le 2e CC a lieu à la dernière séance : épreuve pratique. Le contrôle terminal est un examen sur ordinateur : travail sur des données de marché. <i>(Ton premier document indiquait le 17 octobre et le 5 décembre ; le 6 novembre vient du document le plus récent.)</i></div>
+{id:1,t:"Évaluation, investisseur, système financier",html:`
+<p class="lead">Le cadre du cours, la logique de l’investisseur et le rôle du système financier.</p>
+<div class="callout"><b>Évaluation.</b> 2 contrôles continus (CC) comptent pour 40 % : le 1er CC a lieu le 6 novembre (questions de cours et potentiellement des petits exercices), le 2e lors de la dernière séance (épreuve pratique). 1 contrôle terminal (CT) compte pour 60 % : examen sur ordinateur, avec des données de marché à travailler.</div>
 <h3>Plan du cours</h3>
-<ul><li>Généralités sur les marchés financiers</li><li>Théorie du pricing et théorie des marchés efficients</li><li>Mécanique financière : capitalisation et actualisation</li><li>Le risque en finance</li><li>Instruments financiers : obligations, actions, options (partie encore vide dans tes notes)</li></ul>
+<ul><li>Généralités sur les marchés financiers</li><li>Théorie du pricing, théorie des marchés efficients</li><li>La mécanique financière : deux notions fondamentales, la capitalisation et l’actualisation</li><li>Le risque en finance</li><li>Instruments financiers : obligations, actions, options</li></ul>
+<p>Cette version du site couvre la partie 1 (généralités sur les marchés financiers) et le début de la partie 2 (mécanique financière : capitalisation, actualisation, VAN, TRA).</p>
+<h3>La logique de l’investisseur financier</h3>
+<p>L’investisseur financier est la personne qui fait l’acquisition d’un titre financier. Il a un <b>double objectif</b> :</p>
+<ul><li>Le temps pendant lequel il prête ses fonds à l’entreprise, qui lui cède en contrepartie un de ses titres financiers, doit lui rapporter une rémunération, car il renonce à utiliser les fonds prêtés.</li>
+<li>Le risque qu’il prend doit lui rapporter une rémunération, <b>proportionnelle au risque</b>.</li></ul>
 <h3>Action et obligation</h3>
-<div class="tablebox"><table><tr><th></th><th>Action</th><th>Obligation</th></tr>
-<tr><td>Nature</td><td>Part de capital, titre de propriété : financement par capitaux propres</td><td>Titre de dette : financement par la dette</td></tr>
-<tr><td>Rémunération</td><td>Dividende variable et plus-value. Elle ne se rembourse pas, elle se revend</td><td>Coupon (intérêts), fixe ou variable (indexé). Capital remboursé</td></tr>
-<tr><td>Risque</td><td>Élevé : remboursé en dernier</td><td>Modéré à faible : prioritaire sur l’action</td></tr></table></div>
-<div class="callout">Le double objectif de l’investisseur : que le temps pendant lequel il prête ses fonds lui rapporte de l’argent (il renonce à les utiliser), et que le risque pris lui rapporte une rémunération proportionnelle au risque.</div>
+<div class="tablebox"><table><tr><th></th><th>Action (ou part)</th><th>Obligation</th></tr>
+<tr><td>Nature</td><td>Part de capital, titre de propriété. L’investisseur devient actionnaire (copropriétaire)</td><td>Titre de créance, donc dette. Un prêt à une entreprise ou à un État : l’investisseur est créancier et ne possède aucune part de la société</td></tr>
+<tr><td>Rémunération</td><td>Dividende (variable), non garanti, et plus-value éventuelle à la revente</td><td>Fixe ou variable (indexée) : coupon (intérêts), versé à des dates régulières, plus remboursement du capital à l’échéance</td></tr>
+<tr><td>Risque</td><td>Élevé : en cas de faillite, l’actionnaire est remboursé en dernier, après tous les créanciers, et peut perdre toute sa mise</td><td>Modéré à faible (selon la solvabilité de l’émetteur). Prioritaire sur l’action</td></tr></table></div>
 <h3>Le système financier</h3>
-<p>Il met en relation les agents économiques <b>excédentaires</b> en ressources (AEEF, souvent les ménages) et les agents <b>déficitaires</b> (AEBF : entreprises, État, administrations).</p>
-<div class="formula">AEEF → système financier → AEBF</div>
-<ul><li><b>Marché financier</b> = finance directe. <b>Système bancaire</b> = finance indirecte.</li>
-<li><b>Infrastructure de marché :</b> CCP (chambre de compensation, sécurise les transactions) et Euronext.</li>
-<li><b>Autorités :</b> AMF (Autorité des marchés financiers), Banque de France, ACPR. Le Trésor fait aussi partie du système.</li></ul>`},
+<p>Les marchés financiers sont une composante du système financier (SF). Le SF joue un rôle fondamental : il met en relation des agents économiques <b>excédentaires</b> en ressources (qui ont de l’épargne, souvent les ménages) et des agents économiques <b>déficitaires</b> (entreprises, État) qui ont besoin de ressources et les demandent aux premiers.</p>
+<div class="formula">AEE (excédentaires) → SF → AEBF (déficitaires)</div>
+<p>Cette relation peut être <b>directe</b> ou <b>indirecte</b>.</p>`},
 {id:2,t:"Finance directe, indirecte, ALM",html:`
-<p class="lead">Deux façons de faire circuler l’épargne vers l’investissement.</p>
-<h3>Finance directe</h3>
-<p>La finance des marchés : l’offre et la demande de fonds se rencontrent directement. L’agent excédentaire est contractuellement en relation avec celui qui a besoin de financement et détient un droit direct. Exemples : souscrire à une augmentation de capital d’une entreprise cotée, souscrire à un emprunt obligataire.</p>
-<p>L’<b>intermédiaire financier</b> (CIF, EI, PSI, y compris une banque quand elle conseille et exécute des ordres) est un simple <b>courtier</b> : conseil, exécution d’ordres, mise en relation. Il n’accorde pas de financement et ne collecte pas de ressources : <b>rien n’apparaît à son bilan</b>, seule sa commission figure au compte de résultat.</p>
-<h3>Finance indirecte</h3>
-<p>La finance intermédiée par le système bancaire. La banque achète des titres (actions, obligations) ou accorde des crédits, et se finance par ses propres titres de dette, une augmentation de capital ou la collecte de dépôts. Elle sert d’<b>écran</b> : prêteurs et emprunteurs ne sont pas en relation contractuelle. Elle opère une <b>transformation</b> : ressources collectées à court terme, emplois à long terme.</p>
-<div class="tablebox"><table><tr><th>Actif (emplois)</th><th>Passif (ressources)</th></tr><tr><td>Instruments financiers achetés, crédits, dépôts auprès de la banque centrale</td><td>Dépôts des ménages et des entreprises, émission de dettes (obligations), actionnaires, refinancement auprès de la banque centrale</td></tr></table></div>
-<p>Ne pas confondre l’<b>intermédiation financière</b> (finance indirecte) et l’<b>activité d’intermédiaire financier</b> (finance directe).</p>
-<h3>Marge d’intermédiation</h3>
-<p>Les ressources ont un coût, les emplois rapportent. Exemple : ressources de 100 avec 10 d’intérêts payés, coût = 10 %. Emplois de 100 qui rapportent 12, rendement = 12 %. Marge d’intermédiation = 12 % − 10 % = <b>2 %</b>.</p>
+<p class="lead">Deux façons de mettre en relation l’épargne et le besoin de financement.</p>
+<h3>La finance directe</h3>
+<p>Les agents économiques qui ont des excédents de ressources financent <b>directement</b> ceux qui ont besoin de financement. Le SF sert uniquement de <b>courtier</b> : il met en relation les demandeurs avec ceux qui peuvent prêter. C’est la finance des marchés financiers : c’est là que se rencontrent l’offre et la demande de fonds, et le financement est contractuellement direct entre l’agent excédentaire et l’agent en besoin.</p>
+<p><b>Intermédiaires de la finance directe :</b> CIF (conseiller en investissements financiers), EI, PSI (prestataires de services d’investissement : exécution d’ordres). Les banques en font partie, non pas dans leur fonction de financement mais dans leur fonction de conseil.</p>
+<p>L’activité d’intermédiaire financier <b>n’apparaît pas à son bilan</b> : il n’accorde pas de financement et ne collecte pas de ressources. Seule sa rémunération (commission de courtage) apparaît dans son <b>compte de résultat</b>.</p>
+<h3>La finance indirecte</h3>
+<p>C’est la finance <b>intermédiée par le système bancaire</b> (partie importante du SF). Les banques peuvent acheter des titres émis par des entreprises (actions ou obligations). Elles peuvent émettre elles-mêmes des titres de dette achetés par leurs clients, et se refinancer par la collecte de dépôts. Le système bancaire sert d’<b>écran</b> entre les demandeurs et les pourvoyeurs de capitaux : ils ne sont pas mis en relation contractuelle.</p>
+<p>La banque opère une <b>transformation</b> : elle collecte des ressources à court terme (CT) et finance avec elles des prêts, obligations ou actions d’entreprises, des ressources de long terme (LT). Elle peut aussi émettre elle-même des obligations souscrites par le public (dette à moyen et long terme).</p>
+<div class="tablebox"><table><tr><th>Actif (emplois)</th><th>Passif (ressources)</th></tr><tr><td>Portefeuille d’actions, de titres, crédits</td><td>Ressources collectées auprès des clients (dépôts) ou empruntées à la banque centrale, dette émise</td></tr></table></div>
+<p>Il faut bien distinguer l’<b>intermédiation financière</b> (finance indirecte) de l’<b>activité d’intermédiaire financier</b> (finance directe).</p>
+<h3>La marge d’intermédiation</h3>
+<p>Les ressources que mobilise la banque ne sont pas gratuites : elles ont un coût. Parallèlement, les emplois lui rapportent une rémunération.</p>
+<div class="tablebox"><table><tr><th>Ressources</th><th>Emplois</th></tr><tr><td>Volume 100, intérêts payés 10 : coût 10 / 100 = 10 %</td><td>Volume 100, rémunération 12 : 12 / 100 = 12 %</td></tr></table></div>
+<div class="formula">marge d’intermédiation = 12 % − 10 % = 2 %</div>
 <h3>Désintermédiation et économie d’endettement</h3>
-<ul><li>En Europe, la <b>désintermédiation</b> est de plus en plus forte : une part croissante du financement des entreprises vient directement des marchés (nouveaux titres, billets de trésorerie, obligations, augmentation de capital).</li>
-<li>Quand les marchés sont peu développés, c’est l’<b>économie d’endettement</b> : entreprises très endettées auprès des banques, elles-mêmes endettées auprès de la banque centrale.</li>
-<li>Risque en économie d’endettement : risque de bilan et de solvabilité de l’emprunteur. Si l’entreprise ne génère plus assez de cash flows pour payer ses intérêts, effet boule de neige sur la banque.</li>
-<li>Risque en économie de marchés : risque sur la valeur du titre, volatilité du titre.</li></ul>
-<div class="callout">Prêt de 10 M€ à 5 % : en courtage, la banque ne perd que sa rémunération (500 K€) ; en intermédiation, elle risque 10 M€. L’intermédiaire est souvent plus rémunérateur, et la banque est attirée par les métiers de service.</div>
-<h3>ALM : gestion actif-passif (Asset Liability Management)</h3>
-<p>Adossement du bilan : gérer les risques de taux et de liquidité, éviter le décalage de maturité (dettes à rembourser à court terme, actifs qui ne rapportent qu’à long terme), équilibrer rentabilité et solvabilité dans le cadre de Bâle.</p>
-<h3>OPCVM, théoriciens, marchéisation</h3>
-<ul><li><b>OPCVM (SICAV, FCP) :</b> la banque conçoit le fonds, le dote d’actifs (actions, obligations) et émet des parts. Uniquement en actions : OPCVM <b>dynamique</b>.</li>
-<li><b>Gurley et Shaw (1960) :</b> premiers économistes à avoir théorisé la finance directe et indirecte. <b>Hicks :</b> distinction entre l’économie d’endettement et l’économie de marchés financiers.</li>
-<li><b>Marchéisation :</b> les crédits aux ménages et aux PME sont surtout dispensés par les banques, mais les marchés influencent leurs prix : la banque doit s’aligner pour ne pas perdre ses clients.</li></ul>`},
+<ul><li>En Europe, l’économie financière et la <b>désintermédiation</b> sont de plus en plus fortes : les marchés financiers jouent un rôle plus important, une part croissante du financement des entreprises se fait directement sur les marchés.</li>
+<li>Quand les marchés financiers sont peu développés, le mode privilégié est l’endettement bancaire : c’est l’<b>économie d’endettement</b>. Les entreprises sont fortement endettées auprès de leurs banques, elles-mêmes endettées auprès de la banque centrale.</li>
+<li>Risque en économie d’endettement : <b>risque de bilan et de solvabilité de l’emprunteur</b>. Si l’entreprise ne génère plus assez de cash flows pour rembourser ses intérêts, il y a un effet boule de neige sur la banque.</li>
+<li>Risque en économie de marché : <b>risque sur la valeur du titre</b>, volatilité du titre.</li>
+<li>Quand les marchés sont développés, l’endettement n’est plus la seule solution : l’entreprise peut se financer par capitaux propres (augmentation de capital, émission de nouveaux titres souscrits directement par les investisseurs). L’économie de marchés financiers se caractérise par l’appel direct à l’épargne des investisseurs : obligations, billets de trésorerie…</li></ul>
+<div class="callout"><b>Courtage ou intermédiation ?</b> En courtage, la banque ne porte pas de risque à son bilan : elle craint seulement que le client ne la paie pas. Sur un prêt de 10 M€ à 5 %, elle ne perd que 500 K€ en cas de courtage, mais 10 M€ en intermédiation financière. L’intermédiaire financier est souvent plus rémunérateur, et la tendance de l’industrie bancaire est d’aller vers les métiers de service.</div>
+<h3>Banques, OPCVM (SICAV, FCP)</h3>
+<p>La banque conçoit l’OPCVM et le dote d’actifs (actions, obligations…), puis émet des parts auprès d’investisseurs, qui acquièrent une ou plusieurs parts de l’OPCVM. Un OPCVM investi uniquement en actions est un OPCVM <b>dynamique</b>.</p>
+<h3>Auteurs et marchéisation</h3>
+<ul><li><b>Gurley et Shaw</b> ont théorisé la distinction finance directe / finance indirecte. <b>Hicks</b> : économie de marchés financiers.</li>
+<li>Les crédits bancaires destinés aux ménages et aux PME sont dispensés largement par les banques. Il y a une tarification du marché : c’est la <b>marchéisation</b>. Le marché financier influence les prix proposés par les banques, qui doivent s’ajuster aux prix des marchés pour ne pas perdre leurs clients.</li></ul>
+<h3>ALM : Asset and Liability Management</h3>
+<p>Pratique de gestion financière stratégique utilisée surtout par les banques, les compagnies d’assurance et les grandes entreprises, pour analyser, piloter et équilibrer l’ensemble de leurs actifs et de leurs passifs. Elle vise un <b>adossement</b> du bilan de la banque.</p>
+<ul><li><b>Actifs</b> (ce que l’organisation possède) : prêts accordés, investissements, liquidités, titres.</li>
+<li><b>Passifs</b> (ce qu’elle doit) : dépôts des clients, emprunts, engagements envers des assurés.</li></ul>
+<ol><li><b>Gérer les risques financiers :</b> risque de taux d’intérêt (taux des emprunts et des prêts qui évoluent de manière décalée) et risque de liquidité (ne pas avoir assez de liquidités pour faire face aux demandes immédiates).</li>
+<li><b>Éviter le décalage de maturité :</b> ne pas avoir des dettes à rembourser à court terme alors que les actifs ne rapportent qu’à long terme.</li>
+<li><b>Optimiser la rentabilité :</b> trouver le juste équilibre entre la prise de risque (profit) et la solvabilité à long terme, pour respecter la réglementation (accords de Bâle pour les banques).</li></ol>`},
 {id:3,t:"Marchés primaire, secondaire, dérivés",html:`
-<p class="lead">Où les titres sont créés, échangés et dérivés.</p>
-<div class="tablebox"><table><tr><th>Marché</th><th>Rôle</th><th>À retenir</th></tr>
-<tr><td>Primaire</td><td>Émission, création des titres (le neuf, l’argent frais, <i>new money</i>)</td><td>L’entreprise y lève des fonds : c’est le seul marché où elle se finance</td></tr>
-<tr><td>Secondaire</td><td>Transactions ultérieures (l’occasion)</td><td>Changement de propriétaire, sans création de titre ni cash pour l’entreprise. Liquidité et cotation</td></tr>
-<tr><td>Dérivés</td><td>Valeur dépendant d’un sous-jacent</td><td>« Marché sur un marché », effet de levier</td></tr></table></div>
-<h3>Fonctions du marché secondaire</h3>
-<ul><li>L’investisseur pense à sa sortie avant d’entrer. La sortie est facile pour un titre à court terme (on attend le remboursement). Pour un actionnaire, la seule sortie est de vendre à un autre investisseur.</li>
-<li>Le marché secondaire assure la <b>liquidité</b> et la <b>cotation</b>. Il relaie ou refinance les investissements initiaux.</li>
-<li>C’est un <b>jeu à somme nulle</b> entre investisseurs. Il ne finance pas le développement économique. Une entreprise qui a émis des obligations est sûre de ses fonds selon l’échéancier du contrat.</li></ul>
-<h3>Liquidité</h3>
-<p>Aptitude d’un bien à être transformé rapidement en cash, sans perte de valeur. C’est aussi pouvoir transiger au prix affiché sans perturber le marché.</p>
-<h3>Produits dérivés</h3>
-<ul><li>Sous-jacents possibles : obligation, action, matière première agricole, énergétique ou minière, indice boursier.</li>
-<li>Deux familles : <b>contrats à terme</b> (engagement ferme d’acheter ou vendre à l’échéance à un prix fixé) et <b>options</b> (un droit, sans obligation).</li>
-<li><b>Effet de levier :</b> une mise de fonds limitée (le prix de l’option) donne une position bien plus importante.</li>
-<li>Ils permettent de transférer un risque à un tiers, de se couvrir avant de spéculer. Produits standardisés, très liquides.</li></ul>`},
+<p class="lead">Où les titres sont créés, échangés, et où l’on négocie des produits qui en dépendent.</p>
+<h3>Du marché primaire au marché secondaire</h3>
+<ul><li>Le <b>marché primaire (MP)</b> est le marché de l’émission, de la création des titres financiers. Le <b>marché secondaire (MS)</b> est le marché des transactions ultérieures à l’émission, le « marché de l’occasion ».</li>
+<li>Deux éléments essentiels les caractérisent : le <b>prix</b> du titre (son cours) et la <b>chose</b> (le titre). La vie d’un titre est liée au fait qu’il peut être acheté et vendu à tout moment.</li></ul>
+<div class="tablebox"><table><tr><th></th><th>Marché primaire</th><th>Marché secondaire</th></tr>
+<tr><td>Rôle</td><td>Création des titres, émission</td><td>Transactions ultérieures</td></tr>
+<tr><td>Pour l’entreprise</td><td>Elle reçoit du cash en échange (<i>new money</i>) : c’est là qu’elle lève des fonds et se finance. Marché primordial</td><td>Ne touche pas sa trésorerie : on achète et vend des titres déjà créés, simple changement de propriétaire. L’entreprise s’en soucie peu</td></tr>
+<tr><td>Fonction</td><td>Permet à des agents économiques de se procurer des ressources par l’émission de titres cotés sur un marché (visibilité sur leur cours)</td><td>Assure la valorisation et la cotation des titres, la liquidité</td></tr></table></div>
+<p>La cotation par la Banque de France correspond à l’analyse financière de la santé de l’entreprise, traduite en un cours de Bourse.</p>
+<h3>Les fonctions du marché secondaire</h3>
+<ul><li>L’investisseur vérifie à chaque moment s’il doit acheter ou vendre ses actifs. Il ne veut pas s’immobiliser sur un placement : avant même d’entrer dans un investissement, il a déjà pensé à sa sortie.</li>
+<li>La sortie est relativement aisée pour un titre à <b>court terme</b>, plus complexe pour un investissement de long terme. Pour un actionnaire, la seule possibilité de se dégager est de vendre son action à un autre investisseur intéressé.</li>
+<li>Le MS assure la <b>liquidité</b> des titres, leur valorisation et leur cotation, et permet le refinancement des investissements.</li>
+<li>C’est un <b>jeu à somme nulle</b> entre investisseurs, a priori totalement indépendant de l’émetteur initial : une entreprise qui a émis des obligations est certaine de la disponibilité des fonds selon l’échéancier du contrat. Aucun cash supplémentaire pour l’entreprise.</li>
+<li>Il ne finance pas le développement économique, mais son rôle reste important : il relaie ou refinance les investissements initiaux.</li></ul>
+<h3>Le marché des dérivés : marchés à terme et optionnels</h3>
+<p>On y négocie des <b>produits dérivés</b> : des produits dont la valeur dépend d’un autre actif, le <b>sous-jacent</b> (actions, obligations, matières premières agricoles…). Le marché des dérivés est un marché sur un marché, un contrat sur un contrat.</p>
+<p>Deux grandes familles : les <b>contrats à terme</b> et les <b>options</b>.</p>
+<ul><li>Les dérivés permettent de prendre des positions importantes, des intentions fermes à l’achat ou à la vente, avec une <b>mise de fonds limitée</b> grâce à un <b>effet de levier</b> important.</li>
+<li>Avantage commun : <b>transférer un risque à un tiers</b>, se couvrir contre un risque avant de spéculer. Produits standardisés, de très grande liquidité.</li>
+<li><b>Option :</b> son prix donne le droit d’acquérir ou de vendre une certaine quantité à une certaine date. Il peut y avoir une disproportion entre le prix payé et la position que l’on peut prendre : une mise limitée permet une position plus importante sur une action.</li></ul>
+<h3>Le contrat à terme (future, forward)</h3>
+<p>Accord <b>ferme</b> entre deux parties pour acheter ou vendre un actif sous-jacent (matière première, action, taux d’intérêt, devise, indice boursier) à une date future déterminée, à un prix fixé dès aujourd’hui.</p>
+<ul><li><b>Engagement ferme :</b> contrairement à l’option (un droit, pas une obligation), l’acheteur doit acheter et le vendeur doit vendre à l’échéance, quel que soit le prix du marché.</li>
+<li><b>Sous-jacent :</b> pétrole, blé, or, taux d’intérêt, obligations d’État, indices (CAC 40, S&amp;P 500).</li>
+<li><b>Échéance :</b> date future convenue du dénouement (fin mars, juin, septembre…).</li>
+<li><b>Couverture :</b> un producteur de blé craint une baisse du prix d’ici sa récolte dans six mois. Il vend aujourd’hui un contrat à terme à un prix fixé. Si le prix baisse, le contrat compense sa perte ; si le prix monte, il ne profite pas de la hausse, mais son chiffre d’affaires est sécurisé.</li>
+<li><b>Spéculation :</b> un investisseur qui anticipe la hausse du pétrole achète un contrat à terme sans posséder de baril, pour revendre le contrat plus cher avant l’échéance. Autre exemple : un produit spéculatif parie sur une forte baisse de l’euro par rapport au dollar.</li></ul>`},
 {id:4,t:"Les six fonctions du système financier",html:`
 <p class="lead">Typologie de Merton et Bodie.</p>
-<p>Un système financier réunit marchés financiers et intermédiaires financiers. Son but : fournir de la liquidité aux projets les plus rentables compte tenu des risques anticipés. Rentabilité et risque sont liés. Le marché permet aussi de transformer un revenu présent en revenu futur, pour une consommation future plus grande, et de créer pour l’emprunteur une ressource immédiate contre un intérêt à payer.</p>
-<ul><li><b>1. Faciliter les transactions :</b> règlement et compensation (chèques, carte, virement, paiement mobile).</li>
-<li><b>2. Mettre en commun les fonds</b> pour de grands projets, et subdiviser le capital des entreprises : l’investisseur accède à l’épargne de millions de personnes et peut diversifier. L’entrepreneur est incité à être performant. L’épargnant détient ses actifs sous forme plus liquide que l’immobilier.</li>
-<li><b>3. Répartir les ressources</b> dans le temps, l’espace et entre secteurs : un jeune ménage emprunte pour se loger, un futur retraité épargne, un secteur mature finance un secteur en fort développement.</li>
-<li><b>4. Gérer le risque :</b> il est imprudent de tout investir dans une seule entreprise. Les intermédiaires créent des produits d’épargne collective (SICAV, FCP) qui diversifient.</li>
-<li><b>5. Fournir une information sur les prix</b> à très faible coût : taux d’intérêt et prix des actifs guident les décisions d’épargne et d’investissement.</li>
-<li><b>6. Limiter les problèmes d’incitation</b> (asymétrie d’information, théorie de l’agence) : l’investisseur qui confie ses fonds à un gestionnaire espère qu’il les gère au mieux de ses intérêts. Un mauvais gestionnaire est sanctionné par le marché, qui lui retire ses clients : discipline de marché, alignement des intérêts.</li></ul>`},
-{id:5,t:"Les banques",html:`
-<p class="lead">Du modèle historique à la banque universelle, et ce qui a changé depuis 2008.</p>
+<p>Un système financier est constitué des marchés financiers et des intermédiaires financiers. Son objectif : fournir les liquidités aux projets d’investissement qui apparaissent les plus rentables compte tenu des risques anticipés sur ces placements. Deux grandes notions : <b>rentabilité et risque</b>, dont la relation est négative (le texte de ton cours parle d’une « relation négative »).</p>
+<p>Comme tout marché, un marché financier assure l’équilibre entre l’offre et la demande d’actifs financiers. Il permet aussi aux investisseurs de transformer un revenu actuel en revenu futur, pour une consommation espérée plus grande dans le futur, et crée pour l’emprunteur une ressource financière utilisable immédiatement, en contrepartie d’un intérêt à payer.</p>
+<p>Six fonctions essentielles, mises en évidence par les économistes <b>Merton et Bodie</b> :</p>
+<ol><li><b>Faciliter les transactions :</b> mécanismes de règlement et de compensation des opérations (chèque, carte bancaire, téléphone…).</li>
+<li><b>Mettre en commun des fonds</b> pour entreprendre des projets de grande taille et de coût important. Le marché financier est un mécanisme de subdivision ou de partage du capital des entreprises : l’investisseur accède aux ressources de millions d’épargnants, peut diversifier et élargir ses investissements. L’entrepreneur est incité à avoir des résultats performants. L’épargnant détient ses actifs sous une forme plus liquide que l’investissement immobilier.</li>
+<li><b>Répartir les ressources</b> dans le temps, l’espace et entre secteurs économiques : les jeunes ménages empruntent pour acheter un logement, ceux qui approchent de la retraite épargnent. Des secteurs à maturité peuvent financer des secteurs à fort développement.</li>
+<li><b>Fournir des outils de gestion du risque :</b> il n’est pas prudent de tout investir dans une même entreprise (si elle fait faillite, on perd tout). Les intermédiaires créent des épargnes collectives (fonds communs de placement) qui permettent de réduire le risque par la diversification.</li>
+<li><b>Fournir une information sur les prix</b> au plus bas coût possible, ce qui aide la décision individuelle : taux d’intérêt et prix (actions, obligations) sont des indicateurs d’investissement.</li>
+<li><b>Limiter les problèmes entre les parties d’un contrat</b> (asymétrie d’information) : il n’est pas toujours possible de savoir si l’autre partie fait ce qui est prévu. L’investisseur qui confie des fonds espère qu’ils seront gérés au mieux de ses intérêts plutôt que de ceux du gestionnaire. Si ce n’est pas le cas, les mauvais gestionnaires sont sanctionnés par le marché : sélection naturelle, <b>discipline de marché</b>, alignement d’intérêts entre les parties.</li></ol>`},
+{id:5,t:"Le rôle financier des banques",html:`
+<p class="lead">Du modèle commercial / affaires à la banque universelle, puis aux trois départements.</p>
 <h3>Historique</h3>
-<ul><li><b>Banque commerciale :</b> collecte l’épargne des clients et prête aux entreprises.</li>
-<li><b>Banque d’affaires :</b> conseil (M&A, gestion de fortune), intermédiaire pour le placement d’actions ou d’obligations, sans toucher à son bilan.</li>
-<li>Années 1990 : rapprochements en <b>banques universelles</b>. Exemples : BNP et Paribas, Chase Manhattan et JP Morgan, Bank of America et Merrill Lynch.</li>
-<li><b>Glass-Steagall Act (Banking Act)</b> : loi américaine qui interdisait le rapprochement banques commerciales / banques d’affaires. Abrogée en 1999. Ton cours indique « 1890 » pour sa date ; elle date en réalité de 1933, à vérifier avec ton enseignant.</li>
-<li><b>Crise de 2008 :</b> volonté politique de séparer à nouveau activités de dépôts et de marchés, pour protéger l’épargne. Réalisée partiellement : les banques doivent cantonner leurs activités spéculatives pour compte propre dans des structures séparées. En France, à la suite de l’élection présidentielle de 2012, une loi a imposé des filiales ségréguées et l’identification des activités spéculatives.</li></ul>
-<h3>Les trois départements</h3>
-<div class="tablebox"><table><tr><th>Département</th><th>Particularités</th></tr>
-<tr><td>Banque de détail (<i>retail banking</i>)</td><td>Particuliers, professionnels, PME. Millions de clients, dimension quasi industrielle, produits standardisés. La diversification des profils élimine une partie du risque. Très concurrentiel, marges faibles après frais généraux et coût du risque (provisions pour créances douteuses). Services annexes : encaissement de chèques, virements, paiement électronique, crédit à la consommation, assurance</td></tr>
-<tr><td>BFI (<i>corporate and investment banking</i>)</td><td>Le plus rentable. Quelques milliers de grandes entreprises, services sophistiqués sur mesure</td></tr>
-<tr><td>Gestion d’actifs</td><td>Clients institutionnels (assureurs, <i>family offices</i>) et particuliers fortunés. SICAV, FCP, produits structurés ; elle recourt à la BFI pour obtenir des instruments de couverture</td></tr></table></div>
-<h3>Services spécialisés de la banque de détail</h3>
-<ul><li><b>Affacturage :</b> l’entreprise cède ses factures à un factor pour être payée à l’avance.</li>
-<li><b>Crédit-bail :</b> la banque achète un bien et le loue à l’entrepreneur ; à la fin, option d’achat à la valeur résiduelle.</li></ul>
-<h3>Les services de la BFI</h3>
-<ul><li><b>ECM</b> (Equity Capital Market) : introduction en bourse, augmentations de capital, titres convertibles en actions (OCA).</li>
-<li><b>DCM</b> (Debt Capital Market) : émission d’obligations.</li>
-<li><b>M&amp;A</b> (Mergers and Acquisitions) : conseil en fusions-acquisitions et valorisation, pas de financement.</li>
-<li><b>Crédits syndiqués :</b> un pool de banques prête, une banque est chef de file.</li>
-<li><b>Financements spécialisés :</b> LBO (<i>leveraged buy-out</i>, levier).</li>
-<li><b>Marchés spécialisés :</b> change, taux d’intérêt, matières premières.</li></ul>
-<h3>Autres acteurs, crise de 2020, réglementation</h3>
-<ul><li>Acteurs spécialisés : conseil en fusion-acquisition (Lazard, Rothschild, Hottinger), néobanque (Revolut), banque régionale (Crédit Mutuel Arkéa).</li>
-<li>La crise sanitaire de 2020 montre à nouveau, après 2008, le rôle central des banques. Elles fournissent des liquidités et sont un indicateur de l’aversion au risque. Leur métier de base : apprécier le risque et le repackager en éliminant le risque diversifiable.</li>
-<li>Les comités de Bâle imposent aux banques au moins 8 % de fonds propres sur les crédits accordés. Pour optimiser, certains groupes sortent les risques de leur bilan par la <b>titrisation</b>, vers des structures non régulées.</li></ul>`},
-{id:6,t:"Marchés efficients (Fama)",html:`
-<p class="lead">Un premier cadre théorique : les prix disent-ils tout ?</p>
-<p>« Efficient » vient d’une idée d’optimisation. Un marché efficient est un marché où le prix des titres reflète à tout moment toute l’information pertinente disponible : il intègre instantanément les conséquences des événements passés et toutes les anticipations sur les événements futurs. Il est donc impossible de prévoir les variations futures.</p>
-<ul><li>Seule une information nouvelle, totalement imprévue, modifie le prix. Son apparition étant imprévisible, les changements de prix sont <b>aléatoires</b> : <b>marche au hasard</b> (processus stochastique). D’où les profils d’ingénieurs sur les marchés.</li>
-<li>L’ajustement est quasi instantané car la concurrence entre investisseurs est très forte. Le prix dépend de la rentabilité et du risque perçus.</li>
-<li>On parle aussi de théorie des marchés en équilibre ou des marchés parfaits.</li></ul>
-<h3>Les trois formes (Eugene Fama, Université de Chicago, prix Nobel d’économie 2013)</h3>
-<div class="tablebox"><table><tr><th>Forme</th><th>Les prix intègrent</th><th>Conséquence</th></tr>
-<tr><td>Faible</td><td>Les données historiques</td><td>Analyse technique (chartiste) inutile : on ne prévoit pas les rentabilités futures par des modèles statistiques</td></tr>
-<tr><td>Semi-forte</td><td>+ toutes les informations publiques (rapports, presse, prospectus, annonces)</td><td>Analyse fondamentale inutile aussi. Seuls les initiés (dirigeants) pourraient faire mieux. Aucun effet sur le prix avant ni le lendemain de l’annonce</td></tr>
-<tr><td>Forte</td><td>+ informations privées ou privilégiées</td><td>Même les initiés ne peuvent pas faire mieux. Vrai si les autorités de marché répriment le délit d’initié</td></tr></table></div>
-<p>Les trois niveaux de Fama s’appuient sur : la capacité à prévoir les cours futurs, la réponse des marchés à des événements ponctuels, l’influence des informations privilégiées.</p>`},
-{id:7,t:"Finance comportementale",html:`
-<p class="lead">Les investisseurs sont-ils rationnels ? Les contestations de l’efficience.</p>
+<ul><li>Les banques se répartissaient entre <b>banques commerciales</b> (collecte de ressources auprès des clients et crédits à ces clients) et <b>banques d’affaires</b> (conseil en fusion-acquisition, intermédiaire financier pour le placement d’instruments financiers, sans toucher à leur bilan).</li>
+<li>Depuis le début du XXe siècle, émergence de grandes <b>banques universelles</b> aux États-Unis et en Europe, à l’occasion de rapprochements entre banques commerciales et banques d’affaires : en 1990, BNP et Paribas ; aux États-Unis, JP Morgan et Chase Manhattan. D’autres rapprochements : Bank of America et Merrill Lynch.</li>
+<li>Tendance favorisée par l’évolution de la réglementation, notamment aux États-Unis avec le <b>Glass-Steagall Act</b> : cette loi interdisait le rapprochement entre banque commerciale et banque d’affaires, et a été <b>abrogée en 1999</b>. Elle traduit la volonté des grands groupes de mettre en place un business model de banque universelle dans un contexte d’internationalisation et de complexification croissante.</li>
+<li><b>Crise financière de 2008 :</b> volonté politique de scinder à nouveau les grands groupes bancaires, pour séparer les activités de dépôts des activités de marchés et empêcher que les ressources des épargnants soient utilisées à des fins spéculatives. Idée portée par le souci de protéger les épargnants, partiellement matérialisée dans les réglementations nationales : les banques ont dû cantonner dans des structures différentes leurs activités spéculatives de compte propre (demande d’agrément pour une filiale).</li>
+<li>La grande majorité des groupes bancaires ont aujourd’hui trois départements : détail, financement et investissement, gestion d’actifs.</li></ul>
+<h3>La banque de détail (<i>retail banking</i>)</h3>
+<ul><li>Clients : particuliers, professionnels et PME. Fonction d’<b>intermédiation financière</b> : elle collecte l’épargne des agents excédentaires et prête (crédit) à ceux qui ont besoin de financement.</li>
+<li>Des millions de clients : dimension quasi industrielle (effet de masse), produits financiers standardisés. Un portefeuille important de clients et de nombreux crédits <b>éliminent une partie du risque par la diversification</b> des profils de risque.</li>
+<li>Activité fortement <b>concurrentielle</b> : le prêt bancaire est un produit standardisé, donc les clients font aisément jouer la concurrence. Les <b>marges sont peu élevées</b> après prise en compte des frais généraux et du <b>coût du risque</b> (provisions pour créances douteuses).</li>
+<li><b>Services annexes</b> pour les entreprises : gestion des flux financiers (encaissement de chèques, virements, paiement électronique, gestion de trésorerie).</li>
+<li><b>Services spécialisés pour les particuliers :</b> crédit à la consommation, produits d’assurance.</li>
+<li><b>Services spécialisés pour les PME :</b> l’<b>affacturage</b> (financement fondé sur une cession de créances à un factor, qui paie la créance) et le <b>crédit-bail</b>, pour une raison historique : ces services étaient déjà proposés aux PME à l’origine.</li></ul>
+<h3>La banque de financement et d’investissement (BFI, ou CIB)</h3>
+<p>Le département le plus rentable. Services sophistiqués, sur mesure, pour de grandes entreprises ; quelques milliers de clients tout au plus (exemples : BNP Paribas CIB, CACIB).</p>
+<ol><li><b>ECM</b> (<i>Equity Capital Market</i>) : accès au marché actions. Aide à l’introduction en bourse et aux augmentations de capital ultérieures ; émission de produits financiers transformables en actions, comme les <b>OCA</b> (obligations convertibles en actions).</li>
+<li><b>DCM</b> (<i>Debt Capital Market</i>) : accès au marché obligataire. Aide à lever de la dette auprès d’investisseurs par l’émission d’obligations.</li>
+<li><b>M&amp;A</b> (<i>Mergers and Acquisitions</i>) : conseil en fusion-acquisition. Pas une opération de financement, un conseil de valorisation.</li>
+<li><b>Financements bancaires spécialisés et importants :</b> crédits syndiqués ou sophistiqués. Une banque est <b>chef de file</b> (tête de file) et d’autres établissements se syndiquent. Exemple de ton cours : BNP 50 %, CA 25 %, CE 25 %.</li>
+<li><b>Marchés des changes et des matières premières :</b> produits qui permettent aux clients de se couvrir contre le risque de variation des prix ou des monnaies.</li></ol>
+<p>Les trois premiers services (ECM, DCM, M&amp;A) rendent compte de la partie <b>investissement</b> de la banque.</p>
+<h3>La gestion d’actifs</h3>
+<ul><li>Clients propres : <b>investisseurs institutionnels</b> (compagnies d’assurance), <i>family offices</i> (regroupement de personnes fortunées) et particuliers très fortunés.</li>
+<li>Produits : <b>SICAV, FCP</b> et produits structurés (packages financiers). Elle peut recourir à la BFI pour obtenir des instruments de couverture.</li></ul>
+<h3>Autres acteurs, crise de 2020</h3>
+<ul><li>À côté des groupes globaux, des acteurs spécialisés dans un nombre réduit d’activités : conseil en fusion-acquisition (Lazard, Rothschild, Hottinger), néobanque (Revolut), banque implantée dans une zone géographique (Crédit Mutuel Arkéa : Ouest et Est de la France).</li>
+<li>La <b>crise sanitaire de 2020</b> montre à nouveau, après 2008, le rôle central des banques : elles fournissent des liquidités ou des financements et sont aussi un <b>indicateur d’aversion au risque</b> des investisseurs.</li>
+<li>Leur métier de base : <b>apprécier le risque et le repackager</b>, en éliminant le risque qui peut être diversifié. Du fait des contraintes réglementaires importantes, une partie de leur activité traditionnelle (par exemple le trading) est désormais exercée par des acteurs non régulés.</li></ul>`},
+{id:6,t:"Les marchés efficients (Fama)",html:`
+<p class="lead">Un premier cadre théorique : les prix reflètent-ils toute l’information ?</p>
+<p><b>Marché financier efficient :</b> marché où les prix des titres reflètent à tout instant toute l’information pertinente disponible sur ces titres. On parle aussi de théorie des marchés <b>à l’équilibre</b> ou des marchés <b>parfaits</b>.</p>
+<ul><li>Le prix intègre instantanément les conséquences des événements passés et reflète déjà toutes les anticipations sur les événements futurs. Il est donc <b>impossible de prévoir les variations futures</b> : tous les éléments connus ou anticipés (passé, présent, futur) sont déjà dans le prix.</li>
+<li>Seule une <b>information nouvelle totalement imprévue</b> modifie le prix. Son apparition étant imprévisible, les changements de prix sont <b>aléatoires</b> : la théorie parle de <b>marche au hasard</b> des taux de rentabilité quotidiens (processus stochastique).</li>
+<li>L’ajustement du prix à une nouvelle information est <b>quasi instantané</b> car le niveau de concurrence entre investisseurs est très important. À tout moment, un titre est coté à un prix qui dépend de sa rentabilité et de son risque, tels que perçus ou anticipés par les investisseurs.</li>
+<li>Économiste à retenir : <b>Eugène Fama</b> (université de Chicago, prix Nobel d’économie en <b>2013</b>).</li></ul>
+<p>Trois niveaux d’efficience sont définis selon : la capacité à prévoir les cours futurs, la réponse des marchés à des événements ponctuels, l’influence des informations privilégiées sur les marchés.</p>
+<h3>Les trois degrés</h3>
+<div class="tablebox"><table><tr><th>Forme</th><th>Description</th><th>Implication</th></tr>
+<tr><td>Faible</td><td>Les prix intègrent les données historiques</td><td>Analyse technique inutile</td></tr>
+<tr><td>Semi-forte</td><td>Les prix intègrent les données historiques et publiques</td><td>Analyse technique et fondamentale inutiles</td></tr>
+<tr><td>Forte</td><td>Les prix intègrent les données historiques, publiques et privées ou privilégiées</td><td>Même les initiés ne peuvent pas obtenir une meilleure rentabilité que le marché</td></tr></table></div>
+<h3>Forme faible</h3>
+<p>L’analyse technique est inutile : tous les investisseurs pensent le marché efficient, donc personne ne gagne en croyant que les variations du passé vont se reproduire. Il n’est pas possible de prévoir les rentabilités futures à partir de modèles statistiques qui lieraient les rentabilités à des taux de rendement, à l’écart entre taux long et court, etc.</p>
+<h3>Forme semi-forte</h3>
+<p>Les prix intègrent, en plus des informations historiques, toutes les informations <b>publiques</b> disponibles : rapports des grandes entreprises, articles de presse, information financière obligatoire (prospectus), annonce par l’entreprise d’un nouveau contrat. Le prix d’une action doit réagir immédiatement et ponctuellement à l’annonce d’une information significative : <b>aucun effet visible avant l’annonce, ni au lendemain de l’annonce</b>. Les données publiques étant aussi les données fondamentales, l’analyse fondamentale est inutile, comme l’analyse technique.</p>
+<ul><li>Il est impossible de générer de manière constante un rendement anormal (alpha) en analysant rapports annuels ou ratios.</li>
+<li>Seuls les investisseurs détenant des informations confidentielles (assimilables à un délit d’initié) ont un avantage réel pour surperformer.</li>
+<li>L’ajustement est supposé si rapide que l’on ne peut pas exploiter le délai pour un profit d’arbitrage.</li></ul>
+<h3>Forme forte</h3>
+<p>Niveau le plus extrême : le prix reflète instantanément toute l’information, publique ou privée (projets secrets, décisions stratégiques non annoncées…). Même les initiés ne peuvent pas tirer parti de l’évolution des cours : un PDG au courant d’une fusion imminente ne pourrait pas en profiter, car le cours l’intégrerait déjà. Les marchés sont efficients au sens fort si les organismes de surveillance peuvent empêcher et réprimer les délits d’initiés.</p>
+<ul><li>Si elle était vérifiée, la gestion passive (fonds indiciels, ETF) serait la seule stratégie rationnelle.</li>
+<li>C’est un modèle surtout théorique, quasi unanimement jugé irréaliste : l’existence même de lois contre les délits d’initiés montre que l’information privée a une valeur non intégrée dans les cours.</li></ul>`},
+{id:7,t:"La finance comportementale",html:`
+<p class="lead">Les investisseurs ne sont pas toujours rationnels : les anomalies qui contredisent l’efficience.</p>
 <h3>Thaler et Kahneman (années 1980)</h3>
-<p>Ils testent l’efficience et mettent en évidence des anomalies : volatilité excessive des marchés, instabilité des cours, « bruit » autour de la valeur fondamentale.</p>
-<ul><li><b>Dual listing :</b> deux sociétés jumelles, mêmes flux de dividendes, cotées sur deux marchés, affichent des cours différents. Impossible sur un marché efficient.</li>
-<li><b>Anomalies calendaires :</b> rendement plus faible le lundi, meilleure rentabilité en janvier.</li>
-<li><b>Anomalie météorologique :</b> rentabilité meilleure quand il fait beau que quand il pleut.</li></ul>
-<h3>Quatre familles d’anomalies</h3>
-<ul><li><b>Fondamentales (contredisent la forme semi-forte) :</b> effet <i>taille</i> (petites capitalisations plus rentables, même ajusté du bêta) et effet <i>valeur</i> (actions décotées, faible PER ou fort book-to-market, surperforment les actions de croissance).</li>
-<li><b>Techniques (contredisent la forme faible) :</b> <b>momentum</b> (Jegadeesh et Titman, 1993) à 3-12 mois : les gagnants continuent de gagner. <b>Retour à la moyenne</b> (De Bondt et Thaler, 1985) à 3-5 ans : les perdants finissent par surperformer.</li>
-<li><b>Calendaires :</b> effet janvier (ventes fiscales en décembre puis rachats, surtout petites capitalisations), effet week-end ou lundi.</li>
-<li><b>Comportementales :</b> sur-réaction aux mauvaises nouvelles (krachs injustifiés), sous-réaction aux résultats réguliers (fenêtres d’arbitrage), <b>bulles spéculatives</b> : bulle internet des années 2000, « exubérance irrationnelle ».</li></ul>
-<h3>Rationalité remise en cause</h3>
-<p>La finance comportementale s’appuie sur la psychologie et les neurosciences. Les décisions sont influencées par l’environnement et les circonstances.</p>
-<ul><li><b>Gain et perte :</b> les choix diffèrent. Être sûr de gagner 50 ou avoir une chance sur deux de gagner 100 : on assure un gain certain. À l’inverse, on prend des risques quand la probabilité de perte est forte.</li></ul>
-<h3>Mimétisme (André Orléan)</h3>
-<ul><li><b>Normatif :</b> conformisme.</li><li><b>Informationnel :</b> on imite ceux qui sont supposés mieux informés.</li><li><b>Autoréférentiel :</b> on prévoit le comportement majoritaire pour l’imiter. La bonne décision dépend de l’action collective : <b>prophétie autoréalisatrice</b>, principe même d’une bulle spéculative.</li></ul>
-<p>Le <b>program trading</b> (ordres pré-programmés, par exemple vendre à partir d’un seuil de perte) accentue le mimétisme : effet boule de neige. <b>Flash crash de Stockholm, 2 mai 2022</b> : l’indice perd plus de 8 % en quelques minutes à cause d’une erreur de saisie (<i>fat finger</i>) d’un opérateur d’une grande banque américaine.</p>`},
-{id:8,t:"Comportements des investisseurs",html:`
-<p class="lead">Trois façons d’aborder le risque.</p>
+<p>De nombreux économistes (dont <b>Thaler et Kahneman</b>) ont cherché dans les années 1980 à tester l’efficience des marchés. Ils ont mis en évidence des anomalies :</p>
+<ul><li><b>Volatilité des marchés et instabilité des cours :</b> première contestation, issue du bon sens. Il semble y avoir du <b>bruit</b> (perturbation) autour de la valeur fondamentale du titre.</li>
+<li><b>Dual listing :</b> des sociétés jumelles (quasi identiques, mêmes flux de dividendes, donc même valeur fondamentale) cotées sur deux marchés distincts ont des cours qui peuvent diverger. Sur un marché efficient, la valorisation devrait être la même.</li>
+<li><b>Anomalies calendaires :</b> les titres semblent moins bien performer le lundi, et janvier est un mois particulier avec une meilleure rentabilité.</li>
+<li><b>Anomalie météorologique :</b> la rentabilité est meilleure quand il fait beau que quand il pleut.</li></ul>
+<h3>Quatre catégories d’anomalies</h3>
+<ol><li><b>Fondamentales</b> (contredisent la forme semi-forte) : <b>effet taille</b> (les actions de faible capitalisation, <i>small caps</i>, rapportent plus à long terme que les <i>large caps</i>, même après ajustement du risque, le bêta) ; <b>effet valeur</b> (les actions décotées <i>value</i>, faible Price-to-Earnings ou fort Book-to-Market, surperforment les actions de croissance <i>growth</i>).</li>
+<li><b>Techniques et de persistance</b> (contredisent la forme faible) : <b>effet momentum</b> (Jegadeesh et Titman, 1993) à 3-12 mois, les gagnants continuent de gagner et les perdants de baisser ; <b>retour à la moyenne</b> (<i>mean reversion</i>, De Bondt et Thaler, 1985) à 3-5 ans, les portefeuilles perdants finissent par surperformer les gagnants.</li>
+<li><b>Calendaires :</b> <b>effet janvier</b> (rendements anormalement élevés en janvier, notamment pour les petites capitalisations, souvent expliqué par des ventes fiscales en décembre suivies de rachats) ; <b>effet week-end ou lundi</b> (rendements du lundi souvent inférieurs, parfois négatifs).</li>
+<li><b>Comportementales</b> (bulles et krachs) : <b>sur-réaction</b> aux mauvaises nouvelles (krachs non justifiés par les fondamentaux) et <b>sous-réaction</b> aux annonces de résultats réguliers (fenêtres d’arbitrage) ; <b>bulles spéculatives</b> comme la bulle internet des années 2000, « exubérance irrationnelle ».</li></ol>
+<h3>Remise en cause de la rationalité</h3>
+<p>La finance comportementale remet en cause le postulat de base de la rationalité des investisseurs. Elle s’appuie sur d’autres disciplines : les économistes ont fait appel à la neuroscience et à la psychologie. Les décisions ne sont pas systématiquement rationnelles et sont influencées par l’environnement et les circonstances : on note des <b>biais de comportement</b> (mimétisme, excès de confiance, aversion à la perte).</p>
+<ul><li><b>Gain ou perte :</b> les choix diffèrent. Les investisseurs préfèrent prendre des risques quand la probabilité de perte est forte, et préfèrent assurer un gain plus faible quand le gain est certain. Exemple : être sûr de gagner 50, ou avoir une chance sur deux de gagner 100 : ils choisissent d’assurer le gain certain.</li></ul>
+<h3>Théorie du mimétisme (André Orléan)</h3>
+<ul><li><b>Mimétisme normatif :</b> s’apparente au conformisme (normatisme).</li>
+<li><b>Mimétisme informationnel :</b> imiter ce que les autres font parce qu’on les suppose mieux informés.</li>
+<li><b>Mimétisme autoréférentiel :</b> prévoir le comportement majoritaire pour l’imiter. La « bonne action » dépend d’une action collective de tous les intervenants. Conséquence : <b>prophéties autoréalisatrices</b> (<i>self-fulfilling prophecy</i>) et <b>bulles spéculatives</b>.</li></ul>
+<p>Ces phénomènes de mimétisme peuvent être accentués par des décisions préprogrammées dans les logiciels d’achat et de cession automatiques des opérateurs financiers (<b>program trading</b>).</p>
+<div class="callout"><b>Flash crash du 2 mai 2022</b> (Bourse de Stockholm) : l’indice chute de plus de 8 % en quelques minutes. Cause : une simple erreur d’un opérateur d’une grande banque américaine (<i>fat finger</i>).</div>`},
+{id:8,t:"Les comportements des investisseurs",html:`
+<p class="lead">Un investisseur financier peut adopter un de ces trois comportements : couverture, spéculation, arbitrage.</p>
 <div class="tablebox"><table><tr><th>Comportement</th><th>Définition</th></tr>
-<tr><td>Couverture (<i>hedge</i>)</td><td>Se protéger contre un risque. Concept général : financer du long terme par du long terme (adossement des maturités)</td></tr>
-<tr><td>Spéculation</td><td>Accepter un risque : prendre position, parier sur l’évolution future du prix d’un actif, sans en tirer de revenu régulier</td></tr>
-<tr><td>Arbitrage</td><td>Pas de risque ni d’avis spéculatif : tirer parti des écarts de prix d’un même titre entre marchés (il « screene » les marchés)</td></tr></table></div>
-<ul><li>Le <b>spéculateur</b> a un rôle utile : si les besoins de ressources sont à long terme et l’épargne à court terme, quelqu’un doit emprunter à court terme pour placer à long terme. Il fait une <b>transformation des échéances</b>, sans adossement.</li>
-<li>L’<b>arbitragiste</b> contribue à la liquidité, réduit le déséquilibre initial, assure l’égalité des prix entre marchés au même moment et rend les marchés plus efficients.</li>
-<li>Les algorithmes rendent l’arbitrage plus rare et plus complexe.</li>
-<li><b>Limites de l’arbitrage</b> (Shleifer et Vishny, 1997) : l’arbitragiste est théoriquement le garant de l’efficience, mais la finance comportementale a montré que son pouvoir n’est pas absolu.</li></ul>`},
-{id:9,t:"Capitalisation, actualisation, VAN, TRA",html:`
-<p class="lead">Un euro aujourd’hui vaut plus qu’un euro demain. Cinq idées à savoir refaire.</p>
-<p>Acheter un titre est un acte intéressé : on renonce à une satisfaction immédiate pour une satisfaction future supérieure, d’où une exigence de rentabilité. Différer une dépense la réduit, accélérer une recette l’accroît. Il existe un taux d’intérêt de l’argent même en l’absence de risque.</p>
-<h3>Capitalisation</h3>
-<div class="formula">V<sub>n</sub> = V<sub>0</sub> × (1 + t)<sup>n</sup>&nbsp;&nbsp;&nbsp;t = (V<sub>n</sub> / V<sub>0</sub>)<sup>1/n</sup> − 1</div>
-<p>Exemple : 100 000 € investis fin 2013, revendus 10 ans plus tard 1,8 M€, sans apport ni dividende. La plus-value est de 1,7 M€, soit +1 700 %. Diviser par 10 pour obtenir 170 % par an est faux : le taux annuel suppose que les revenus sont réinvestis (capitalisés) et produisent à leur tour des revenus. On cherche le taux d’un placement équivalent : 100 000 × (1 + i)<sup>10</sup> = 1 800 000, donc (1 + i)<sup>10</sup> = 18 et i = 18<sup>1/10</sup> − 1 ≈ <b>33,5 %</b>.</p>
-<ul><li>La croissance est exponentielle, pas linéaire.</li>
-<li>Tripler son capital en 16 ans, le doubler en 10 ans ou demander 7,177 centimes par euro investi : même idée (7,177 % par an pour doubler en 10 ans).</li>
-<li>Seuls comptent les flux de trésorerie effectifs, au moment où ils sont touchés et non acquis : le moindre décalage change le taux.</li></ul>
-<h3>Actualisation</h3>
-<p>Chercher la valeur d’aujourd’hui d’une somme future. C’est déprécier le futur : on applique aux flux futurs un coefficient d’actualisation inférieur à 1. Cela permet de comparer des flux à des dates différentes.</p>
-<div class="formula">V<sub>0</sub> = V<sub>n</sub> / (1 + t)<sup>n</sup></div>
-<ul><li>Exemple : 1 000 € dans 5 ans avec un coefficient de 0,6 valent 600 €. Entre A (1 000 € dans 5 ans) et B (650 € aujourd’hui), on choisit B.</li>
-<li>110 € dans un an : avec 10 % exigés le prix maximal est 100 € ; avec 11 % exigés, 110 / 1,11 ≈ 99,1 €. Plus l’exigence est forte, plus le prix baisse.</li>
-<li>Autre exemple : 5 000 / 1,06 ≈ 4 717 (ton cours écrit 4 716).</li>
-<li>L’actualisation est l’inverse de la capitalisation.</li></ul>
-<h3>Valeur actuelle et VAN d’un titre</h3>
-<p>Posséder un titre, c’est avoir le droit de percevoir une suite de cash flows (dividendes, intérêts, remboursement). La valeur actuelle est la somme actualisée de ces flux ; le titre a aussi un prix de marché V<sub>0</sub>.</p>
-<div class="formula">VA = Σ F<sub>i</sub> / (1 + t)<sup>i</sup>&nbsp;&nbsp;&nbsp;VAN = VA − V<sub>0</sub></div>
+<tr><td>Couverture (<i>hedge</i>)</td><td>Se protéger contre un risque. Concept général : choisir un investissement long terme pour couvrir un financement long terme. <b>Adossement des maturités</b> en vue de couvrir un risque</td></tr>
+<tr><td>Spéculation</td><td>Contrairement à la couverture, qui vise à éliminer le risque, la spéculation <b>accepte un risque</b> : le spéculateur prend position, parie sur l’évolution future d’un actif (s’il pense que le prix va augmenter, il achète), sans volonté d’exploiter l’actif ni d’en tirer un revenu régulier (dividende, coupon)</td></tr>
+<tr><td>Arbitrage</td><td>L’arbitragiste <b>ne prend pas de risque</b> et n’a pas d’avis spéculatif sur l’évolution future d’un actif. Il tire parti des seules imperfections entre les marchés</td></tr></table></div>
+<h3>Le spéculateur</h3>
+<p>Opérateur de marché qui assume un risque, il joue un rôle <b>important et utile</b> dans l’économie. Exemple : si les besoins de ressources sont à long terme alors que l’épargne est à court terme, il faut que quelqu’un prenne le risque d’emprunter à court terme pour placer à long terme. Le spéculateur opère une <b>transformation des échéances</b>, donc pas d’adossement des maturités.</p>
+<h3>L’arbitragiste</h3>
+<ul><li>Il « screene » les marchés et tire parti des écarts de prix d’un même titre sur différents marchés, pour le revendre ensuite.</li>
+<li>Les opérations d’arbitrage jouent un rôle important : elles contribuent à la <b>liquidité</b> du marché et réduisent le déséquilibre initial. Elles assurent l’<b>égalité des prix</b> entre les marchés au même moment, évitent les écarts de prix et rendent les marchés plus efficients.</li>
+<li>Les algorithmes informatiques (progrès technologiques) rendent l’arbitrage de plus en plus rare et complexe.</li>
+<li><b>Limites de l’arbitrage</b> (Shleifer et Vishny, 1997) : l’arbitragiste est théoriquement le garant de l’efficience, mais la finance comportementale a démontré que son pouvoir n’est pas absolu.</li></ul>`},
+{id:9,t:"La valeur du temps et la capitalisation",html:`
+<p class="lead">Partie 2 : mécanique financière. Un euro aujourd’hui vaut plus qu’un euro demain.</p>
+<p>L’achat d’un titre financier est un acte <b>intéressé</b> : c’est renoncer à une satisfaction immédiate au profit d’un investissement dont on espère une satisfaction ultérieure supérieure. Conséquence : une <b>exigence de rentabilité</b> pour cet investissement. Si l’on ne rémunérait pas ce renoncement, on privilégierait l’utilité immédiate.</p>
+<div class="callout">1 euro aujourd’hui n’est pas égal à 1 euro demain : il lui est <b>supérieur</b>. Différer le règlement d’une dépense, c’est la réduire ; accélérer le règlement d’une recette, c’est l’accroître. Il existe en temps normal un taux d’intérêt de l’argent, même en l’absence de risque.</div>
+<h3>La capitalisation</h3>
+<div class="formula">V<sub>N</sub> = V<sub>0</sub> × (1 + t)<sup>n</sup>&nbsp;&nbsp;&nbsp;t = (V<sub>N</sub> / V<sub>0</sub>)<sup>1/n</sup> − 1</div>
+<p><b>Exemple :</b> un entrepreneur a investi 100 000 € fin 2013 dans sa société. Il la revend 10 ans plus tard pour 1,8 M€, sans avoir apporté d’autres fonds ni touché de dividende. Quel est le taux de rentabilité annuel ?</p>
+<div class="formula">100 000 × (1 + i)<sup>10</sup> = 1 800 000&nbsp;→&nbsp;(1 + i)<sup>10</sup> = 18&nbsp;→&nbsp;1 + i = 18<sup>1/10</sup>&nbsp;→&nbsp;i = 18<sup>1/10</sup> − 1 ≈ 33,5 %</div>
+<ul><li>La plus-value est de 1,7 M€ pour un investissement initial de 100 K€. Il faut calculer le taux de rentabilité d’un <b>placement équivalent</b> qui verse des revenus chaque année, non consommés mais <b>capitalisés</b>, qui génèrent eux-mêmes des revenus et transforment la somme initiale en 1,7 M€.</li>
+<li>Les flux annuels de revenus deviennent du capital, productif de revenu à son tour. On fait l’hypothèse que les flux sont <b>réinvestis au même taux</b>. On cherche le taux d’un placement qui transforme, sur la même durée, le même capital initial en le même capital final.</li>
+<li>Du fait de la capitalisation des intérêts, la croissance est <b>exponentielle, pas linéaire</b>.</li>
+<li>Question du cours : est-ce la même chose de tripler son capital en 16 ans, de le doubler en 10 ans, ou de demander 7,177 centimes par euro investi ? (Doubler en 10 ans correspond à 7,177 % par an.)</li>
+<li>Le moindre décalage entre le droit au revenu et l’encaissement de ce revenu modifie le taux de rentabilité. Ce qui importe, ce sont les <b>flux de trésorerie effectifs</b> : tout calcul financier précis tient compte des flux exactement au moment où ils sont touchés, et non au moment où ils sont acquis.</li></ul>`},
+{id:10,t:"L’actualisation",html:`
+<p class="lead">Chercher la valeur d’aujourd’hui d’une somme future.</p>
+<h3>Définition</h3>
+<p>L’actualisation permet de comparer des investissements qui ont une séquence de flux différente, en calculant une <b>valeur actuelle</b> qui aide à comparer les titres financiers.</p>
+<ul><li>Actualiser, c’est <b>déprécier le futur</b>, donc être exigeant vis-à-vis des flux futurs plutôt que des flux présents. Les flux futurs ne sont pas utilisables immédiatement. On applique au flux futur un <b>coefficient d’actualisation inférieur à 1</b>.</li>
+<li>Les valeurs actualisées sont directement comparables entre elles, et deux placements sont équivalents quand leurs valeurs actualisées sont égales.</li>
+<li>L’investisseur actualise pour comparer à son exigence de rentabilité. Le mécanisme traduit son exigence : il ne renonce à une consommation immédiate que s’il retient un certain taux de rentabilité.</li></ul>
+<div class="formula">V<sub>0</sub> = V<sub>N</sub> / (1 + t)<sup>n</sup></div>
+<h3>Exemple du cours</h3>
+<p>Exigence de rentabilité ER = 11 % pour un flux de 110 :</p>
+<div class="formula">11 % = (110 − X) / X&nbsp;→&nbsp;11 % = 110 / X − 1&nbsp;→&nbsp;1,11 = 110 / X&nbsp;→&nbsp;X = 110 / 1,11 ≈ 99,1 €</div>
+<p>Autre exemple (document 1) : 5 000 / (1 + 0,06) = 4 716,98 (le document écrit 4 716).</p>`},
+{id:11,t:"Valeur actuelle et valeur actuelle nette (VAN)",html:`
+<p class="lead">Évaluer un titre : ce qu’il vaut aujourd’hui face à son prix de marché.</p>
+<p>Posséder un titre financier, c’est posséder le droit de percevoir des cash flows (dividendes, etc.) qui s’écoulent dans le temps selon des modalités propres au titre acheté.</p>
+<h3>Valeur actuelle d’un titre</h3>
+<p>C’est la somme actualisée de ses flux futurs. Le titre a aussi un prix de marché V<sub>0</sub>.</p>
+<div class="formula">VA = Σ F<sub>i</sub> / (1 + t)<sup>i</sup>&nbsp;&nbsp;&nbsp;VAN = VA − V<sub>0</sub> = Σ F<sub>i</sub> / (1 + t)<sup>i</sup> − V<sub>0</sub></div>
 <div class="tablebox"><table><tr><th>VAN</th><th>Décision</th></tr>
-<tr><td>&gt; 0</td><td>Projet positif : on investit</td></tr>
-<tr><td>= 0</td><td>Projet neutre : valeur d’équilibre du titre</td></tr>
-<tr><td>&lt; 0</td><td>Projet négatif : on n’investit pas (prix de marché supérieur à la valeur actuelle : si on baisse son exigence de rentabilité, le prix acceptable augmente)</td></tr></table></div>
-<ul><li>Exemple de ton cours : 7 flux de 10, 20, 7, 19, 7, 10 et 45 actualisés à 5 % : somme actualisée ≈ 94,27 (dans ton tableau).</li>
-<li><b>Équilibre :</b> si VA et valeur de marché divergent, les arbitragistes et les financiers qui cherchent une VAN positive ramènent la VAN à 0. Sur un marché efficient à l’équilibre : VAN = 0, VA = V<sub>0</sub> : le prix est la somme actualisée des flux futurs.</li>
-<li><b>Trois lectures de la VAN :</b> valeur créée par l’investissement (coût 100, VAN 10 : on s’enrichit de 10) ; supplément maximal que l’investisseur accepte de payer (jusqu’à 10 de plus pour un actif de 100, valeur actuelle 110) ; écart entre valeur actuelle (110) et valeur de marché (100).</li>
-<li>Titre A : flux de 5 000, 4 000, 5 000, 4 000, puis 5 000 + 100 000 aux années 1 à 5, taux d’actualisation 6 %.</li></ul>
-<h3>Taux de rentabilité actuariel (TRA)</h3>
-<p>Le taux d’actualisation qui annule la VAN : on cherche t tel que VAN = 0, soit VA = V<sub>0</sub>.</p>
-<div class="formula">Σ F<sub>i</sub> / (1 + t)<sup>i</sup> − V<sub>0</sub> = 0</div>
-<ul><li>Exemple : V<sub>0</sub> = 2, flux annuel constant de 0,8 pendant 5 ans : TRA ≈ 29 % (28,65 % exactement).</li>
-<li><b>Critère de choix :</b> si TRA &gt; ou = rentabilité exigée, l’investisseur achète. À l’équilibre sur un marché efficient, TRA = rentabilité exigée du marché, et VAN = 0.</li></ul>`},
-{id:10,t:"Taux facial, équivalent, proportionnel",html:`
-<p class="lead">Dans la vie courante on parle de taux d’intérêt plutôt que de TRA. Quatre taux à ne pas confondre.</p>
-<h3>Taux facial</h3>
-<p>Taux de l’emprunt, utilisé pour calculer les intérêts proportionnellement au temps écoulé et au capital emprunté. Exemple : 100 € à 10 % sur 4 ans, 10 % par an.</p>
-<h3>Taux équivalent (actuariel)</h3>
-<p>Si les intérêts sont versés plusieurs fois dans l’année, le montant total est le même mais l’échéancier diffère. Exemple : prêt de 100 le 1er janvier n, intérêts semestriels : 5 € le 1er juillet n, puis 100 + 5 € le 1er janvier n+1. Payer 5 € six mois plus tôt rend ce prêt plus cher que payer 10 € à la fin de l’année. Le taux effectif n’est donc pas 10 % : il est supérieur.</p>
-<p>Deux taux relatifs à des périodes différentes sont équivalents si la valeur future d’une même somme à une même date est la même. Les 5 € reçus le 1er juillet peuvent être capitalisés six mois à 10 % : au total le preneur a touché 10,25 €. Le taux équivalent est le véritable coût du prêt.</p>
-<div class="formula">1 + t = (1 + t<sub>a</sub> / n)<sup>n</sup>&nbsp;&nbsp;&nbsp;t = (1 + t<sub>a</sub> / n)<sup>n</sup> − 1</div>
-<ul><li>t<sub>a</sub> : taux apparent ou facial. t : taux actuariel. n : nombre de versements par an.</li>
-<li>Semestriel : t = (1 + 10 % / 2)² − 1 = 0,1025 = <b>10,25 %</b>.</li>
-<li>Mensuel : 5 % par an versé chaque mois : t = (1 + 5 / (100 × 12))<sup>12</sup> − 1 = 0,0512 = <b>5,12 %</b>.</li>
-<li>L’année est la base de référence en finance : on compare des taux annuels.</li></ul>
-<h3>Taux proportionnel</h3>
-<p>Deux taux sont proportionnels quand ils sont dans le même rapport que les périodes auxquelles ils s’appliquent. 10 % par an est proportionnel à 5 % par semestre et à 2,5 % par trimestre. Mais 5 % par semestre n’est pas équivalent à 10 % par an. Le taux proportionnel ne sert qu’à calculer les cash flows.</p>`},
-{id:11,t:"Rentabilité, risque, bêta",html:`
-<p class="lead">Mesurer ce qu’un titre rapporte et ce qu’il fait risquer.</p>
-<h3>Le risque en finance</h3>
-<p>Incertitude sur le montant des flux futurs actualisés et sur la valeur future des titres. L’investisseur ne connaît pas avec certitude le prix auquel il pourra céder, ni les flux jusqu’à la vente. Il cherche à réduire le caractère aléatoire des flux. Le simple fait de percevoir des flux incertains réduit la valeur du titre.</p>
-<ul><li><b>Risques économiques</b> (liés à l’activité de l’entreprise) : industriels et commerciaux, crédit, réglementaire, inflation (prix des matières premières), escroquerie, conjoncturel (bourse euphorique ou krach).</li>
-<li><b>Risques financiers</b> (sphère financière, pas forcément corrélés à l’entreprise) : climatique, taux d’intérêt, liquidité, change, systémique, conjoncturel.</li></ul>
-<div class="callout"><b>Volatilité = risque :</b> plus un titre est volatil, plus il est risqué. Le risque d’un titre se mesure par la volatilité de sa valeur, donc de sa rentabilité, par la variance ou l’écart-type.</div>
-<h3>Rendement et rentabilité</h3>
-<p>La rentabilité est la rémunération des fonds (intérêts, dividende) plus la plus-value ou moins-value si on vend le titre.</p>
-<div class="formula">Univers certain : r = F<sub>1</sub> / V<sub>0</sub> + (V<sub>1</sub> − V<sub>0</sub>) / V<sub>0</sub></div>
-<div class="formula">rendement = revenu annuel / cours moyen annuel</div>
-<div class="formula">rentabilité = (revenu annuel + plus ou moins-value) / cours moyen annuel</div>
-<p>F<sub>1</sub> : intérêt ou dividende ; V<sub>0</sub> : valeur de marché à la date 0 ; V<sub>1</sub> − V<sub>0</sub> : plus ou moins-value latente.</p>
-<h3>Espérance de rentabilité (univers incertain)</h3>
-<div class="formula">E(R) = Σ P<sub>i</sub> × r<sub>i</sub></div>
-<p>Titre A : 12 chances sur 100 de −22 %, 74 de +6 %, 14 de +16 % : E(R) = −0,0264 + 0,0444 + 0,0224 = 0,0404 ≈ <b>4 %</b>.</p>
-<h3>Variance et écart-type</h3>
-<div class="formula">Var(r) = (1/n) Σ (r<sub>i</sub> − r̄)²&nbsp;&nbsp;&nbsp;σ = √Var(r)</div>
-<ol><li>Calculer la moyenne des rentabilités.</li><li>Calculer l’écart de chaque rentabilité à la moyenne.</li><li>Prendre le carré de chacun (neutralise les signes).</li><li>Faire la somme, puis la moyenne des carrés : la variance.</li><li>Prendre la racine : l’écart-type.</li></ol>
-<p>Exemple de ton Excel (titre A, 10 jours : 5, −2, 6, 12, −4, 15, 10, −1, 2, −6 %) : moyenne 3,70 %, variance 0,45 % (0,0045), écart-type <b>6,74 %</b>. L’écart-type mesure la dispersion moyenne des rentabilités autour de la moyenne, donc le risque.</p>
-<h3>Risque de marché et risque spécifique</h3>
-<ul><li><b>Risque de marché (systématique) :</b> lié à la variation du marché dans son ensemble, non diversifiable. Lié à l’économie, aux taux, à l’inflation. Exemple : hausse des coûts de l’énergie, qui touche plus Air France que d’autres.</li>
-<li><b>Risque spécifique (intrinsèque) :</b> propre à l’entreprise, diversifiable. Exemple : incendie de locaux, signature d’un contrat. Les deux risques sont indépendants.</li></ul>
-<h3>Sensibilité et bêta</h3>
-<p>La <b>sensibilité</b> au marché (bêta) caractérise le risque systématique ; elle est différente de la <b>volatilité</b>. Modèle de régression linéaire simple, explicatif : la droite minimise la somme des écarts entre elle et les observations, caractérisée par son coefficient directeur β.</p>
-<div class="formula">r<sub>j,t</sub> = α<sub>j</sub> + β × r<sub>M,t</sub> + ε<sub>j,t</sub></div>
-<ul><li>ε : terme d’erreur. β : sensibilité de la rentabilité du titre à celle du marché, propre à chaque titre.</li>
-<li>Quand le marché varie de 1 %, la rentabilité du titre varie de β % : β &gt; 1 amplifie les variations.</li></ul>
-<div class="formula">β<sub>j</sub> = Cov(R<sub>j</sub>, R<sub>M</sub>) / Var(R<sub>M</sub>)&nbsp;&nbsp;&nbsp;Cov = (1/n) Σ (r<sub>i</sub> − r̄)(r<sub>M,i</sub> − r̄<sub>M</sub>)</div>
-<div class="formula">risque de marché d’un titre = β × σ(R<sub>M</sub>)</div>
-<ul><li>β du marché = 1. Selon ton cours : β des obligations entre 0 et 0,5, β des actions &gt; 0,5, β négatif : cas écarté.</li>
-<li>Le β évolue dans le temps : sensibilité du secteur à la conjoncture, structure des coûts (plus de coûts fixes, plus de point mort élevé), visibilité de l’entreprise sur ses performances, structure financière.</li></ul>
-<h3>Risque d’un portefeuille (début)</h3>
-<p>L’objectif est de comparer rentabilité et risque de plusieurs actifs pour constituer un portefeuille. L’investisseur rationnel cherche à maximiser sa rentabilité et à minimiser son risque : à rentabilité égale, il choisit le moins risqué ; à risque équivalent, le plus rentable.</p>
-<div class="tablebox"><table><tr><th></th><th>Sanofi</th><th>Stellantis</th></tr><tr><td>Rentabilité</td><td>6 %</td><td>13 %</td></tr><tr><td>Écart-type σ</td><td>10 %</td><td>17 %</td></tr></table></div>
-<p>On ne peut pas détenir 100 % de l’un ou de l’autre : on construit un portefeuille avec des pondérations. Exemple : w<sub>SA</sub> = 70 % donc w<sub>ST</sub> = 100 % − 70 % = 30 %. La rentabilité du portefeuille tient compte de ces pondérations. Le calcul du risque du portefeuille et la tarification MEDAF restent à venir (vides dans tes notes).</p>`},
-{id:12,t:"Partie Excel (CAC 40, Sanofi)",html:`
-<p class="lead">Utile pour le 2e CC (épreuve pratique) et pour le contrôle terminal sur ordinateur.</p>
-<h3>1. Préparer les données</h3>
-<ul><li>On travaille sur les rentabilités du CAC 40, en rentabilités <b>hebdomadaires</b>.</li><li>Rédiger une mini-description du sujet.</li><li>Remettre les données dans l’ordre chronologique et nettoyer les cellules (garder seulement celles utiles).</li></ul>
-<h3>2. Analyser les données : formules à connaître</h3>
-<div class="formula">=MAX(plage)&nbsp;&nbsp;=MIN(plage)&nbsp;&nbsp;=MOYENNE(plage)&nbsp;&nbsp;écart-type</div>
-<div class="formula">rentabilité hebdomadaire = (valeur d’arrivée − valeur de départ) / valeur de départ = cellule n / cellule n−1 − 1</div>
-<ul><li><b>Cellules mauvaises :</b> Cmd+F, onglet Remplacer, chercher l’information fausse (par exemple un espace) et la remplacer par rien, puis « remplacer tout ».</li></ul>
-<h3>3. Représentation graphique</h3>
-<ul><li>Insertion, sélectionner les données (date et clôture ajustée), graphique.</li><li>Attribuer une couleur différente à chaque cours. Pour changer la couleur : clic sur le graphique, clic droit, format de la série de données, icône stylo.</li></ul>
-<h3>4 à 6. Document Word, exploitation, suite</h3>
-<ul><li>Faire un document Word avec un tableau, puis exploiter les données.</li>
-<li>Préparer la rentabilité du marché (CAC 40) et la rentabilité d’une entreprise (Sanofi) pour les comparer.</li></ul>
-<h3>Comparer marché et entreprise</h3>
-<div class="tablebox"><table><tr><th></th><th>Rentabilité du marché</th><th>Rentabilité Sanofi</th></tr><tr><td>t<sub>0</sub></td><td>2 %</td><td>2,5 %</td></tr><tr><td>t<sub>10</sub></td><td>−4 %</td><td>−5 %</td></tr></table></div>
-<p>Le CAC 40 recule de 4 %, l’entreprise de 5 % : variation dans le même sens, corrélation positive, le titre amplifie les variations du marché. On trace un nuage de points (abscisse : marché, ordonnée : titre) : t<sub>0</sub> (2 ; 2,5) et t<sub>10</sub> (−4 ; −5), puis la droite de régression dont la pente est le bêta.</p>`},
+<tr><td>VAN &gt; 0</td><td>Projet positif : on investit</td></tr>
+<tr><td>VAN = 0</td><td>Projet neutre, pas de rentabilité supplémentaire : on arrive à la <b>valeur d’équilibre</b> du titre</td></tr>
+<tr><td>VAN &lt; 0</td><td>Projet négatif : ne pas investir</td></tr></table></div>
+<h3>À sa valeur d’équilibre</h3>
+<p>Si un déséquilibre entre la VA et la valeur de marché se produit, les marchés s’emploient à rétablir l’équilibre et à rendre la VAN nulle. Ces opérations réduisent l’écart entre la VA et la valeur de marché, et <b>les arbitragistes y participent</b>. Sur un marché efficient à l’équilibre : <b>VAN = 0, VA = V<sub>0</sub></b>.</p>
+<h3>Généralisation et portée de la VAN</h3>
+<p>Tout actif, quelle que soit sa forme, génère une série de flux de trésorerie positifs et/ou négatifs. La VAN s’interprète de <b>trois manières</b> :</p>
+<ol><li>Le <b>montant de la valeur créée</b> par un investissement : si l’investissement coûte 100 et que la VAN est de 10, l’investisseur s’enrichit de 10.</li>
+<li>Le <b>montant supplémentaire maximal</b> que l’investisseur est prêt à payer pour réaliser cet investissement.</li>
+<li>L’<b>écart</b> entre la VA et V<sub>0</sub> (la valeur de marché).</li></ol>
+<h3>Exercice du cours : titre A</h3>
+<p>Flux : année 1 : 5 000 ; année 2 : 4 000 ; année 3 : 5 000 ; année 4 : 4 000 ; année 5 : 5 000 + 100 000. Taux d’actualisation : 6 %. Valeur actuelle : 5 000 / 1,06 + 4 000 / 1,06² + 5 000 / 1,06³ + 4 000 / 1,06⁴ + 105 000 / 1,06⁵ ≈ <b>94 105,55 €</b> (calcul fait pour toi : le cours ne donne pas le résultat). La VAN s’obtient en retranchant le prix de marché du titre.</p>`},
+{id:12,t:"Le taux de rentabilité actuariel (TRA)",html:`
+<p class="lead">Le taux d’actualisation qui annule la VAN.</p>
+<p>Il existe en général un taux d’actualisation qui annule la VAN : c’est le <b>taux de rentabilité actuariel (TRA)</b>. On cherche le taux t tel que VAN = 0.</p>
+<div class="formula">Σ F<sub>i</sub> / (1 + t)<sup>i</sup> − V<sub>0</sub> = 0&nbsp;&nbsp;(on cherche t)</div>
+<h3>Exemple du cours</h3>
+<p>Instrument financier : V<sub>0</sub> = 2, flux annuel constant de 0,8 pendant 5 ans. Quel est son TRA ? On cherche t tel que 0,8 × (1/(1+t) + … + 1/(1+t)⁵) = 2. Résultat calculé pour toi : <b>t ≈ 28,65 %</b> (le cours ne donne pas la réponse).</p>
+<h3>Le TRA comme critère de choix d’investissement</h3>
+<ul><li>Le TRA est fréquemment utilisé sur les marchés financiers : il représente la rémunération de l’investisseur, qu’il peut comparer au taux de rentabilité qu’il exige.</li>
+<li>Si <b>TRA &gt; taux de rentabilité exigé</b>, l’investisseur achète le titre. Un investissement dans un titre est rentable lorsque son TRA est <b>supérieur ou égal</b> au taux de rentabilité exigé.</li>
+<li>À l’équilibre, dans une optique de marché efficient, le <b>TRA est identique au taux de rentabilité exigé</b>, qui est le taux de rentabilité du marché. La VAN est nulle.</li></ul>`},
 {id:13,t:"Auteurs et dates",html:`
-<p class="lead">Tous les noms et toutes les dates de tes cours, du plus ancien au plus récent.</p>
+<p class="lead">Tous les noms et toutes les dates qui apparaissent dans tes deux documents.</p>
 <h3>Chronologie</h3>
-<div class="tablebox"><table><tr><th>Date</th><th>Auteur ou événement</th><th>Ce qu’il faut retenir</th></tr>
-<tr><td>1890 ou 1933</td><td>Glass-Steagall Act (Banking Act)</td><td>Loi américaine séparant banques commerciales et banques d’affaires. Ton cours indique 1890 ; la date réelle est 1933, à vérifier</td></tr>
-<tr><td>1960</td><td>Gurley et Shaw</td><td>Premiers économistes à théoriser la finance directe et indirecte</td></tr>
-<tr><td>Années 1980</td><td>Thaler et Kahneman</td><td>Anomalies qui contredisent l’efficience : volatilité, dual listing, calendaires, météo</td></tr>
-<tr><td>1985</td><td>De Bondt et Thaler</td><td>Retour à la moyenne à 3-5 ans</td></tr>
-<tr><td>Années 1990</td><td>Rapprochements bancaires</td><td>BNP et Paribas ; Chase Manhattan et JP Morgan ; Bank of America et Merrill Lynch : banques universelles</td></tr>
-<tr><td>1993</td><td>Jegadeesh et Titman</td><td>Effet momentum à 3-12 mois</td></tr>
+<div class="tablebox"><table><tr><th>Date</th><th>Auteur ou événement</th><th>À retenir</th></tr>
+<tr><td>Début du XXe siècle</td><td>Banques universelles</td><td>Émergence aux États-Unis et en Europe, par rapprochement banques commerciales / banques d’affaires</td></tr>
+<tr><td>Années 1980</td><td>Thaler et Kahneman</td><td>Tests de l’efficience, anomalies : volatilité, dual listing, calendaires, météo</td></tr>
+<tr><td>1985</td><td>De Bondt et Thaler</td><td>Retour à la moyenne (3-5 ans)</td></tr>
+<tr><td>Années 1990 (1990)</td><td>Rapprochements bancaires</td><td>BNP et Paribas ; JP Morgan et Chase Manhattan ; Bank of America et Merrill Lynch</td></tr>
+<tr><td>1993</td><td>Jegadeesh et Titman</td><td>Effet momentum (3-12 mois)</td></tr>
 <tr><td>1997</td><td>Shleifer et Vishny</td><td>Limites de l’arbitrage</td></tr>
-<tr><td>1999</td><td>Abrogation du Glass-Steagall Act</td><td>Permet les banques universelles</td></tr>
-<tr><td>Années 2000</td><td>Bulle internet</td><td>« Exubérance irrationnelle » : prix déconnectés de la valeur fondamentale</td></tr>
-<tr><td>2008</td><td>Crise financière</td><td>Volonté de scinder les groupes bancaires, cantonner les activités spéculatives</td></tr>
-<tr><td>2012</td><td>Élection présidentielle en France</td><td>Loi sur les filiales ségréguées et l’identification des activités spéculatives</td></tr>
-<tr><td>2013</td><td>Eugene Fama (Univ. de Chicago)</td><td>Prix Nobel d’économie ; trois formes d’efficience</td></tr>
+<tr><td>1999</td><td>Abrogation du Glass-Steagall Act</td><td>Loi américaine qui interdisait le rapprochement banques commerciales / banques d’affaires</td></tr>
+<tr><td>Années 2000</td><td>Bulle internet</td><td>« Exubérance irrationnelle »</td></tr>
+<tr><td>2008</td><td>Crise financière</td><td>Volonté de scinder à nouveau les groupes bancaires (dépôts / marchés), cantonner les activités spéculatives de compte propre</td></tr>
+<tr><td>Fin 2013</td><td>Exemple de capitalisation</td><td>100 000 € investis, revendus 1,8 M€ dix ans plus tard : 33,5 % par an</td></tr>
+<tr><td>2013</td><td>Eugène Fama</td><td>Prix Nobel d’économie (université de Chicago)</td></tr>
 <tr><td>2020</td><td>Crise sanitaire</td><td>Rôle central des banques, indicateur d’aversion au risque</td></tr>
-<tr><td>2 mai 2022</td><td>Flash crash de Stockholm</td><td>Indice en baisse de plus de 8 % en quelques minutes, erreur de saisie (<i>fat finger</i>)</td></tr></table></div>
-<h3>Auteurs par thème, sans date</h3>
+<tr><td>2 mai 2022</td><td>Flash crash, Bourse de Stockholm</td><td>Indice en baisse de plus de 8 % en quelques minutes : erreur de saisie (<i>fat finger</i>)</td></tr>
+<tr><td>6 novembre</td><td>1er contrôle continu</td><td>Questions de cours et potentiellement petits exercices</td></tr></table></div>
+<h3>Auteurs et leur contribution</h3>
 <div class="tablebox"><table><tr><th>Auteur</th><th>Contribution</th></tr>
-<tr><td>Hicks</td><td>Distinction économie d’endettement / économie de marchés financiers</td></tr>
+<tr><td>Gurley et Shaw</td><td>Distinction finance directe / finance indirecte</td></tr>
+<tr><td>Hicks</td><td>Économie de marchés financiers</td></tr>
 <tr><td>Merton et Bodie</td><td>Six fonctions du système financier</td></tr>
-<tr><td>Fama</td><td>Trois degrés d’efficience : faible, semi-forte, forte</td></tr>
-<tr><td>André Orléan</td><td>Mimétisme : normatif, informationnel, autoréférentiel</td></tr>
-<tr><td>Thaler et Kahneman</td><td>Finance comportementale : biais face au gain et à la perte</td></tr></table></div>
+<tr><td>Eugène Fama</td><td>Théorie des marchés efficients, trois degrés d’efficience</td></tr>
+<tr><td>Thaler et Kahneman</td><td>Anomalies, finance comportementale</td></tr>
+<tr><td>André Orléan</td><td>Mimétisme normatif, informationnel, autoréférentiel</td></tr>
+<tr><td>Jegadeesh et Titman</td><td>Momentum</td></tr>
+<tr><td>De Bondt et Thaler</td><td>Retour à la moyenne</td></tr>
+<tr><td>Shleifer et Vishny</td><td>Limites de l’arbitrage</td></tr></table></div>
 <h3>Chiffres des exemples</h3>
-<ul><li>100 000 € investis fin 2013, 1,8 M€ dix ans plus tard : 33,5 % par an.</li><li>Comités de Bâle : 8 % de fonds propres minimum sur les crédits.</li><li>Marge d’intermédiation : 12 % − 10 % = 2 %.</li><li>Doubler en 10 ans : 7,177 % par an.</li></ul>`}
-];
-
-
-/* remap des anciens numéros de chapitre vers les 13 chapitres */
-function rch(ch,txt){txt=(txt||"").toLowerCase();
- if(ch===4)return /banque|glass|bâle|bale|bfi/.test(txt)?5:4;
- if(ch===5)return /fama|efficien|marche au hasard|marche aléatoire/.test(txt)?6:7;
- if(ch===6)return 8; if(ch===7)return /taux|équivalent|proportionnel|facial/.test(txt)?10:9; if(ch===8)return 11; return ch;}
-const EXTRA_CARDS=[
-[44,1,"Comment sont répartis les contrôles ?","2 contrôles continus (40 %) et 1 contrôle terminal (60 %). 1er CC le 6 novembre (cours, petits exercices), 2e CC à la dernière séance (épreuve pratique), terminal sur ordinateur avec données de marché."],
-[45,1,"Qui sont les AEEF et les AEBF ?","Agents économiques à excédent de ressources (souvent les ménages) et à besoin de financement (entreprises, État). Le système financier les met en relation."],
-[46,1,"Quelles infrastructures et autorités encadrent les marchés ?","CCP (chambre de compensation) et Euronext ; AMF, Banque de France, ACPR et le Trésor."],
-[47,2,"Que figure-t-il au bilan d’un intermédiaire financier en finance directe ?","Rien : il est un simple courtier (conseil, exécution d’ordres, mise en relation). Seule sa commission apparaît au compte de résultat."],
-[48,2,"Qu’est-ce que l’économie d’endettement (Hicks) ?","Entreprises très endettées auprès des banques, elles-mêmes endettées auprès de la banque centrale. Risque de bilan et de solvabilité, effet boule de neige. À opposer à l’économie de marchés financiers."],
-[49,2,"Qui a théorisé la finance directe et indirecte ?","Gurley et Shaw (1960). Hicks distingue économie d’endettement et économie de marchés financiers."],
-[50,2,"Qu’est-ce que l’ALM ?","Asset Liability Management : gestion actif-passif, adossement du bilan, gestion des risques de taux et de liquidité, équilibre rentabilité-solvabilité (Bâle)."],
-[51,3,"Quelle différence entre marché primaire et secondaire ?","Primaire : émission de titres neufs, argent frais pour l’entreprise. Secondaire : revente entre investisseurs, liquidité et cotation, jeu à somme nulle, sans cash pour l’entreprise."],
-[52,3,"Qu’est-ce que l’effet de levier d’une option ?","Une mise limitée (le prix de l’option) donne une exposition bien plus importante au sous-jacent."],
-[53,4,"Citer les six fonctions du système financier (Merton et Bodie).","Faciliter les transactions ; mettre en commun les fonds ; répartir les ressources dans le temps, l’espace et les secteurs ; gérer le risque ; fournir l’information sur les prix ; limiter les problèmes d’incitation."],
-[54,5,"Qu’était le Glass-Steagall Act ?","Loi américaine séparant banques commerciales et banques d’affaires, abrogée en 1999 (date de la loi : 1933, ton cours dit 1890 : à vérifier). Elle a précédé les banques universelles."],
-[55,5,"Quels sont les trois départements d’une banque universelle ?","Banque de détail, BFI (banque de financement et d’investissement, la plus rentable), gestion d’actifs."],
-[56,5,"ECM, DCM, M&A : que signifient-ils ?","Equity Capital Market (introductions en bourse, augmentations de capital), Debt Capital Market (obligations), Mergers and Acquisitions (conseil en fusions-acquisitions)."],
-[57,5,"Quel est le minimum de fonds propres imposé par Bâle ?","Au moins 8 % des crédits accordés. Certains groupes sortent les risques par titrisation."],
-[58,5,"Affacturage et crédit-bail ?","Affacturage : l’entreprise cède ses factures à un factor pour être payée à l’avance. Crédit-bail : la banque achète un bien et le loue, avec option d’achat à la valeur résiduelle."],
-[59,6,"Quelles sont les trois formes d’efficience de Fama ?","Faible (prix = données historiques), semi-forte (+ informations publiques), forte (+ informations privées). Fama, Université de Chicago, Nobel 2013."],
-[60,6,"Pourquoi les prix suivent-ils une marche au hasard ?","Seule une information nouvelle imprévisible modifie le prix : les variations sont aléatoires et on ne peut pas prévoir les cours futurs."],
-[61,7,"Quelles sont les quatre familles d’anomalies ?","Fondamentales (taille, valeur), techniques (momentum, retour à la moyenne), calendaires (janvier, lundi), comportementales (sur et sous-réaction, bulles)."],
-[62,7,"Momentum et retour à la moyenne : auteurs et horizons ?","Momentum : Jegadeesh et Titman (1993), 3-12 mois. Retour à la moyenne : De Bondt et Thaler (1985), 3-5 ans."],
-[63,7,"Que sont les trois types de mimétisme (André Orléan) ?","Normatif (conformisme), informationnel (imiter les mieux informés), autoréférentiel (anticiper la majorité) : prophétie autoréalisatrice, principe d’une bulle."],
-[64,7,"Que s’est-il passé le 2 mai 2022 à Stockholm ?","Flash crash : l’indice perd plus de 8 % en quelques minutes à cause d’une erreur de saisie (fat finger). Illustre le program trading et l’effet boule de neige."],
-[65,8,"Quelles sont les limites de l’arbitrage ?","Shleifer et Vishny (1997) : l’arbitragiste, garant théorique de l’efficience, n’a pas un pouvoir absolu."],
-[66,9,"Quelle est la bonne réponse : +1 700 % en 10 ans donne 170 % par an ?","Faux : le taux annuel suppose la capitalisation. 100 000 € → 1,8 M€ en 10 ans : 18^(1/10) − 1 ≈ 33,5 % par an."],
-[67,9,"Que donnent les trois lectures de la VAN ?","Valeur créée par l’investissement ; supplément maximal acceptable ; écart entre valeur actuelle et valeur de marché."],
-[68,9,"Que vaut la VAN à l’équilibre d’un marché efficient ?","Zéro : VA = V0, le prix est la somme actualisée des flux. Les arbitragistes ramènent la VAN à 0 ; TRA = rentabilité exigée."],
-[69,10,"Taux facial, équivalent, proportionnel : différences ?","Facial : taux de l’emprunt. Équivalent : coût réel annuel, (1 + ta/n)ⁿ − 1. Proportionnel : même rapport que les périodes, sert à calculer les cash flows, non équivalent."],
-[70,10,"Quel est le taux équivalent de 5 % par an versé mensuellement ?","(1 + 0,05/12)¹² − 1 ≈ 5,12 %."],
-[71,10,"Quel est le taux équivalent de 10 % avec intérêts semestriels ?","(1 + 0,10/2)² − 1 = 10,25 %."],
-[72,11,"Risque de marché ou spécifique ?","Marché : systématique, non diversifiable (taux, inflation, énergie). Spécifique : propre à l’entreprise, diversifiable (incendie, contrat). Les deux sont indépendants."],
-[73,11,"Rendement ou rentabilité ?","Rendement = revenu annuel / cours moyen. Rentabilité = (revenu + plus ou moins-value) / cours moyen."],
-[74,11,"Comment calculer variance et écart-type ?","Moyenne ; écart à la moyenne ; carrés ; moyenne des carrés = variance ; racine = écart-type. Exemple Excel : moyenne 3,70 %, variance 0,45 %, σ 6,74 %."],
-[75,11,"Sensibilité ou volatilité ?","La sensibilité (bêta) mesure le risque systématique ; la volatilité mesure la dispersion totale. Ce sont deux notions différentes."],
-[76,11,"Que dit ton cours sur les valeurs de bêta ?","Marché = 1 ; obligations entre 0 et 0,5 ; actions > 0,5 ; bêta négatif écarté. Le bêta évolue dans le temps (secteur, coûts fixes, visibilité, structure financière)."],
-[77,11,"Que fait l’investisseur rationnel ?","À rentabilité égale, il choisit le moins risqué ; à risque équivalent, le plus rentable. Il construit un portefeuille avec des pondérations (ex. 70 % / 30 %)."],
-[78,12,"Quelle formule Excel pour la rentabilité hebdomadaire ?","Cellule n / cellule n−1 − 1 : (valeur d’arrivée − valeur de départ) / valeur de départ. Fonctions : MAX, MIN, MOYENNE, écart-type."],
-[79,12,"Comment corriger des cellules mal formatées dans Excel ?","Cmd+F, onglet Remplacer, chercher l’élément fautif (ex. un espace), remplacer par rien, « remplacer tout »."],
-[80,13,"Date : 1960 ?","Gurley et Shaw : théorie de la finance directe et indirecte."],
-[81,13,"Date : 1985, 1993, 1997 ?","1985 De Bondt et Thaler (retour à la moyenne) ; 1993 Jegadeesh et Titman (momentum) ; 1997 Shleifer et Vishny (limites de l’arbitrage)."],
-[82,13,"Date : 1999, 2008, 2012, 2013 ?","1999 abrogation du Glass-Steagall ; 2008 crise financière ; 2012 loi française sur les filiales ségréguées ; 2013 Nobel de Fama."],
-[83,13,"Date : 2020 et 2 mai 2022 ?","2020 : crise sanitaire, rôle central des banques. 2 mai 2022 : flash crash de Stockholm."]
-];
-const EXTRA_QCM=[
-[1,"Quelle pondération pour le contrôle terminal ?",["60 %","40 %","50 %","100 %"],0,"2 CC = 40 %, terminal = 60 %."],
-[2,"Un intermédiaire financier en finance directe…",["n’a rien à son bilan, seulement une commission","porte les crédits à son bilan","collecte des dépôts","transforme les échéances"],0,"Il agit en courtier."],
-[2,"Qui a théorisé finance directe et indirecte en 1960 ?",["Gurley et Shaw","Fama","Merton et Bodie","Orléan"],0,"Gurley et Shaw (1960)."],
-[3,"Sur le marché secondaire, l’entreprise…",["ne reçoit aucun cash","lève des fonds","émet des titres","est remboursée"],0,"Il y a changement de propriétaire, sans création de titre."],
-[4,"Combien de fonctions du système financier chez Merton et Bodie ?",["6","3","4","8"],0,"Six fonctions."],
-[5,"Le Glass-Steagall Act a été abrogé en…",["1999","1933","2008","2012"],0,"Abrogé en 1999 ; il date de 1933."],
-[5,"Quel département bancaire est le plus rentable ?",["BFI","Banque de détail","Gestion d’actifs","Affacturage"],0,"La banque de financement et d’investissement."],
-[5,"Fonds propres minimum selon Bâle ?",["8 %","4 %","12 %","20 %"],0,"Au moins 8 % des crédits."],
-[6,"Quelle forme d’efficience rend l’analyse technique inutile ?",["Faible","Semi-forte","Forte","Aucune"],0,"Les prix intègrent les données historiques."],
-[6,"Qui a reçu le Nobel d’économie en 2013 pour l’efficience ?",["Eugene Fama","Kahneman","Thaler","Hicks"],0,"Fama, Université de Chicago."],
-[7,"Momentum : auteurs et horizon ?",["Jegadeesh et Titman, 1993, 3-12 mois","De Bondt et Thaler, 1985, 3-5 ans","Fama, 2013, 1 an","Shleifer et Vishny, 1997, 1 mois"],0,"Le retour à la moyenne est De Bondt et Thaler."],
-[7,"Le mimétisme autoréférentiel conduit à…",["une prophétie autoréalisatrice","l’efficience forte","un arbitrage sans risque","une VAN nulle"],0,"Principe d’une bulle spéculative."],
-[7,"Le flash crash de Stockholm (2 mai 2022) est dû à…",["une erreur de saisie","une crise sanitaire","une loi bancaire","un défaut souverain"],0,"Fat finger, baisse de plus de 8 %."],
-[8,"Qui a étudié les limites de l’arbitrage ?",["Shleifer et Vishny (1997)","Gurley et Shaw (1960)","Jegadeesh et Titman (1993)","Fama (2013)"],0,"Leur pouvoir n’est pas absolu."],
-[9,"VAN > 0 signifie…",["on investit","on n’investit pas","valeur d’équilibre","TRA nul"],0,"Projet positif."],
-[9,"Le TRA est le taux qui…",["annule la VAN","maximise la VAN","double le capital","égale le taux facial"],0,"VAN = 0."],
-[10,"5 % annuel versé mensuellement : taux équivalent ?",["5,12 %","5,00 %","5,50 %","4,88 %"],0,"(1 + 0,05/12)¹² − 1."],
-[10,"10 % par an est proportionnel à…",["2,5 % par trimestre","2,4 % par trimestre","5,12 % par semestre","10,25 % par trimestre"],0,"Même rapport que les périodes."],
-[11,"Risque diversifiable ?",["Spécifique","De marché","Systématique","Aucun"],0,"Le risque spécifique se diversifie."],
-[11,"β des obligations selon le cours ?",["entre 0 et 0,5","1","supérieur à 1","négatif"],0,"Actions > 0,5 ; marché = 1."],
-[11,"Écart-type des rentabilités 5, −2, 6, 12, −4, 15, 10, −1, 2, −6 % ?",["≈ 6,74 %","≈ 3,70 %","≈ 0,45 %","≈ 10 %"],0,"Moyenne 3,70 %, variance 0,45 %, σ 6,74 %."],
-[12,"Formule Excel de la rentabilité hebdomadaire ?",["cellule n / cellule n−1 − 1","cellule n − cellule n−1","cellule n × cellule n−1","MOYENNE(plage)"],0,"(arrivée − départ) / départ."],
-[13,"Qui en 1985 a documenté le retour à la moyenne ?",["De Bondt et Thaler","Jegadeesh et Titman","Hicks","Merton"],0,"3-5 ans."],
-[13,"Date de la crise qui a conduit à vouloir scinder les banques ?",["2008","1999","2020","2012"],0,"Crise de 2008."]
-];
-const EXTRA_EXOS=[
-{ch:10,t:"Taux mensuel équivalent",make(){
-  const ta=pick([3,4,5,6,8,12]);const t=(Math.pow(1+ta/100/12,12)-1)*100;
-  return {text:`Un taux de ${ta} % par an est versé chaque mois. Quel est le taux annuel équivalent ?`,
-    fields:[{label:"Taux équivalent",ans:t,tol:.02,unit:"%",d:3}],
-    sol:`t = (1 + ta / 12)¹² − 1`,calc:`(1 + ${ta/100} / 12)^12 − 1 = ${frFix(t,3)} %`};}},
-{ch:11,t:"Moyenne, variance, écart-type",make(){
-  const r=Array.from({length:6},()=>pick([-6,-4,-2,0,2,4,6,8,10,12]));
-  const m=r.reduce((a,b)=>a+b,0)/r.length;const v=r.reduce((a,b)=>a+(b-m)*(b-m),0)/r.length;
-  return {text:`Rentabilités sur 6 jours : ${r.join(" %, ")} %. Calcule la moyenne et l’écart-type (variance divisée par n).`,
-    fields:[{label:"Moyenne",ans:m,tol:.05,unit:"%",d:2},{label:"Écart-type σ",ans:Math.sqrt(v),tol:.1,unit:"%",d:2}],
-    sol:`σ = √( (1/n) Σ (ri − r̄)² )`,calc:`moyenne = ${frFix(m)} %, variance = ${frFix(v)}, σ = ${frFix(Math.sqrt(v))} %`};}},
-{ch:11,t:"Rendement et rentabilité d’un titre",make(){
-  const V0=pick([50,80,100,120]),F=pick([3,4,5,6]),V1=V0+pick([-10,-5,5,10,15]);
-  const r=(F+V1-V0)/V0*100;
-  return {text:`Un titre coté ${V0} € verse un dividende de ${F} € et vaut ${V1} € un an plus tard. Quelle est la rentabilité ?`,
-    fields:[{label:"Rentabilité",ans:r,tol:.05,unit:"%",d:2}],
-    sol:`r = F / V0 + (V1 − V0) / V0`,calc:`(${F} + ${V1} − ${V0}) / ${V0} = ${frFix(r)} %`};}},
-{ch:9,t:"Doubler son capital",make(){
-  const n=pick([5,8,10,12,15]);const t=(Math.pow(2,1/n)-1)*100;
-  return {text:`Quel taux annuel faut-il pour doubler un capital en ${n} ans ?`,
-    fields:[{label:"Taux annuel",ans:t,tol:.02,unit:"%",d:3}],
-    sol:`t = 2^(1/n) − 1`,calc:`2^(1/${n}) − 1 = ${frFix(t,3)} %`};}}
+<ul><li>Marge d’intermédiation : 12 % − 10 % = 2 % (ressources 100 à 10 %, emplois 100 à 12 %).</li>
+<li>Prêt de 10 M€ à 5 % : en courtage, perte maximale de 500 K€ ; en intermédiation, 10 M€.</li>
+<li>Crédit syndiqué : BNP 50 %, CA 25 %, CE 25 %.</li>
+<li>Capitalisation : 18<sup>1/10</sup> − 1 ≈ 33,5 %. Doubler en 10 ans : 7,177 % par an.</li>
+<li>Actualisation : 110 / 1,11 ≈ 99,1 € ; 5 000 / 1,06 = 4 716,98.</li>
+<li>TRA : V<sub>0</sub> = 2, flux de 0,8 pendant 5 ans : environ 28,65 %.</li></ul>`}
 ];
 
 /* ---------- données : cartes (id, chapitre, question, réponse) ---------- */
 const CARDS=[
-[1,1,"Qu’est-ce qu’une action ?","Une part de capital : l’actionnaire est copropriétaire. Rémunération par dividendes et plus-value, non garantie. Risque élevé : il est remboursé en dernier."],
-[2,1,"Qu’est-ce qu’une obligation ?","Un titre de créance : l’investisseur est prêteur, perçoit des coupons et récupère le capital à l’échéance. Risque modéré à faible, prioritaire sur l’action."],
-[3,1,"Quel est le double objectif de l’investisseur ?","Que le temps pendant lequel il prête ses fonds lui rapporte de l’argent, et que le risque pris soit rémunéré."],
-[4,1,"Ressources à 10 %, emplois à 12 % : marge d’intermédiation ?","12 % − 10 % = 2 %. C’est l’écart entre le rendement des emplois et le coût des ressources."],
-[5,2,"Finance directe ou indirecte ?","Directe : marchés, relation contractuelle entre agent excédentaire et déficitaire. Indirecte : la banque s’interpose comme écran et transforme les dépôts en crédits."],
-[6,2,"Courtier ou intermédiaire financier : différence comptable ?","Le courtier (CIF, EI, PSI) touche une commission au compte de résultat et n’a rien au bilan. La banque intermédiaire a des ressources au passif et des emplois à l’actif."],
-[7,2,"Désintermédiation et économie d’endettement ?","Désintermédiation : part croissante du financement des entreprises obtenue sur les marchés. Économie d’endettement : l’endettement bancaire domine, les banques s’endettent auprès de la banque centrale."],
-[8,2,"À quoi sert l’ALM ?","À gérer actifs et passifs : risques de taux et de liquidité, éviter le décalage de maturité, équilibrer rentabilité et solvabilité (Bâle)."],
-[9,2,"Qu’est-ce qu’un décalage de maturité ?","Des dettes à rembourser à court terme alors que les actifs ne rapportent qu’à long terme."],
-[10,2,"Qu’est-ce qu’un OPCVM ?","Un fonds conçu par une banque (SICAV, FCP), doté d’actifs et financé par l’émission de parts. Dynamique s’il n’investit qu’en actions."],
-[11,2,"Qui sont Gurley, Shaw et Hicks ?","Gurley et Shaw : distinction finance directe / indirecte. Hicks : économie de marchés financiers."],
-[12,2,"Qu’est-ce que la marchéisation ?","L’influence des marchés financiers sur les prix des banques, qui doivent s’ajuster pour ne pas perdre leurs clients."],
-[13,3,"Marché primaire et marché secondaire ?","Primaire : émission (le neuf), seul marché où l’entreprise se finance. Secondaire : occasion, apporte liquidité et cotation, sans financement nouveau."],
-[14,3,"Définir la liquidité.","L’aptitude d’un bien à être transformé rapidement en cash, sans perte de valeur."],
-[15,3,"Qu’est-ce qu’un produit dérivé ?","Un produit dont la valeur dépend d’un sous-jacent. Deux familles : contrats à terme et options."],
-[16,3,"Contrat à terme ou option ?","Contrat à terme : engagement ferme d’acheter ou vendre à l’échéance à un prix fixé. Option : un droit, sans obligation."],
-[17,3,"Pourquoi les dérivés ont-ils un effet de levier ?","Une mise de fonds limitée permet de prendre une position bien plus importante sur le sous-jacent."],
-[18,4,"Les six fonctions du système financier (Merton et Bodie) ?","Transactions, mise en commun des fonds, allocation dans le temps et l’espace, gestion du risque, information sur les prix, limitation des problèmes d’incitation."],
-[19,4,"Les trois métiers d’une banque universelle ?","Banque de détail, banque de financement et d’investissement (BFI), gestion d’actifs."],
-[20,4,"Que font l’ECM et le DCM ?","ECM : marchés d’actions (introduction en bourse, augmentation de capital). DCM : marchés de dette (émissions obligataires). Ce sont des activités de BFI."],
-[21,4,"Glass-Steagall Act ?","Loi américaine séparant banques commerciales et banques d’affaires. Abrogée en 1999, d’où les banques universelles."],
-[22,5,"Qu’est-ce qu’un marché efficient ?","Un marché où le prix reflète à tout moment toute l’information disponible. Seule une information imprévue le modifie : les variations sont aléatoires."],
-[23,5,"Les trois formes d’efficience (Fama) ?","Faible : historique (analyse technique inutile). Semi-forte : + information publique (analyse fondamentale inutile). Forte : + information privée."],
-[24,5,"Que remet en cause la finance comportementale ?","La rationalité des investisseurs et l’efficience des marchés (Thaler, Kahneman)."],
-[25,5,"Les quatre familles d’anomalies ?","Fondamentales (taille, valeur), techniques (momentum, retour à la moyenne), calendaires (janvier, week-end), comportementales (sur-réaction, bulles)."],
-[26,5,"Comment réagit-on face à un gain ou à une perte probable ?","Face à un gain, on préfère le certain (50 sûrs plutôt qu’une chance sur deux de 100). Face à une perte probable, on prend des risques."],
-[27,5,"Les trois mimétismes d’Orléan ?","Normatif : conformité. Informationnel : on imite les mieux informés supposés. Autoréférentiel : on anticipe le comportement majoritaire (prophéties autoréalisatrices, bulles)."],
-[28,5,"Flash crash de Stockholm ?","2 mai 2022 : indice en baisse de plus de 8 % en quelques minutes à cause d’une erreur de saisie, amplifiée par le program trading."],
-[29,6,"Couverture, spéculation, arbitrage ?","Couverture : se protéger d’un risque. Spéculation : parier sur l’évolution d’un actif. Arbitrage : exploiter sans risque les écarts de prix entre marchés."],
-[30,6,"Quel est le rôle utile du spéculateur ?","Il assume un risque et transforme les échéances : emprunter à court terme pour placer à long terme."],
-[31,6,"Apport et limites de l’arbitrage ?","Il égalise les prix et rend les marchés plus efficients. Ses limites : Shleifer et Vishny (1997) ; les algorithmes le rendent plus rare."],
-[32,7,"Formules de capitalisation et de taux de rentabilité ?","Vn = V0 × (1 + t)ⁿ et t = (Vn / V0)^(1/n) − 1."],
-[33,7,"100 000 € deviennent 1,8 M€ en 10 ans : taux annuel ?","t = 18^(1/10) − 1 ≈ 33,5 % par an (et non 170 %)."],
-[34,7,"110 € dans un an, 11 % exigés : prix maximal ?","110 / 1,11 ≈ 99,1 €. Avec 10 % exigés : 100 €."],
-[35,7,"Règle de décision selon la VAN ?","VAN = VA − V0. VAN > 0 : on investit. VAN = 0 : neutre, valeur d’équilibre. VAN < 0 : on n’investit pas."],
-[36,7,"Qu’est-ce que le TRA ?","Le taux qui annule la VAN : Σ Fi / (1 + t)ⁱ = V0. On achète si TRA ≥ rentabilité exigée."],
-[37,7,"10 % avec intérêts semestriels : taux annuel équivalent ?","(1 + 0,10 / 2)² − 1 = 10,25 %. Le 5 % semestriel n’est que proportionnel."],
-[38,7,"Taux pour doubler son capital en 10 ans ?","2^(1/10) − 1 ≈ 7,177 % par an."],
-[39,8,"Rendement ou rentabilité ?","Rendement : revenu / cours. Rentabilité : (revenu + plus ou moins-value) / cours."],
-[40,8,"−22 % (12 %), +6 % (74 %), +16 % (14 %) : espérance ?","E(R) = Σ Pi × ri = −2,64 + 4,44 + 2,24 = 4,04 %."],
-[41,8,"Variance et écart-type ?","Variance : moyenne pondérée des carrés des écarts à l’espérance. Écart-type : sa racine carrée. Mesure du risque d’un titre."],
-[42,8,"Risque systématique ou spécifique ?","Systématique : lié au marché, non diversifiable. Spécifique : propre à l’entreprise, diversifiable."],
-[43,8,"Définir le bêta.","β = Cov(Rj, RM) / Var(RM), sensibilité du titre au marché. Le marché vaut 1 ; β > 1 amplifie les variations. Risque de marché = β × σ(RM)."]
-].map(([id,ch,q,a])=>({id,ch:rch(ch,q+" "+a),q,a})).concat(EXTRA_CARDS.map(([id,ch,q,a])=>({id,ch,q,a})));
+[1,1,"Comment est organisée l’évaluation ?","2 contrôles continus (40 %) : le 1er le 6 novembre (questions de cours, éventuellement petits exercices), le 2e à la dernière séance (épreuve pratique). 1 contrôle terminal (60 %) : examen sur ordinateur avec des données de marché."],
+[2,1,"Quel est le double objectif de l’investisseur financier ?","1) Que le temps pendant lequel il prête ses fonds lui rapporte une rémunération (il renonce à les utiliser). 2) Que le risque pris lui rapporte une rémunération proportionnelle au risque."],
+[3,1,"Qu’est-ce qu’une action ?","Une part de capital, un titre de propriété : l’investisseur est actionnaire (copropriétaire). Dividende variable, non garanti, et plus-value éventuelle. Risque élevé : remboursé en dernier, peut perdre toute sa mise."],
+[4,1,"Qu’est-ce qu’une obligation ?","Un titre de créance (dette) : l’investisseur est créancier, sans part de la société. Rémunération fixe ou variable (indexée) : coupons versés régulièrement, capital remboursé à l’échéance. Risque modéré à faible, prioritaire sur l’action."],
+[5,1,"Qui sont les AEE et les AEBF, et quel est leur lien ?","Agents économiques excédentaires (qui ont de l’épargne, souvent les ménages) et déficitaires (entreprises, État). Le système financier les met en relation : AEE > SF > AEBF."],
+[6,2,"Qu’est-ce que la finance directe ?","Les agents excédentaires financent directement ceux qui ont besoin de financement. Le système financier sert de courtier (mise en relation). C’est la finance des marchés financiers : financement contractuellement direct."],
+[7,2,"Qu’est-ce que la finance indirecte ?","La finance intermédiée par le système bancaire. La banque sert d’écran entre demandeurs et pourvoyeurs de capitaux : pas de relation contractuelle entre eux. Elle opère une transformation (ressources court terme, emplois long terme)."],
+[8,2,"Quels sont les intermédiaires de la finance directe ?","CIF (conseiller en investissements financiers), EI, PSI (services d’investissement, exécution d’ordres), dont les banques dans leur fonction de conseil, non de financement."],
+[9,2,"Que montre le bilan d’un intermédiaire financier (courtier) ?","Rien : il n’accorde pas de financement et ne collecte pas de ressources. Seule sa rémunération (commission) apparaît dans son compte de résultat."],
+[10,2,"Que contient le bilan d’une banque qui fait de l’intermédiation ?","À l’actif : les emplois (portefeuille d’actions, crédits…). Au passif : les ressources collectées auprès des clients ou empruntées à la banque centrale, et la dette émise."],
+[11,2,"Comment calcule-t-on la marge d’intermédiation ?","Taux de rémunération des emplois − coût des ressources. Exemple : emplois 12 / 100 = 12 %, ressources 10 / 100 = 10 % : marge = 2 %."],
+[12,2,"Qu’est-ce que la désintermédiation ?","Une part de plus en plus importante du financement des entreprises se fait directement sur les marchés financiers, en Europe notamment, plutôt que par les banques."],
+[13,2,"Qu’est-ce qu’une économie d’endettement ?","Marchés financiers peu développés : entreprises fortement endettées auprès des banques, elles-mêmes endettées auprès de la banque centrale. Risque de bilan et de solvabilité, effet boule de neige sur la banque."],
+[14,2,"Quel risque dans une économie de marché ?","Le risque sur la valeur du titre : la volatilité du titre."],
+[15,2,"Courtage ou intermédiation : exemple d’un prêt de 10 M€ à 5 % ?","En courtage la banque ne perd que sa rémunération (500 K€) ; en intermédiation elle risquerait 10 M€."],
+[16,2,"Qu’est-ce qu’un OPCVM ?","SICAV ou FCP : la banque conçoit l’OPCVM, le dote d’actifs (actions, obligations) et émet des parts. Uniquement en actions : OPCVM dynamique."],
+[17,2,"Qui a théorisé la distinction finance directe / indirecte ? Et Hicks ?","Gurley et Shaw. Hicks : économie de marchés financiers."],
+[18,2,"Qu’est-ce que la marchéisation ?","Le marché financier influence les prix proposés par les banques (crédits aux ménages et PME) : la banque doit s’aligner sur les prix des marchés pour ne pas perdre ses clients."],
+[19,2,"Qu’est-ce que l’ALM et quels sont ses trois objectifs ?","Asset and Liability Management : piloter actifs et passifs. 1) Gérer les risques de taux et de liquidité. 2) Éviter le décalage de maturité. 3) Optimiser la rentabilité en équilibrant risque et solvabilité (accords de Bâle)."],
+[20,3,"Marché primaire : définition et intérêt pour l’entreprise ?","Marché de l’émission, de la création des titres. L’entreprise reçoit du cash (new money) : c’est là qu’elle se finance."],
+[21,3,"Marché secondaire : définition ?","Marché des transactions ultérieures à l’émission, « marché de l’occasion ». Simple changement de propriétaire, sans cash pour l’entreprise. Assure valorisation, cotation et liquidité."],
+[22,3,"Pourquoi le marché secondaire est-il un jeu à somme nulle ?","Entre investisseurs : l’un achète ce que l’autre vend, indépendamment de l’émetteur. Il ne finance pas le développement économique mais refinance les investissements initiaux."],
+[23,3,"Quelle est la seule sortie d’un actionnaire ?","Vendre son action à un autre investisseur intéressé. La sortie est plus aisée pour un titre à court terme."],
+[24,3,"Qu’est-ce qu’un produit dérivé ?","Un produit dont la valeur dépend d’un autre actif, le sous-jacent (actions, obligations, matières premières…). Deux familles : contrats à terme et options. Marché sur un marché."],
+[25,3,"Qu’est-ce que l’effet de levier d’un dérivé ?","Une mise de fonds limitée permet de prendre une position bien plus importante sur le sous-jacent."],
+[26,3,"Contrat à terme ou option : quelle différence ?","Contrat à terme : engagement ferme d’acheter ou de vendre à l’échéance à un prix fixé. Option : un droit (acquérir ou vendre une quantité à une date), pas une obligation."],
+[27,3,"Exemple de couverture par contrat à terme ?","Un producteur de blé vend aujourd’hui un contrat à terme à un prix fixé : si le prix baisse, le contrat compense sa perte ; si le prix monte il ne profite pas de la hausse, mais son chiffre d’affaires est sécurisé."],
+[28,3,"Exemple de spéculation par contrat à terme ?","Un investisseur anticipe la hausse du pétrole, achète un contrat à terme sans posséder de baril, et le revend plus cher avant l’échéance."],
+[29,4,"Quels sont les objectifs d’un système financier ?","Fournir des liquidités aux projets d’investissement les plus rentables en fonction des risques anticipés. Deux notions : rentabilité et risque."],
+[30,4,"Qui a défini les six fonctions du système financier ?","Merton et Bodie."],
+[31,4,"Fonction 1 et 2 du système financier ?","1) Faciliter les transactions (règlement et compensation : chèque, carte…). 2) Mettre en commun des fonds pour de grands projets et subdiviser le capital des entreprises (diversification)."],
+[32,4,"Fonction 3 et 4 du système financier ?","3) Répartir les ressources dans le temps, l’espace et entre secteurs (jeunes ménages qui empruntent, retraités qui épargnent). 4) Fournir des outils de gestion du risque (épargne collective, diversification)."],
+[33,4,"Fonction 5 et 6 du système financier ?","5) Information sur les prix au plus bas coût. 6) Limiter les problèmes entre parties d’un contrat (asymétrie d’information) : discipline de marché, alignement d’intérêts."],
+[34,5,"Banque commerciale ou banque d’affaires ?","Commerciale : collecte des ressources auprès des clients et prête. D’affaires : conseil (fusions-acquisitions), intermédiaire pour le placement d’instruments financiers, sans toucher à son bilan."],
+[35,5,"Qu’est-ce qu’une banque universelle ?","Un groupe issu du rapprochement de banques commerciales et d’affaires : BNP et Paribas, JP Morgan et Chase Manhattan, Bank of America et Merrill Lynch."],
+[36,5,"Qu’était le Glass-Steagall Act ?","Loi américaine qui interdisait le rapprochement banques commerciales / banques d’affaires. Abrogée en 1999, ce qui a favorisé les banques universelles."],
+[37,5,"Quelle conséquence de la crise de 2008 pour les banques ?","Volonté politique de séparer à nouveau dépôts et marchés pour protéger les épargnants : les activités spéculatives de compte propre sont cantonnées dans des structures différentes."],
+[38,5,"Quels sont les trois départements des groupes bancaires ?","Banque de détail, banque de financement et d’investissement (BFI), gestion d’actifs."],
+[39,5,"Caractéristiques de la banque de détail ?","Particuliers, pros, PME ; intermédiation financière ; millions de clients, dimension quasi industrielle ; produits standardisés ; diversification du risque ; très concurrentielle, marges faibles après frais généraux et coût du risque."],
+[40,5,"Qu’est-ce que le coût du risque ?","Les provisions que la banque doit faire en prévision des créances douteuses."],
+[41,5,"Affacturage et crédit-bail ?","Affacturage : cession de créances à un factor qui paie la créance. Crédit-bail : service spécialisé proposé aux PME. Tous deux dans la banque de détail."],
+[42,5,"Caractéristiques de la BFI ?","Le département le plus rentable : services sophistiqués, sur mesure, pour quelques milliers de grandes entreprises (ex. BNP Paribas CIB, CACIB)."],
+[43,5,"ECM, DCM, M&A ?","ECM (Equity Capital Market) : introduction en bourse, augmentations de capital, OCA. DCM (Debt Capital Market) : émission d’obligations. M&A : conseil en fusion-acquisition, conseil de valorisation, pas du financement."],
+[44,5,"Qu’est-ce qu’un crédit syndiqué ?","Un financement important réalisé par plusieurs établissements, avec un chef de file. Exemple : BNP 50 %, CA 25 %, CE 25 %."],
+[45,5,"Que fait la gestion d’actifs ?","Clients : investisseurs institutionnels (assureurs), family offices, particuliers fortunés. Produits : SICAV, FCP, produits structurés. Elle recourt à la BFI pour des instruments de couverture."],
+[46,5,"Donne des exemples d’acteurs spécialisés.","Conseil en fusion-acquisition : Lazard, Rothschild, Hottinger. Néobanque : Revolut. Banque régionale : Crédit Mutuel Arkéa."],
+[47,5,"Quel est le métier de base des banques ?","Apprécier le risque et le repackager, en éliminant le risque qui peut être diversifié. Elles sont aussi un indicateur d’aversion au risque (crises de 2008 et de 2020)."],
+[48,6,"Qu’est-ce qu’un marché efficient ?","Un marché où les prix des titres reflètent à tout instant toute l’information pertinente disponible. Aussi appelé marché à l’équilibre ou marché parfait."],
+[49,6,"Pourquoi parle-t-on de marche au hasard ?","Seule une information nouvelle totalement imprévue modifie le prix. Son apparition étant imprévisible, les variations de prix sont aléatoires (processus stochastique)."],
+[50,6,"Qui est Eugène Fama ?","Économiste de l’université de Chicago à l’origine de la théorie des marchés efficients, prix Nobel d’économie en 2013. Trois niveaux d’efficience."],
+[51,6,"Forme faible de l’efficience ?","Les prix intègrent les données historiques. L’analyse technique est inutile."],
+[52,6,"Forme semi-forte de l’efficience ?","Les prix intègrent les données historiques et publiques. Analyse technique et fondamentale inutiles. Aucun effet sur le prix avant l’annonce, ni au lendemain."],
+[53,6,"Forme forte de l’efficience ?","Les prix intègrent aussi les informations privées ou privilégiées : même les initiés ne peuvent pas faire mieux que le marché. Vrai si les autorités répriment le délit d’initié."],
+[54,7,"Quelles anomalies Thaler et Kahneman ont-ils mises en évidence ?","Volatilité et instabilité des cours (bruit autour de la valeur fondamentale), dual listing (sociétés jumelles à cours différents), anomalies calendaires (lundi, janvier), anomalie météorologique."],
+[55,7,"Quelles sont les quatre catégories d’anomalies ?","Fondamentales (taille, valeur), techniques (momentum, retour à la moyenne), calendaires (janvier, lundi), comportementales (sur et sous-réaction, bulles)."],
+[56,7,"Effet taille et effet valeur ?","Taille : les small caps rapportent plus que les large caps, même ajusté du risque. Valeur : les actions décotées (faible PER, fort Book-to-Market) surperforment les actions de croissance."],
+[57,7,"Effet momentum ?","Jegadeesh et Titman, 1993 : à 3-12 mois, les gagnants continuent de gagner et les perdants de baisser. Contredit la forme faible."],
+[58,7,"Retour à la moyenne ?","De Bondt et Thaler, 1985 : à 3-5 ans, les portefeuilles perdants finissent par surperformer les gagnants (correction d’une réaction excessive)."],
+[59,7,"Effet janvier et effet week-end ?","Janvier : rendements anormalement élevés (surtout petites capitalisations), expliqués par des ventes fiscales en décembre puis des rachats. Week-end ou lundi : rendements du lundi souvent inférieurs, parfois négatifs."],
+[60,7,"Sur-réaction, sous-réaction, bulles ?","Sur-réaction aux mauvaises nouvelles (krachs injustifiés), sous-réaction aux résultats réguliers (fenêtres d’arbitrage). Bulles : exemple de la bulle internet des années 2000, « exubérance irrationnelle »."],
+[61,7,"Quel biais face au gain et à la perte ?","Les investisseurs assurent un gain certain (50 sûrs plutôt qu’une chance sur deux d’obtenir 100), mais prennent des risques quand la probabilité de perte est forte."],
+[62,7,"Les trois mimétismes d’André Orléan ?","Normatif (conformisme), informationnel (imiter ceux supposés mieux informés), autoréférentiel (prévoir le comportement majoritaire pour l’imiter) : prophétie autoréalisatrice et bulles."],
+[63,7,"Qu’est-ce que le program trading ?","Décisions préprogrammées dans les logiciels d’achat et de cession automatiques, qui accentuent le mimétisme."],
+[64,7,"Que s’est-il passé le 2 mai 2022 à Stockholm ?","Flash crash : l’indice chute de plus de 8 % en quelques minutes, à cause d’une erreur d’un opérateur d’une grande banque américaine (fat finger)."],
+[65,8,"Qu’est-ce que la couverture ?","Se protéger contre un risque (hedge). Choisir un investissement long terme pour couvrir un financement long terme : adossement des maturités."],
+[66,8,"Qu’est-ce que la spéculation ?","Accepter un risque : prendre position, parier sur l’évolution future du prix d’un actif, sans en tirer de revenu régulier. Le spéculateur transforme les échéances : rôle utile."],
+[67,8,"Qu’est-ce que l’arbitrage ?","Pas de risque ni d’avis spéculatif : tirer parti des écarts de prix d’un même titre entre marchés. Il apporte liquidité, égalité des prix et efficience."],
+[68,8,"Limites de l’arbitrage ?","Shleifer et Vishny, 1997 : l’arbitragiste est théoriquement le garant de l’efficience, mais son pouvoir n’est pas absolu. Les algorithmes rendent l’arbitrage plus rare et complexe."],
+[69,9,"Pourquoi un euro aujourd’hui vaut-il plus qu’un euro demain ?","L’achat d’un titre est un acte intéressé : on renonce à une satisfaction immédiate, d’où une exigence de rentabilité. Il existe un taux d’intérêt de l’argent même sans risque."],
+[70,9,"Formules de la capitalisation ?","VN = V0 × (1 + t)ⁿ et t = (VN / V0)^(1/n) − 1. Croissance exponentielle, pas linéaire."],
+[71,9,"100 000 € en 2013 deviennent 1,8 M€ en 10 ans : quel taux annuel ?","(1 + i)¹⁰ = 18, donc i = 18^(1/10) − 1 ≈ 33,5 %. Diviser la plus-value (1 700 %) par 10 serait faux : les revenus sont capitalisés."],
+[72,9,"Quelle hypothèse sur les flux dans la capitalisation ?","Ils sont réinvestis au même taux. Seuls comptent les flux de trésorerie effectifs, au moment où ils sont touchés, pas acquis."],
+[73,9,"Quel taux pour doubler un capital en 10 ans ?","7,177 % par an : 2^(1/10) − 1."],
+[74,10,"Qu’est-ce que l’actualisation ?","Chercher la valeur d’aujourd’hui d’une somme future, en la dépréciant par un coefficient inférieur à 1. Elle permet de comparer des flux à des dates différentes."],
+[75,10,"Formule de l’actualisation ?","V0 = VN / (1 + t)ⁿ."],
+[76,10,"110 € dans un an avec 11 % d’exigence : prix maximal ?","110 / 1,11 ≈ 99,1 €."],
+[77,11,"Définition de la VA et de la VAN ?","VA = Σ Fi / (1 + t)ⁱ : somme actualisée des flux futurs. VAN = VA − V0 (valeur de marché)."],
+[78,11,"Comment décide-t-on avec la VAN ?","VAN > 0 : projet positif, on investit. VAN = 0 : neutre, valeur d’équilibre. VAN < 0 : on n’investit pas."],
+[79,11,"Que vaut la VAN à l’équilibre d’un marché efficient ?","Zéro : VA = V0. Les marchés, avec les arbitragistes, rétablissent l’équilibre."],
+[80,11,"Les trois interprétations de la VAN ?","1) Valeur créée par l’investissement (coût 100, VAN 10 : on s’enrichit de 10). 2) Supplément maximal que l’investisseur accepte de payer. 3) Écart entre la VA et la valeur de marché V0."],
+[81,12,"Qu’est-ce que le TRA ?","Taux de rentabilité actuariel : le taux d’actualisation qui annule la VAN. On cherche t tel que Σ Fi / (1 + t)ⁱ − V0 = 0."],
+[82,12,"Comment utilise-t-on le TRA pour décider ?","Si TRA ≥ rentabilité exigée, l’investisseur achète. À l’équilibre d’un marché efficient, TRA = rentabilité exigée du marché, VAN nulle."],
+[83,12,"TRA : V0 = 2, flux de 0,8 pendant 5 ans ?","Environ 28,65 % par an."],
+[84,13,"Quelle date : abrogation du Glass-Steagall ?","1999."],
+[85,13,"Dates : 1985, 1993, 1997 ?","1985 De Bondt et Thaler (retour à la moyenne) ; 1993 Jegadeesh et Titman (momentum) ; 1997 Shleifer et Vishny (limites de l’arbitrage)."],
+[86,13,"Dates : 2008, 2013, 2020, 2022 ?","2008 crise financière ; 2013 Nobel de Fama ; 2020 crise sanitaire ; 2 mai 2022 flash crash de Stockholm."]
+].map(([id,ch,q,a])=>({id,ch,q,a}));
 
-/* ---------- données : QCM [chapitre, question, choix, bonne réponse, explication] ---------- */
+/* ---------- données : QCM [chapitre, question, choix, bonne réponse (index 0), explication] ---------- */
 const QCM=[
-[1,"Qu’est-ce qui distingue une action d’une obligation ?",["L’action est une part de capital, l’obligation un titre de créance","L’action est un prêt, l’obligation une part de capital","Les deux sont des parts de capital","Les deux versent un coupon fixe"],0,"L’actionnaire est copropriétaire et passe en dernier. L’obligataire est créancier et reçoit des coupons."],
-[1,"Ressources à 10 %, emplois à 12 % : quelle est la marge d’intermédiation ?",["2 %","12 %","22 %","10 %"],0,"12 % − 10 % = 2 %."],
-[2,"Quelle définition de la finance indirecte est correcte ?",["La banque s’interpose entre prêteurs et emprunteurs et transforme les dépôts","Prêteur et emprunteur signent un contrat direct","Le financement est public","Le courtier perçoit une commission"],0,"En finance directe, c’est la relation contractuelle directe. En finance indirecte, la banque fait écran."],
-[2,"Que cherche à éviter l’ALM ?",["Le décalage de maturité entre dettes courtes et actifs longs","Le délit d’initié","La hausse des dividendes","Les fusions-acquisitions"],0,"Elle gère aussi les risques de taux et de liquidité."],
-[2,"Que désigne la désintermédiation ?",["La part croissante du financement des entreprises obtenue sur les marchés","La disparition des banques","Le financement par la banque centrale","La hausse des crédits bancaires"],0,"À l’opposé, l’économie d’endettement est dominée par le crédit bancaire."],
-[2,"Quand un OPCVM est-il dit dynamique ?",["Quand il n’investit qu’en actions","Quand il est à taux variable","Quand il est coté","Quand il est géré par une banque d’affaires"],0,"Les investisseurs achètent des parts de SICAV ou de FCP."],
-[3,"Que permet le marché secondaire ?",["Liquidité et cotation, sans financement nouveau","Émettre de nouveaux titres","Financer directement l’entreprise","Fixer les taux directeurs"],0,"Seul le marché primaire apporte de l’argent frais à l’entreprise."],
-[3,"Différence entre contrat à terme et option ?",["Le contrat à terme est un engagement ferme, l’option un droit","Le contrat à terme est un droit, l’option un engagement","Aucune","L’option ne porte que sur des actions"],0,"À l’échéance, le contrat à terme oblige à acheter ou vendre au prix fixé."],
-[3,"Qu’est-ce que la liquidité ?",["La capacité à transformer un bien en cash rapidement et sans perte de valeur","Le montant de cash d’une banque","La rentabilité d’un titre","Le volume de dettes"],0,"Rapidité et absence de perte de valeur."],
-[4,"Laquelle n’est PAS une fonction du système financier selon Merton et Bodie ?",["Fixer le taux directeur","Gestion du risque","Information sur les prix","Transactions"],0,"Les six fonctions : transactions, mise en commun, allocation, gestion du risque, information, incitations."],
-[4,"Que fait la BFI ?",["Des services sur mesure pour de grandes entreprises (ECM, DCM, fusions-acquisitions)","Des crédits standardisés pour les particuliers","La gestion de SICAV pour les particuliers","La supervision des banques"],0,"La banque de détail vise des millions de clients avec des produits standardisés."],
-[4,"Que s’est-il passé en 1999 pour le Glass-Steagall Act ?",["Il a été abrogé","Il a été adopté","Il a été renforcé","Il a été étendu à l’Europe"],0,"Cette loi séparait banques commerciales et banques d’affaires."],
-[5,"Efficience semi-forte : que devient l’analyse fondamentale ?",["Inutile, car l’information publique est déjà dans les prix","Indispensable","Utile seulement pour les initiés","Remplacée par l’analyse technique"],0,"Faible : historique. Semi-forte : + information publique. Forte : + information privée."],
-[5,"Quelle forme d’efficience rend l’analyse technique inutile ?",["La forme faible, et donc aussi les suivantes","Seulement la forme forte","Aucune","Seulement la semi-forte"],0,"Si les prix intègrent déjà l’historique, lire des graphiques n’apporte rien."],
-[5,"Face à un gain probable, que préfèrent les investisseurs selon la finance comportementale ?",["Un gain certain plus faible","Un pari risqué","Ne rien faire","Vendre à découvert"],0,"En revanche, face à une perte probable, ils prennent des risques."],
-[5,"Que caractérise le mimétisme autoréférentiel ?",["On anticipe le comportement majoritaire pour l’imiter, ce qui crée des bulles","On suit le groupe par conformité","On imite des mieux informés","On refuse de suivre le marché"],0,"Il produit des prophéties autoréalisatrices."],
-[6,"Quel comportement exploite sans risque les écarts de prix entre marchés ?",["L’arbitrage","La spéculation","La couverture","La titrisation"],0,"L’arbitragiste égalise les prix et rend les marchés plus efficients."],
-[6,"Quel est le rôle utile du spéculateur ?",["Assumer un risque et transformer les échéances","Éliminer le risque","Fixer les prix","Garantir l’égalité des prix"],0,"Il emprunte à court terme pour placer à long terme."],
-[7,"Un titre verse 110 € dans un an. Prix maximal pour une rentabilité exigée de 10 % ?",["100 €","99,1 €","110 €","121 €"],0,"110 / 1,10 = 100 €. Pour 11 % : 110 / 1,11 ≈ 99,1 €."],
-[7,"10 % avec intérêts semestriels : taux annuel équivalent ?",["10,25 %","10 %","5 %","20 %"],0,"(1 + 0,10 / 2)² − 1 = 10,25 %."],
-[7,"VAN = 0 signifie…",["Projet neutre : le prix est la valeur actuelle des flux","Projet très rentable","Projet à rejeter","Le TRA est nul"],0,"VAN > 0 : on investit. VAN < 0 : on rejette."],
-[7,"Quand achète-t-on selon le TRA ?",["Si TRA ≥ rentabilité exigée","Si TRA ≤ rentabilité exigée","Si TRA = 0","Toujours"],0,"Le TRA est le taux qui annule la VAN."],
-[8,"Un titre a un bêta de 1,4. Que cela signifie-t-il ?",["Il amplifie les variations du marché","Il les amortit","Il est sans risque","Il est indépendant du marché"],0,"Bêta du marché = 1. Au-dessus de 1, le titre bouge davantage que le marché."],
-[8,"Quel risque est diversifiable ?",["Le risque spécifique","Le risque systématique","Les deux","Aucun"],0,"Le risque de marché reste présent quel que soit le portefeuille."],
-[8,"−22 % (12 %), +6 % (74 %), +16 % (14 %) : espérance de rentabilité ?",["≈ 4 %","0 %","≈ 6 %","≈ 16 %"],0,"E(R) = −2,64 + 4,44 + 2,24 = 4,04 %."]
-].map(([ch,q,o,a,e])=>({ch:rch(ch,q+" "+o.join(" ")),q,o,a,e})).concat(EXTRA_QCM.map(([ch,q,o,a,e])=>({ch,q,o,a,e})));
+[1,"Quel poids a le contrôle terminal ?",["60 %","40 %","50 %","100 %"],0,"2 CC à 40 % au total et 1 CT à 60 %."],
+[1,"Quelle est la nature du 1er CC (6 novembre) ?",["Questions de cours et éventuellement petits exercices","Une épreuve pratique sur ordinateur","Un oral","Un dossier à rendre"],0,"L’épreuve pratique est le 2e CC."],
+[1,"Qu’est-ce qui distingue une action d’une obligation ?",["L’action est une part de capital, l’obligation un titre de créance","L’action est un prêt, l’obligation une part de capital","Les deux sont des parts de capital","Les deux versent un coupon fixe"],0,"L’actionnaire est copropriétaire, l’obligataire est créancier."],
+[1,"Qui est remboursé en dernier en cas de faillite ?",["L’actionnaire","L’obligataire","Le créancier","La banque"],0,"L’actionnaire passe après tous les créanciers."],
+[1,"Comment se nomme la rémunération d’une obligation ?",["Le coupon","Le dividende","La plus-value","Le courtage"],0,"Intérêts fixes ou variables indexés, plus remboursement du capital."],
+[1,"Que signifie AEE > SF > AEBF ?",["Les agents excédentaires financent les déficitaires par le système financier","Les banques financent l’État","Les entreprises financent les ménages sans intermédiaire","Le système financier s’endette auprès des agents"],0,"Les agents à excédent de ressources sont en général les ménages."],
+[2,"En finance directe, le système financier joue le rôle de…",["courtier","écran","banque centrale","émetteur"],0,"Il met en relation, sans relation contractuelle intermédiaire."],
+[2,"Que montre le bilan d’un courtier ?",["Rien : seule sa commission figure au compte de résultat","Les dépôts des clients","Un portefeuille d’obligations","Les crédits accordés"],0,"Il n’accorde pas de financement et ne collecte pas de ressources."],
+[2,"Dans la finance indirecte, la banque sert d’…",["écran entre prêteurs et emprunteurs","opérateur de compensation","autorité de marché","assureur"],0,"Ils ne sont pas en relation contractuelle."],
+[2,"Ressources à 10 %, emplois à 12 % : quelle est la marge d’intermédiation ?",["2 %","12 %","22 %","10 %"],0,"12 % − 10 % = 2 %."],
+[2,"Prêt de 10 M€ à 5 % : que risque la banque en courtage ?",["500 K€","10 M€","5 M€","Rien du tout"],0,"En intermédiation, elle risque 10 M€."],
+[2,"Qui a théorisé la distinction finance directe / indirecte ?",["Gurley et Shaw","Fama","Merton et Bodie","Orléan"],0,"Hicks est associé à l’économie de marchés financiers."],
+[2,"Dans une économie d’endettement, le risque principal est…",["le risque de bilan et de solvabilité de l’emprunteur","la volatilité du titre","le risque de change","le risque de liquidité du marché"],0,"Dans une économie de marché, c’est la volatilité du titre."],
+[2,"Un OPCVM investi uniquement en actions est…",["dynamique","prudent","obligataire","monétaire"],0,"La banque conçoit le fonds et émet des parts."],
+[2,"Parmi ces objectifs, lequel n’est PAS un objectif de l’ALM ?",["Faire de la publicité pour la banque","Gérer les risques de taux et de liquidité","Éviter le décalage de maturité","Optimiser la rentabilité sous contrainte de solvabilité"],0,"L’ALM pilote actifs et passifs."],
+[3,"Sur le marché primaire, l’entreprise…",["reçoit du cash (new money)","ne reçoit rien","achète ses propres titres","est cotée seulement"],0,"C’est le marché où elle se finance."],
+[3,"Le marché secondaire…",["n’apporte pas de cash à l’entreprise","finance le développement économique","crée de nouveaux titres","est le marché des dérivés"],0,"Il y a seulement un changement de propriétaire."],
+[3,"Le marché secondaire est…",["un jeu à somme nulle entre investisseurs","un jeu à somme positive pour l’émetteur","indispensable à l’émission","réservé aux banques"],0,"Il assure liquidité, valorisation et cotation."],
+[3,"La valeur d’un produit dérivé dépend…",["d’un sous-jacent","du bilan de la banque","du taux de change uniquement","d’une action seulement"],0,"Actions, obligations, matières premières, indices…"],
+[3,"Quelle est la différence entre un contrat à terme et une option ?",["Le contrat à terme est un engagement ferme, l’option un droit","L’option est un engagement ferme, le contrat à terme un droit","Aucune","L’un est coté, l’autre non"],0,"L’acheteur d’une option n’est pas obligé d’acheter."],
+[3,"Un producteur de blé qui vend un contrat à terme fait…",["de la couverture","de la spéculation","de l’arbitrage","de l’intermédiation"],0,"Il fixe son prix de vente à l’avance."],
+[3,"L’effet de levier d’un dérivé signifie…",["une mise limitée donne une position importante","un financement par la dette","une baisse du risque","une hausse de la liquidité du titre"],0,"Disproportion entre le prix et la position."],
+[4,"Combien de fonctions du système financier chez Merton et Bodie ?",["6","3","4","8"],0,"Six fonctions essentielles."],
+[4,"Quelle fonction concerne l’asymétrie d’information ?",["Limiter les problèmes entre les parties d’un contrat","Faciliter les transactions","Répartir les ressources","Mettre en commun les fonds"],0,"Discipline de marché, alignement d’intérêts."],
+[4,"Les jeunes ménages qui empruntent pour se loger illustrent…",["la répartition des ressources dans le temps","la gestion du risque","l’information sur les prix","la compensation"],0,"Fonction 3 : temps, espace, secteurs."],
+[4,"Les chèques et la carte bancaire relèvent de…",["la facilitation des transactions","la gestion du risque","l’arbitrage","la spéculation"],0,"Règlement et compensation."],
+[5,"Le Glass-Steagall Act a été abrogé en…",["1999","1990","2008","2013"],0,"Il interdisait le rapprochement banques commerciales / banques d’affaires."],
+[5,"Quel département bancaire est le plus rentable ?",["La BFI","La banque de détail","La gestion d’actifs","Le crédit à la consommation"],0,"Services sophistiqués pour quelques milliers de grandes entreprises."],
+[5,"Que fait le département ECM ?",["Introduction en bourse et augmentations de capital","Émission d’obligations","Conseil en fusion-acquisition","Crédit-bail"],0,"DCM = obligations, M&A = fusions-acquisitions."],
+[5,"Qu’est-ce qu’une OCA ?",["Une obligation convertible en actions","Une option sur contrat à terme","Une offre de crédit assurée","Une obligation courte à taux fixe"],0,"Produit émis grâce à l’ECM."],
+[5,"Pourquoi la marge de la banque de détail est-elle faible ?",["Forte concurrence, frais généraux et coût du risque","Peu de clients","Produits sur mesure","Aucun risque"],0,"Produits standardisés, clients qui font jouer la concurrence."],
+[5,"L’affacturage est…",["une cession de créances à un factor","un prêt à long terme","un contrat à terme","une assurance"],0,"Le factor paie la créance."],
+[5,"Qui est le chef de file d’un crédit syndiqué ?",["La banque en tête du pool","L’entreprise emprunteuse","La banque centrale","L’AMF"],0,"D’autres établissements se syndiquent avec elle."],
+[5,"Après 2008, les activités spéculatives de compte propre…",["sont cantonnées dans des structures différentes","sont interdites partout","sont renforcées","sont transférées aux assureurs"],0,"Pour protéger les épargnants."],
+[6,"Que reflètent les prix d’un marché efficient ?",["Toute l’information pertinente disponible","Seulement les cours passés","Seulement l’information publique","Rien"],0,"À tout instant."],
+[6,"Pourquoi les prix suivent-ils une marche au hasard ?",["Seule une information imprévue les modifie","La bourse est truquée","Les investisseurs sont irrationnels","Les banques centrales décident"],0,"L’apparition d’une information nouvelle est imprévisible."],
+[6,"Quelle forme d’efficience rend l’analyse technique inutile ?",["Faible","Semi-forte uniquement","Forte uniquement","Aucune"],0,"Les prix intègrent déjà les données historiques."],
+[6,"Quelle forme rend l’analyse fondamentale inutile ?",["Semi-forte","Faible","Aucune","Seulement la forte"],0,"Les données publiques sont des données fondamentales."],
+[6,"Qui a reçu le Nobel d’économie en 2013 pour la théorie de l’efficience ?",["Eugène Fama","Kahneman","Hicks","Orléan"],0,"Fama, université de Chicago."],
+[6,"Dans la forme forte, les initiés…",["ne peuvent pas obtenir une meilleure rentabilité que le marché","gagnent toujours","sont sanctionnés par le marché","sont les seuls à agir"],0,"À condition que les délits d’initiés soient réprimés."],
+[7,"Qui a mis en évidence des anomalies dans les années 1980 ?",["Thaler et Kahneman","Fama","Gurley et Shaw","Merton et Bodie"],0,"Volatilité, dual listing, calendaires, météo."],
+[7,"Le dual listing concerne…",["des sociétés jumelles cotées sur deux marchés à des prix différents","deux entreprises qui fusionnent","un titre coté deux fois par jour","deux banques"],0,"Même valeur fondamentale mais cours différents."],
+[7,"Momentum : auteurs et horizon ?",["Jegadeesh et Titman, 1993, 3-12 mois","De Bondt et Thaler, 1985, 3-5 ans","Fama, 2013, 1 an","Shleifer et Vishny, 1997, 1 mois"],0,"Le retour à la moyenne est De Bondt et Thaler."],
+[7,"Retour à la moyenne : horizon ?",["3 à 5 ans","3 à 12 mois","1 jour","10 ans"],0,"Les portefeuilles perdants finissent par surperformer."],
+[7,"L’effet taille signifie que…",["les petites capitalisations rapportent plus à long terme","les grandes capitalisations rapportent plus","le prix suit la taille du bilan","la taille de la banque compte"],0,"Même après ajustement du bêta."],
+[7,"L’effet janvier est souvent expliqué par…",["des ventes fiscales en décembre puis des rachats","la météo","l’inflation","les dividendes"],0,"Surtout pour les petites capitalisations."],
+[7,"Le mimétisme autoréférentiel conduit à…",["des prophéties autoréalisatrices et des bulles","l’efficience forte","l’arbitrage","une VAN nulle"],0,"On imite ce que l’on prévoit que la majorité fera."],
+[7,"Le flash crash du 2 mai 2022 à Stockholm est dû à…",["une erreur de saisie (fat finger)","une crise sanitaire","une loi bancaire","un défaut souverain"],0,"Indice en baisse de plus de 8 % en quelques minutes."],
+[8,"Qui prend un risque et n’a pas d’adossement des maturités ?",["Le spéculateur","L’arbitragiste","Le courtier","Le couvreur"],0,"Il transforme les échéances."],
+[8,"L’arbitragiste…",["ne prend pas de risque et exploite les écarts de prix entre marchés","parie sur la hausse","emprunte à court terme","achète du long terme"],0,"Il contribue à la liquidité et à l’efficience."],
+[8,"Qui a étudié les limites de l’arbitrage ?",["Shleifer et Vishny (1997)","Gurley et Shaw","Jegadeesh et Titman","Fama"],0,"Son pouvoir n’est pas absolu."],
+[8,"La couverture consiste à…",["se protéger contre un risque, avec adossement des maturités","accepter un risque","exploiter les écarts de prix","vendre à découvert"],0,"Hedge."],
+[9,"100 000 € deviennent 1,8 M€ en 10 ans sans apport : quel taux annuel ?",["≈ 33,5 %","170 %","1 700 %","18 %"],0,"18^(1/10) − 1 ≈ 33,5 %."],
+[9,"La capitalisation produit une croissance…",["exponentielle","linéaire","nulle","décroissante"],0,"Les revenus sont réinvestis et produisent à leur tour des revenus."],
+[9,"Quel taux annuel pour doubler un capital en 10 ans ?",["≈ 7,18 %","10 %","20 %","5 %"],0,"2^(1/10) − 1 ≈ 7,177 %."],
+[10,"110 € dans un an, rentabilité exigée 11 % : prix maximal ?",["≈ 99,1 €","≈ 97,9 €","110 €","≈ 100 €"],0,"110 / 1,11."],
+[10,"Actualiser, c’est…",["déprécier le futur","valoriser le futur","ignorer le temps","capitaliser les intérêts"],0,"Avec un coefficient inférieur à 1."],
+[11,"VAN > 0 signifie…",["on investit","on n’investit pas","valeur d’équilibre","TRA nul"],0,"Projet positif."],
+[11,"À l’équilibre d’un marché efficient…",["VAN = 0 et VA = V0","VAN > 0","VA = 0","V0 = 0"],0,"Les arbitragistes rétablissent l’équilibre."],
+[11,"La VAN peut s’interpréter comme…",["la valeur créée, le supplément maximal acceptable, l’écart entre VA et V0","le taux d’intérêt","le bénéfice comptable","le coût du capital"],0,"Trois interprétations dans le cours."],
+[12,"Le TRA est le taux qui…",["annule la VAN","maximise la VAN","double le capital","égale le taux d’inflation"],0,"VAN = 0."],
+[12,"Quand l’investisseur achète-t-il selon le TRA ?",["Si TRA ≥ rentabilité exigée","Si TRA < rentabilité exigée","Si TRA = 0","Jamais"],0,"Un investissement est rentable si son TRA est supérieur ou égal."],
+[13,"Quelle date pour De Bondt et Thaler (retour à la moyenne) ?",["1985","1993","1997","2013"],0,"Jegadeesh et Titman = 1993."],
+[13,"Date de la crise financière qui a relancé la séparation des activités bancaires ?",["2008","1999","2020","2013"],0,"Crise de 2008."]
+].map(([ch,q,o,a,e])=>({ch,q,o,a,e}));
 
 /* ---------- exercices de calcul (variantes aléatoires) ---------- */
 const EXOS=[
-{ch:7,t:"Capitalisation",make(){
+{ch:9,t:"Capitalisation",make(){
   const V0=pick([10000,20000,50000]),t=pick([3,4,5,6,8]),n=pick([3,4,5,6,8,10]);
   const Vn=V0*Math.pow(1+t/100,n);
   return {text:`On place ${fr(V0)} € à ${t} % par an, intérêts capitalisés, pendant ${n} ans.`,
     fields:[{label:"Capital final",ans:Vn,tol:1,unit:"€",d:2}],
-    sol:`Vn = V0 × (1 + t)ⁿ`,calc:`${fr(V0)} × 1,${String(t).padStart(2,"0")}^${n} = ${frFix(Vn)} €`};}},
-{ch:7,t:"Taux de rentabilité",make(){
+    sol:`VN = V0 × (1 + t)ⁿ`,calc:`${fr(V0)} × 1,${String(t).padStart(2,"0")}^${n} = ${frFix(Vn)} €`};}},
+{ch:9,t:"Taux de rentabilité annuel",make(){
   const V0=pick([50000,100000,200000]),k=pick([1.6,1.8,2,2.5,3]),n=pick([4,5,8,10]);
   const Vn=V0*k,t=(Math.pow(Vn/V0,1/n)-1)*100;
   return {text:`Un capital de ${fr(V0)} € vaut ${fr(Vn)} € après ${n} ans, sans apport ni dividende. Quel est le taux annuel ?`,
     fields:[{label:"Taux annuel",ans:t,tol:.1,unit:"%",d:2}],
-    sol:`t = (Vn / V0)^(1/n) − 1`,calc:`(${fr(Vn)} / ${fr(V0)})^(1/${n}) − 1 = ${frFix(t)} %`};}},
-{ch:7,t:"Actualisation",make(){
+    sol:`t = (VN / V0)^(1/n) − 1`,calc:`(${fr(Vn)} / ${fr(V0)})^(1/${n}) − 1 = ${frFix(t)} %`};}},
+{ch:9,t:"Doubler son capital",make(){
+  const n=pick([5,8,10,12,15]);const t=(Math.pow(2,1/n)-1)*100;
+  return {text:`Quel taux annuel faut-il pour doubler un capital en ${n} ans ?`,
+    fields:[{label:"Taux annuel",ans:t,tol:.02,unit:"%",d:3}],
+    sol:`t = 2^(1/n) − 1`,calc:`2^(1/${n}) − 1 = ${frFix(t,3)} %`};}},
+{ch:10,t:"Actualisation",make(){
   const Vn=pick([5000,10000,20000]),t=pick([4,5,6,8,9]),n=pick([2,3,4,5,6]);
   const V0=Vn/Math.pow(1+t/100,n);
   return {text:`Un investissement versera ${fr(Vn)} € dans ${n} ans. La rentabilité exigée est de ${t} %. Quel prix maximal payer aujourd’hui ?`,
     fields:[{label:"Valeur actuelle",ans:V0,tol:1,unit:"€",d:2}],
-    sol:`V0 = Vn / (1 + t)ⁿ`,calc:`${fr(Vn)} / 1,${String(t).padStart(2,"0")}^${n} = ${frFix(V0)} €`};}},
-{ch:7,t:"VA, VAN et décision",make(){
+    sol:`V0 = VN / (1 + t)ⁿ`,calc:`${fr(Vn)} / 1,${String(t).padStart(2,"0")}^${n} = ${frFix(V0)} €`};}},
+{ch:10,t:"Exigence de rentabilité",make(){
+  const F=pick([110,120,105,200]),er=pick([8,10,11,12]);
+  const X=F/(1+er/100);
+  return {text:`Un flux de ${F} € sera perçu dans un an. L’investisseur exige ${er} %. Quel prix maximal accepte-t-il aujourd’hui ?`,
+    fields:[{label:"Prix maximal",ans:X,tol:.05,unit:"€",d:2}],
+    sol:`ER = (F − X) / X, donc X = F / (1 + ER)`,calc:`${F} / 1,${String(er).padStart(2,"0")} = ${frFix(X)} €`};}},
+{ch:11,t:"VA, VAN et décision",make(){
   const F=[pick([3000,4000,5000]),pick([4000,5000,6000]),pick([100000,105000,110000])],t=pick([5,6,7,8]);
   const VA=F[0]/(1+t/100)+F[1]/Math.pow(1+t/100,2)+F[2]/Math.pow(1+t/100,3);
   const V0=Math.round(VA/1000)*1000+pick([-3000,2000,4000]);
@@ -631,39 +639,37 @@ const EXOS=[
   return {text:`Un titre verse ${fr(F[0])} €, ${fr(F[1])} € puis ${fr(F[2])} € aux années 1, 2 et 3. Il coûte ${fr(V0)} € et la rentabilité exigée est de ${t} %.`,
     fields:[{label:"Valeur actuelle (VA)",ans:VA,tol:2,unit:"€",d:2},{label:"VAN",ans:VAN,tol:2,unit:"€",d:2},{label:"Investir ? (1 = oui, 0 = non)",ans:VAN>0?1:0,tol:0,unit:"",d:0}],
     sol:`VA = Σ Fi / (1 + t)ⁱ puis VAN = VA − V0. On investit si la VAN est positive.`,calc:`VA = ${frFix(VA)} €, VAN = ${frFix(VAN)} €`};}},
-{ch:7,t:"Taux équivalent",make(){
-  const n=pick([2,4]),ta=pick([6,8,10,12]);
-  const t=(Math.pow(1+ta/100/n,n)-1)*100;
-  return {text:`Un prêt est annoncé à ${ta} % par an avec des intérêts ${n===2?"semestriels":"trimestriels"}. Quel est le taux annuel équivalent ?`,
-    fields:[{label:"Taux équivalent",ans:t,tol:.02,unit:"%",d:3}],
-    sol:`t = (1 + ta / n)ⁿ − 1`,calc:`(1 + ${ta / 100} / ${n})^${n} − 1 = ${frFix(t,3)} %`};}},
-{ch:7,t:"TRA d’un zéro-coupon",make(){
+{ch:11,t:"Titre A du cours",make(){
+  const t=pick([6,6,5,7]);const F=[5000,4000,5000,4000,105000];
+  const VA=F.reduce((s,x,i)=>s+x/Math.pow(1+t/100,i+1),0);
+  return {text:`Titre A : flux de 5 000, 4 000, 5 000, 4 000 puis 5 000 + 100 000 aux années 1 à 5. Taux d’actualisation : ${t} %. Calcule la valeur actuelle.`,
+    fields:[{label:"Valeur actuelle (VA)",ans:VA,tol:2,unit:"€",d:2}],
+    sol:`VA = Σ Fi / (1 + t)ⁱ`,calc:`VA = ${frFix(VA)} €`};}},
+{ch:12,t:"TRA d’un zéro-coupon",make(){
   const P=pick([80,85,90,95]),n=pick([2,3,4,5]),F=100;
   const t=(Math.pow(F/P,1/n)-1)*100;
   return {text:`Un titre coûte ${P} € et rembourse ${F} € dans ${n} ans, sans coupon. Quel est son TRA ?`,
     fields:[{label:"TRA",ans:t,tol:.1,unit:"%",d:2}],
     sol:`On cherche t tel que P = F / (1 + t)ⁿ, soit t = (F / P)^(1/n) − 1`,calc:`(${F} / ${P})^(1/${n}) − 1 = ${frFix(t)} %`};}},
-{ch:1,t:"Marge d’intermédiation",make(){
+{ch:12,t:"TRA et décision d’achat",make(){
+  const V0=pick([90,95,100]),F=pick([105,110,115]),er=pick([4,5,6,8,10]);
+  const t=(F/V0-1)*100,ok=t>=er;
+  return {text:`Un titre coûte ${V0} € et rapportera ${F} € dans un an (un seul flux). L’investisseur exige ${er} %. Quel est le TRA ? Faut-il acheter ?`,
+    fields:[{label:"TRA",ans:t,tol:.05,unit:"%",d:2},{label:"Acheter ? (1 = oui, 0 = non)",ans:ok?1:0,tol:0,unit:"",d:0}],
+    sol:`TRA = F / V0 − 1. On achète si TRA ≥ rentabilité exigée.`,calc:`${F} / ${V0} − 1 = ${frFix(t)} %, ${ok?"supérieur ou égal":"inférieur"} à ${er} %`};}},
+{ch:2,t:"Marge d’intermédiation",make(){
   const r=pick([2,3,4,5]),m=pick([1.5,2,2.5,3]),e=r+m,enc=pick([50,100,200]);
   return {text:`Une banque collecte ${enc} M€ de ressources à ${fr(r)} % et les prête à ${fr(e)} %.`,
     fields:[{label:"Marge d’intermédiation",ans:m,tol:.01,unit:"%",d:2},{label:"Marge annuelle",ans:enc*m/100,tol:.01,unit:"M€",d:2}],
-    sol:`marge = taux des emplois − taux des ressources`,calc:`${fr(e)} % − ${fr(r)} % = ${fr(m)} %, soit ${fr(enc)} × ${fr(m)} % = ${fr(enc*m/100)} M€`};}},
-{ch:8,t:"Espérance et écart-type",make(){
-  const P=pick([[20,50,30],[10,60,30],[25,50,25],[15,70,15]]),r=[-pick([10,15,20]),pick([4,6,8]),pick([12,16,20])];
-  const E=P.reduce((s,p,i)=>s+p/100*r[i],0);
-  const sd=Math.sqrt(P.reduce((s,p,i)=>s+p/100*Math.pow(r[i]-E,2),0));
-  return {text:`Un titre rapporte ${r[0]} % (probabilité ${P[0]} %), ${r[1]} % (${P[1]} %) ou ${r[2]} % (${P[2]} %).`,
-    fields:[{label:"Espérance E(R)",ans:E,tol:.05,unit:"%",d:2},{label:"Écart-type σ",ans:sd,tol:.1,unit:"%",d:2}],
-    sol:`E(R) = Σ Pi × ri puis σ = √( Σ Pi × (ri − E)² )`,calc:`E(R) = ${frFix(E)} %, σ = ${frFix(sd)} %`};}},
-{ch:8,t:"Bêta et risque de marché",make(){
-  const sM=pick([10,12,15,20]),b=pick([.6,.8,1.2,1.4,1.6]);
-  const varM=Math.pow(sM/100,2),cov=b*varM;
-  return {text:`La volatilité du marché est de ${sM} % (variance ${varM.toFixed(4).replace(".",",")}). La covariance entre le titre et le marché vaut ${cov.toFixed(5).replace(".",",")}.`,
-    fields:[{label:"Bêta",ans:b,tol:.01,unit:"",d:2},{label:"Risque de marché du titre",ans:b*sM,tol:.1,unit:"%",d:2}],
-    sol:`β = Cov(Rj, RM) / Var(RM) puis risque de marché = β × σ(RM)`,calc:`β = ${fr(b)}, risque de marché = ${fr(b)} × ${sM} % = ${fr(b*sM)} %`};}}
-].map(e=>Object.assign(e,{ch:e.t==="Taux équivalent"?10:e.t==="Marge d’intermédiation"?2:rch(e.ch,"")})).concat(EXTRA_EXOS);
+    sol:`marge = taux des emplois − coût des ressources`,calc:`${fr(e)} % − ${fr(r)} % = ${fr(m)} %, soit ${fr(enc)} × ${fr(m)} % = ${fr(enc*m/100)} M€`};}},
+{ch:2,t:"Courtage ou intermédiation",make(){
+  const M=pick([5,10,20,50]),t=pick([3,4,5,6]);
+  return {text:`Un prêt de ${M} M€ à ${t} % n’est pas remboursé. Quelle perte pour la banque en courtage ? Et en intermédiation financière (en M€) ?`,
+    fields:[{label:"Perte en courtage (M€)",ans:M*t/100,tol:.01,unit:"M€",d:2},{label:"Perte en intermédiation (M€)",ans:M,tol:.01,unit:"M€",d:2}],
+    sol:`Courtage : la banque ne perd que sa rémunération. Intermédiation : elle perd le capital prêté.`,calc:`${M} × ${t} % = ${fr(M*t/100)} M€ contre ${M} M€`};}}
+];
 
-/* ---------- navigation ---------- */
+
 const VIEWS=["cours","connaissances","quiz","evaluation"];
 function showView(v){
   if(!VIEWS.includes(v))v="cours";
