@@ -1,0 +1,814 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Révisions Système bancaire</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+/* Layout: sticky top bar with three views (Cours, Connaissances, Quiz et exos); course view = chapter list + reading column */
+:root{
+  --bg:#f3f6f5;--surface:#ffffff;--surface2:#e8eeec;--fg:#13221f;--muted:#566763;--line:#d3ddda;
+  --accent:#0f5c52;--accent-fg:#ffffff;--hi:#a85f00;--hi-bg:#fbf0d9;
+  --good:#12704a;--good-bg:#dff2e8;--bad:#b3261e;--bad-bg:#fbe4e1;
+  --display:'Newsreader',Georgia,serif;--body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1514;--surface:#141f1d;--surface2:#1b2a27;--fg:#e4eeec;--muted:#93a7a2;--line:#27393a;
+  --accent:#5fcdb9;--accent-fg:#06201b;--hi:#f0b44d;--hi-bg:#33280f;
+  --good:#5fd29a;--good-bg:#12352a;--bad:#ff8f86;--bad-bg:#3b1c1a;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1514;--surface:#141f1d;--surface2:#1b2a27;--fg:#e4eeec;--muted:#93a7a2;--line:#27393a;
+  --accent:#5fcdb9;--accent-fg:#06201b;--hi:#f0b44d;--hi-bg:#33280f;
+  --good:#5fd29a;--good-bg:#12352a;--bad:#ff8f86;--bad-bg:#3b1c1a;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 24px;padding-block:10px 0}
+.brand{font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;padding-bottom:8px}
+.brand small{font-family:var(--body);font-size:.78rem;font-weight:400;color:var(--muted);margin-left:8px}
+nav{display:flex;gap:2px;max-width:100%;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:8px 10px 9px;font-weight:500;color:var(--muted);white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+main{padding-block:28px 64px}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.01em;text-wrap:balance;line-height:1.2;margin:0}
+h2{font-size:1.9rem}
+h3{font-size:1.25rem}
+.lead{color:var(--muted);margin:6px 0 0}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.ghost{background:none}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+select,input[type=text]{font:inherit;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:7px 10px;min-width:0}
+.stat{font-size:.88rem;color:var(--muted)}
+.stat b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* Cours */
+.course{display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px;align-items:start}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 72px);display:flex;flex-direction:column;gap:2px}
+.toc button{text-align:left;background:none;border:0;border-left:2px solid var(--line);padding:7px 12px;color:var(--muted);display:flex;gap:8px;justify-content:space-between}
+.toc button[aria-current="true"]{border-left-color:var(--accent);color:var(--fg);font-weight:600}
+.toc .done{color:var(--good);font-size:.85rem}
+.chap{min-width:0;max-width:70ch}
+.chap h2{margin-bottom:4px}
+.chap h3{margin:28px 0 8px}
+.chap p,.chap ul{margin:10px 0}
+.chap ul{padding-left:1.2em}
+.chap li{margin:4px 0}
+.formula{font-family:var(--mono);font-size:.95rem;background:var(--surface2);border-radius:6px;padding:12px 14px;margin:12px 0;overflow-x:auto;white-space:nowrap}
+.callout{background:var(--hi-bg);border-left:3px solid var(--hi);padding:10px 14px;margin:14px 0;border-radius:0 6px 6px 0}
+.tablebox{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.95rem}
+th,td{text-align:left;border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.chapfoot{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;padding-top:18px;border-top:1px solid var(--line)}
+.chapfoot .sp{flex:1}
+@media (max-width:820px){
+  .course{grid-template-columns:minmax(0,1fr);gap:18px}
+  .toc{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  .toc button{border:1px solid var(--line);border-radius:999px;white-space:nowrap;padding:6px 12px}
+  .toc button[aria-current="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+  .toc .done{color:inherit}
+}
+
+/* Connaissances */
+.deckbar{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;margin:18px 0}
+.deckbar label{display:flex;gap:6px;align-items:center;font-size:.92rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-height:280px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;max-width:720px}
+.card .tag{font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.card .face{font-family:var(--display);font-size:1.6rem;line-height:1.3;font-weight:500;text-wrap:balance}
+.card.back .face{font-family:var(--body);font-size:1.08rem;line-height:1.6;font-weight:400}
+.card .actions{display:flex;flex-wrap:wrap;gap:10px}
+.progress{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;max-width:720px}
+.progress i{display:block;height:100%;background:var(--accent)}
+.empty{padding:28px;border:1px dashed var(--line);border-radius:10px;max-width:720px;color:var(--muted)}
+
+/* Quiz */
+.subtabs{display:flex;gap:8px;margin:18px 0}
+.subtabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-weight:500}
+.subtabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.qbox{max-width:720px}
+.qmeta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.qtext{font-family:var(--display);font-size:1.45rem;line-height:1.3;font-weight:500;margin:0 0 16px;text-wrap:balance}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 14px;line-height:1.45}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.good{background:var(--good-bg);border-color:var(--good)}
+.opt.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.explain{margin-top:14px;padding:12px 14px;background:var(--surface2);border-radius:8px}
+.verdict{font-weight:600}
+.verdict.good{color:var(--good)}.verdict.bad{color:var(--bad)}
+.score{font-family:var(--display);font-size:3rem;line-height:1;margin:8px 0}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px;align-items:start}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ex h3{font-size:1.1rem}
+.ex .chip{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.ex p{margin:0}
+.fields{display:grid;gap:8px}
+.field{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field label{flex:1 1 150px;font-size:.92rem}
+.field input{width:130px;font-family:var(--mono);text-align:right}
+.field .u{color:var(--muted);font-size:.9rem;min-width:2ch}
+.field input.good{border-color:var(--good);background:var(--good-bg)}
+.field input.bad{border-color:var(--bad);background:var(--bad-bg)}
+.sol{background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:.94rem}
+.sol .formula{margin:8px 0 0;background:var(--surface)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.card,.qbox{animation:rise .18s ease-out}}
+@keyframes rise{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.evtop{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;margin-top:18px}
+.evcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.evpts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;color:var(--muted);font-size:.92rem}
+.evlist{display:grid;gap:12px;margin-top:12px}
+.evrow{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;min-width:0}
+.evh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px}
+.evd{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--muted);font-size:.88rem}
+.chap ol.flow{list-style:none;counter-reset:f;padding-left:0}
+.chap ol.flow li{counter-increment:f;position:relative;padding:10px 12px 10px 48px;background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:8px 0}
+.chap ol.flow li::before{content:counter(f);position:absolute;left:12px;top:10px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font-size:.85rem;font-weight:600}
+textarea{font:inherit;font-size:16px;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;resize:vertical;min-height:96px}
+.kw{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.kwi{font-size:.82rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted);background:var(--surface)}
+.kwi.ok{border-color:var(--good);color:var(--good);background:var(--good-bg)}
+.chip2{background:var(--surface2);border-radius:6px;padding:4px 10px;font-size:.88rem;color:var(--fg)}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="brand">Système bancaire<small>révisions des DS et de l’examen</small></div>
+  <nav role="tablist" aria-label="Rubriques">
+    <button role="tab" id="tab-cours" data-view="cours" aria-selected="true">Cours</button>
+    <button role="tab" id="tab-connaissances" data-view="connaissances" aria-selected="false">Connaissances</button>
+    <button role="tab" id="tab-quiz" data-view="quiz" aria-selected="false">Quiz et exos</button>
+    <button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false">Évaluation</button>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <section id="view-cours"></section>
+  <section id="view-connaissances" hidden></section>
+  <section id="view-quiz" hidden></section>
+  <section id="view-evaluation" hidden></section>
+</main>
+
+<script>
+"use strict";
+/* ---------- stockage léger (par navigateur) ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem("sb:"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("sb:"+k,JSON.stringify(v))}catch(e){}}
+};
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fr=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:0,maximumFractionDigits:d});
+const frFix=(n,d=2)=>Number(n).toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ---------- données : chapitres (d'après le document Word du cours uniquement) ---------- */
+const CH=[
+{id:1,t:"La monnaie : fonctions et création",html:`
+<p class="lead">Les rappels indispensables : à quoi sert la monnaie, qui la crée, et jusqu’où.</p>
+<div class="callout"><b>Évaluation.</b> 2 DS : un sur le chapitre 1, un sur le chapitre 2, avec des questions à réponse courte. Puis un examen de 1 h 30, plus développé. Il faut savoir <b>expliquer la logique</b> de chaque mécanisme.</div>
+<h3>Plan du cours</h3>
+<ul><li>I. La fonction économique des banques : différentes approches (standard et post-keynésienne)</li><li>II. L’industrie bancaire : ses transformations, ses enjeux</li><li>III. La contribution du système bancaire et financier à l’instabilité économique</li></ul>
+<h3>Les trois fonctions de la monnaie</h3>
+<div class="tablebox"><table><tr><th>Fonction</th><th>À retenir</th></tr>
+<tr><td>Unité de compte</td><td>Étalon commun qui exprime la valeur des biens.</td></tr>
+<tr><td>Réserve de valeur</td><td>On peut épargner en monnaie. Bonne réserve car c’est l’actif le plus <b>liquide</b> : la liquidité est la facilité et la rapidité avec laquelle un actif se transforme en monnaie.</td></tr>
+<tr><td>Intermédiaire des échanges</td><td>Évite la <b>double coïncidence des besoins</b> du troc, rend l’échange moins coûteux. Elle règle aussi des transactions sans échange (impôts) : c’est un <b>moyen de paiement</b>.</td></tr></table></div>
+<p>La fonction que l’on met en avant change la façon de comprendre le rôle des banques.</p>
+<h3>Qui crée la monnaie ?</h3>
+<ul><li><b>La BCE</b> crée la <b>monnaie centrale</b> : monopole des billets (monnaie fiduciaire) et monnaie scripturale. Seules les banques commerciales ont un compte à la BCE ; les particuliers n’ont pas accès à la monnaie centrale scripturale.</li>
+<li><b>Les banques commerciales</b> créent la <b>monnaie bancaire</b>, uniquement scripturale (elles ne peuvent plus émettre de billets), « à partir de rien », par une simple écriture lors d’un crédit.</li>
+<li><b>« Les crédits font les dépôts »</b> : le crédit vient d’abord, le dépôt en découle. L’<b>initiative</b> de la création monétaire vient des banques commerciales ; la BCE crée ensuite la monnaie centrale nécessaire (billets, paiements interbancaires, réserves).</li></ul>
+<div class="tablebox"><table><tr><th>Actif de la banque</th><th>Passif de la banque</th></tr><tr><td>Crédit à l’entreprise : + 1 000 €</td><td>Dépôt à vue de l’entreprise : + 1 000 €</td></tr></table></div>
+<p>Exemple illustratif : le dépôt n’existait pas avant le crédit, 1 000 € de monnaie sont créés.</p>
+<h3>Trois usages de cette monnaie</h3>
+<ol><li><b>Retirer des espèces</b> : la banque emprunte des billets à la BCE, ou utilise les dépôts d’autres clients.</li>
+<li><b>Payer un client de la même banque</b> : simple jeu d’écritures.</li>
+<li><b>Payer un client d’une autre banque</b> : la banque règle en <b>monnaie centrale</b>.</li></ol>
+<h3>Le circuit bancaire</h3>
+<p>La monnaie bancaire ne circule qu’entre les clients d’une même banque (le <b>circuit bancaire</b>). Pour en sortir, elle est détruite et remplacée par un transfert de monnaie centrale. D’où l’intérêt d’une <b>grosse part de marché</b> : moins de monnaie part vers les autres banques.</p>
+<h3>La limite de la création monétaire</h3>
+<p>C’est l’<b>accès à la monnaie centrale</b>, indispensable pour les retraits et les paiements interbancaires.</p>`},
+{id:2,t:"Neutralité de la monnaie",html:`
+<p class="lead">Un débat de fond : la monnaie change-t-elle l’économie réelle ?</p>
+<div class="tablebox"><table><tr><th></th><th>Monnaie neutre</th><th>Monnaie non neutre (Keynes)</th></tr>
+<tr><td>Image</td><td>Une simple étiquette, un « voile »</td><td>Un carburant</td></tr>
+<tr><td>Si la masse monétaire double</td><td>Les prix doublent, rien ne change dans l’économie réelle (pas plus d’emplois ni d’usines) : seulement de l’inflation</td><td>Les achats et investissements augmentent : vrais emplois et vraie production, au moins à court terme</td></tr>
+<tr><td>Origine de la monnaie</td><td>L’échange</td><td>Le <b>paiement</b> : sa fonction première est de mesurer ce qui est dû et de régler la dette</td></tr></table></div>
+<ul><li>La monnaie est <b>non neutre</b> si son intervention modifie les variables réelles (les quantités échangées) ou les désirs des agents.</li>
+<li><b>Exemple :</b> une entreprise et ses salariés. Sans monnaie, pas de production : l’entreprise ne peut pas utiliser leur force de travail sans promesse de paie.</li></ul>
+<div class="callout">Ce débat prépare l’opposition entre l’approche standard (monnaie neutre, économie d’échange) et l’approche post-keynésienne (monnaie non neutre, économie de production).</div>`},
+{id:3,t:"Approche standard : marché et défaillances",html:`
+<p class="lead">Dans l’approche standard, la banque n’existe que parce que le marché est imparfait.</p>
+<h3>Le marché financier</h3>
+<p>Lieu où se rencontrent les <b>agents à capacité de financement</b> (ACF, épargnants) et les <b>agents à besoin de financement</b> (ABF, emprunteurs), qui s’échangent de l’épargne. Son bon fonctionnement repose sur le libre accès et la concurrence.</p>
+<h3>La concurrence pure et parfaite (CPP)</h3>
+<ol><li><b>Atomicité :</b> très grand nombre d’acheteurs et de vendeurs, aucun n’influence le prix seul.</li>
+<li><b>Homogénéité du produit :</b> biens identiques et interchangeables.</li>
+<li><b>Fluidité :</b> libre entrée et sortie, sans barrière financière, technique ou réglementaire.</li>
+<li><b>Transparence :</b> information totale, gratuite, instantanée.</li>
+<li><b>Mobilité des facteurs de production :</b> travail et capital circulent sans contrainte.</li></ol>
+<p>En CPP, l’échange est optimal : c’est l’<b>optimum</b>, situation qu’on ne peut améliorer pour un agent sans dégrader celle d’un autre. <b>Dans ce monde, il n’y a pas de banque</b> : tout passe par le marché, et la banque gênerait le libre-échange en influençant les prix.</p>
+<h3>Finance directe et finance indirecte</h3>
+<div class="formula">Finance directe : ACF ↔ ABF</div>
+<div class="formula">Finance indirecte : ACF ↔ intermédiaire financier ↔ ABF</div>
+<div class="tablebox"><table><tr><th></th><th>Finance directe</th><th>Finance indirecte</th></tr>
+<tr><td>Nom</td><td>Intermédiation <b>hors bilan</b></td><td>Intermédiation <b>de bilan</b></td></tr>
+<tr><td>Exemples</td><td>Courtier, trader</td><td>Banque : dépôts et crédits à son bilan</td></tr>
+<tr><td>En CPP</td><td>Seule possible</td><td>Impossible</td></tr></table></div>
+<h3>Les défaillances de marché</h3>
+<p>Nous ne sommes pas en CPP, donc les marchés financiers non plus : les agents se rencontrent dans de mauvaises conditions. Les intermédiaires financiers existent pour pallier ces défaillances.</p>
+<ul><li><b>Asymétrie d’information</b> (et <b>aléa moral</b>) : les deux agents n’ont pas les mêmes informations. La banque produit chaque jour de l’information sur son client : elle <b>réduit</b> l’asymétrie, sans l’éliminer.</li>
+<li><b>Coûts de transaction :</b> absents en CPP, ils limitent les choix optimaux.</li>
+<li><b>Problème de liquidité :</b> les marchés offrent de la liquidité mais ne l’assurent pas parfaitement.</li></ul>`},
+{id:4,t:"Approche standard : rôles des banques",html:`
+<p class="lead">Ce que fait la banque que le marché ne sait pas faire, et comment ce rôle a évolué.</p>
+<h3>1. La transformation des échéances (Gurley et Shaw)</h3>
+<p>Les ACF veulent prêter à court terme, les ABF veulent emprunter à moyen et long terme : les marchés seuls ne peuvent pas l’assurer, la banque le fait.</p>
+<div class="callout"><b>Risque de ruée bancaire.</b> Si les déposants perdent confiance, ils retirent tous leurs fonds : faillite. La banque doit rester assez liquide et bien choisir à qui elle prête. La menace de ruée la <b>discipline</b>.</div>
+<h3>2. La réduction de l’asymétrie d’information (Akerlof)</h3>
+<p>Akerlof étudie le marché des voitures d’occasion : on ne sait jamais, avant l’achat, si le vendeur dit vrai. La banque connaît et gère les ressources et les moyens de paiement de ses clients : elle produit de l’information. Elle réduit ainsi le risque de <b>rationnement du crédit</b> et la <b>sélection adverse</b> (prêter à la mauvaise personne).</p>
+<h3>3. Le contrôle délégué</h3>
+<p>La banque surveille le débiteur <b>au nom des créanciers</b> pendant toute la relation, sans attendre le défaut pour agir. Elle est plus efficace qu’un agent isolé et réalise des <b>économies d’échelle</b> (elle le fait en grande quantité).</p>
+<h3>4. La réduction du coût de participation au marché</h3>
+<p>Pour un simple agent, aller seul sur le marché serait trop risqué.</p>
+<h3>Depuis les années 1980 : pas de désintermédiation</h3>
+<p>Les réformes cherchent à se rapprocher de la CPP en favorisant la finance directe. Les marchés ont pris beaucoup d’importance, mais les banques vont elles-mêmes sur les marchés pour leurs clients : <b>pas de désintermédiation</b>. Et rien ne démontre que se rapprocher de la CPP rapproche de l’optimum.</p>
+<h3>Les nouveaux rôles des IF (Allen et Santomero)</h3>
+<p>Les intermédiaires ne se contentent plus de collecter des dépôts pour accorder des crédits : ils sont spécialistes de la <b>tarification, de la transformation et du transfert des risques</b>.</p>
+<ul><li><b>Le négoce des risques :</b> concevoir, acheter, revendre des instruments complexes (dérivés, options, contrats à terme) pour redistribuer les risques.</li>
+<li><b>L’accès au marché :</b> ces marchés de dérivés sont des marchés d’intermédiaires, inaccessibles aux investisseurs individuels.</li></ul>
+<div class="callout">Le rôle des banques a <b>changé mais ne s’est pas réduit</b> : elles restent un décideur essentiel de l’allocation des ressources.</div>`},
+{id:5,t:"Approche post-keynésienne",html:`
+<p class="lead">Pour les héritiers de Keynes, la banque est d’abord celle qui crée la monnaie.</p>
+<p>L’approche standard oublie ce qui distingue la banque de toute autre institution : le <b>pouvoir de création monétaire</b>. C’est pour cela qu’on a besoin des banques, pas pour échanger des épargnes.</p>
+<h3>Économie d’échange ou de production</h3>
+<ul><li><b>Économie classique = économie d’échange.</b> Le stock d’épargne est une production antérieure non consommée, une forme réelle.</li>
+<li><b>Keynes = économie de production.</b> Quand on produit, il n’y a encore rien à échanger : l’échange vient après la production.</li>
+<li><b>Exemple patron / salariés :</b> le patron promet une paie ; pour que la promesse inspire confiance, une institution, la banque, certifie qu’avec cette paie on pourra consommer partout. La banque crée la monnaie que le patron emprunte pour payer les salaires : sans elle, pas de production. Ce n’est donc pas vraiment un échange.</li>
+<li>La monnaie est <b>non neutre</b> ; la banque <b>met en route le processus collectif</b> de production en créant une créance (une promesse).</li>
+<li>Les IF existent aussi : les agents ne dépensent pas tout leur revenu, une partie de la production n’est pas vendue, il faut investir l’épargne pour compenser.</li></ul>
+<h3>Le processus de financement</h3>
+<ol class="flow"><li><b>Anticipations des firmes :</b> quelle demande, à quels prix.</li>
+<li><b>Plans de production :</b> coûts comparés à la demande, c’est la <b>demande effective</b> ; les entreprises se tournent vers les banques.</li>
+<li><b>Crédit :</b> les banques créent la monnaie.</li>
+<li><b>Flux de monnaie :</b> elle devient revenu ; une partie est consommée et investie, une partie épargnée.</li>
+<li><b>Flux de revenu équivalent :</b> ce qui ne revient pas vers l’entreprise forme ses besoins résiduels ; la banque joue alors son rôle d’IF.</li></ol>
+<div class="callout"><b>Rôle premier</b> : création monétaire. <b>Rôle final</b> : intermédiaire financier.</div>
+<h3>Conséquences</h3>
+<ul><li><b>Offre de monnaie endogène :</b> déterminée par les demandes des agents non bancaires.</li>
+<li><b>Rôle passif</b> des banques : ce sont les agents non financiers qui sont à l’origine de la création monétaire.</li>
+<li>Le rôle des banques <b>n’est pas lié aux imperfections de marché</b> : la création monétaire n’est pas un processus de marché, la banque fait partie du fonctionnement normal d’une économie de marché, même parfait.</li>
+<li>Le rôle d’IF est <b>secondaire</b>, contrairement à l’approche standard.</li></ul>`},
+{id:6,t:"Endogénéité de la monnaie et comparatif",html:`
+<p class="lead">L’offre de monnaie est-elle totalement endogène ? Désaccord entre post-keynésiens.</p>
+<h3>Les horizontalistes</h3>
+<p>Offre de monnaie <b>totalement endogène</b> : toutes les demandes solvables et crédibles sont acceptées. La banque est passive, donc pas besoin d’une théorie du comportement des banques : elles répondent aux demandes.</p>
+<h3>La critique : la liquidité de la banque</h3>
+<ul><li>L’endogénéité totale reviendrait à financer tout ce qui est finançable. En réalité, on regarde la <b>solvabilité</b> et la <b>liquidité</b>. On peut être solvable et illiquide, donc incapable d’honorer une échéance le jour J.</li>
+<li>La banque regarde <b>sa propre liquidité</b> : sa monnaie ne circule qu’entre ses clients, et les paiements interbancaires exigent de la <b>monnaie centrale</b> (réserves).</li>
+<li>Dès qu’elle crée de la monnaie, elle doit pouvoir se procurer de la monnaie centrale, sinon elle est illiquide. Elle peut refuser un projet solide faute de monnaie centrale.</li>
+<li>L’offre de monnaie s’explique par le <b>niveau de la demande</b> et la <b>décision des banques liée à la liquidité</b>.</li></ul>
+<h3>Qui fixe quoi ?</h3>
+<div class="tablebox"><table><tr><th></th><th>Économie standard</th><th>Horizontalistes</th></tr>
+<tr><td>La BC fixe</td><td>La quantité de monnaie</td><td>Le taux d’intérêt</td></tr>
+<tr><td>Le marché détermine</td><td>Le taux d’intérêt (selon la demande)</td><td>La quantité de monnaie créée</td></tr></table></div>
+<p>Si la quantité est endogène, le prix (le taux d’intérêt) doit être exogène : c’est la BC qui le détermine.</p>
+<h3>Le comparatif à savoir refaire</h3>
+<div class="tablebox"><table><tr><th>Critère</th><th>Approche standard</th><th>Approche post-keynésienne</th></tr>
+<tr><td>Économie</td><td>D’échange</td><td>De production</td></tr>
+<tr><td>Rôle principal</td><td>Intermédiaire financier</td><td>Création monétaire</td></tr>
+<tr><td>Pourquoi des banques</td><td>Imperfections de marché</td><td>Il faut une monnaie pour lancer la production</td></tr>
+<tr><td>En CPP</td><td>Pas de banque</td><td>Toujours des banques</td></tr>
+<tr><td>Rôle d’IF</td><td>Central</td><td>Secondaire, final</td></tr>
+<tr><td>Monnaie</td><td>Neutre</td><td>Non neutre</td></tr>
+<tr><td>Offre de monnaie</td><td>Exogène</td><td>Endogène</td></tr>
+<tr><td>Auteurs</td><td>Gurley et Shaw, Akerlof, Allen et Santomero</td><td>Keynes, horizontalistes</td></tr></table></div>`},
+{id:7,t:"Du fordisme à la financiarisation",html:`
+<p class="lead">Chapitre 2. Trois transformations : la financiarisation, le numérique, la finance verte. La première est essentielle dans les années 1980-1990.</p>
+<h3>L’économie fordiste (Trente Glorieuses)</h3>
+<ul><li>Pour produire beaucoup, il faut une forte demande, portée par des <b>salaires croissants</b>, permis par de forts <b>gains de productivité</b> sans nuire aux profits. Concurrence faible face à la croissance du marché.</li>
+<li>Économie <b>administrée</b> (période keynésienne) : contrôle des changes, <b>limites de crédit</b> imposées aux banques.</li>
+<li>Pas de marchés financiers comme aujourd’hui ni de dérivés : financement à court terme auprès des banques. Liquidité très limitée (peu d’intervenants). Une banque très liquide devait déposer au Trésor.</li></ul>
+<h3>La crise</h3>
+<ol class="flow"><li><b>Fin des années 1960 :</b> les gains de productivité ralentissent, le taux de profit moyen baisse.</li>
+<li>Pour continuer à augmenter les salaires, on monte les prix.</li>
+<li><b>Années 1970 :</b> l’inflation s’installe, c’est la <b>stagflation</b>. Le mécanisme de croissance n’est plus viable.</li>
+<li>La demande intérieure ne suffit plus : on cherche la croissance à l’<b>extérieur</b>, la <b>concurrence</b> s’intensifie (prix ou innovation).</li>
+<li>Le salaire devient un <b>coût à réduire</b>, ce qui limite les débouchés.</li>
+<li>Solution : des <b>marchés financiers liquides</b> ; le gain en patrimoine soutient la croissance.</li></ol>
+<h3>L’effet richesse</h3>
+<p>La consommation dépend du revenu, mais c’est aussi une fonction croissante du <b>patrimoine</b>. On peut aussi réduire sa consommation pour augmenter son épargne.</p>
+<div class="callout"><b>Paroxysme : les subprimes.</b> On prêtait sans regarder les revenus, en comptant sur la valeur future de la maison. Sans marchés financiers puissants, pas de subprimes : les banques ont <b>titrisé</b> les crédits et les ont vendus sur les marchés.</div>
+<h3>Le contexte international et idéologique</h3>
+<ul><li>Déséquilibres des balances des paiements, tensions sur les changes fixes, puis abandon des taux fixes. Les pays en déficit doivent attirer des capitaux, les pays en excédent cherchent des placements : il faut des marchés liquides et des produits variés.</li>
+<li>La remise en cause des politiques keynésiennes ouvre la porte au <b>néolibéralisme</b> : marchés efficients, donc <b>déréglementation</b> (nouveaux marchés et produits, libre circulation des capitaux, déréglementation bancaire).</li>
+<li>Ce mouvement naît dans les années 1980, se renforce dans les années 1990, <b>jusqu’en 2008</b>.</li>
+<li>La capitalisation boursière croît vite (hausse de valeur des titres existants), ce qui nourrit l’effet patrimoine. Mais le marché <b>ne s’est pas substitué aux banques</b> autant que voulu.</li></ul>`},
+{id:8,t:"Transformations de l’industrie bancaire",html:`
+<p class="lead">Ce que la financiarisation a changé pour les banques.</p>
+<h3>Plus de concurrence entre IF</h3>
+<p>Les marchés bancaires étaient peu concurrentiels : on ne changeait pas de banque. Mesures : simplification du changement de banque, arrivée de banques étrangères et en ligne, extension des activités. Pour la banque de dépôt, la concurrence reste faible.</p>
+<h3>Une très forte concentration</h3>
+<p>Réduction drastique du nombre de banques (petites régionales). La liberté des marchés empêche la concurrence ; volonté de créer des acteurs massifs.</p>
+<h3>Les banques systémiques (too big to fail)</h3>
+<ul><li>Si grosses que leur faillite entraînerait tout le système bancaire.</li>
+<li><b>Distorsion de concurrence :</b> refinancement moins cher pour les gros établissements.</li>
+<li><b>Gains privatisés, pertes socialisées</b> : certains toujours gagnants, d’autres toujours perdants.</li></ul>
+<div class="callout"><b>Chiffres à retenir.</b> En 2016, 30 banques systémiques mondiales représentaient 65 % du PIB mondial. Une dépréciation d’environ 5 % de leurs actifs suffisait à absorber leur capital (insolvabilité) : il fallait solliciter BC et gouvernements.</div>
+<h3>L’internationalisation</h3>
+<p>Favorisée par la libéralisation des capitaux ; elle dépasse largement le commerce de biens et services et suit la balance des paiements. Les banques de dépôt, elles, ne se sont pas internationalisées.</p>
+<h3>Essor des activités de marché</h3>
+<ul><li>La transformation des échéances décline. On juge l’allocation bancaire inefficiente : on veut passer au financement de marché (mise en concurrence = allocation optimale).</li>
+<li>L’intermédiation demeure mais passe davantage par les marchés.</li>
+<li>Nouveau : la banque accorde le crédit puis <b>revend la créance</b> (subprimes).</li>
+<li><b>Shadow banking :</b> intermédiation financière non bancaire, non réglementée, sans accès direct au refinancement de la BC, mais centrale pour la liquidité des marchés.</li></ul>
+<h3>Banques universelles</h3>
+<p>Des banques qui font tout. Elles n’existaient pas avant, sauf en Allemagne.</p>`},
+{id:9,t:"Numérique et nouvelles monnaies",html:`
+<p class="lead">Les activités bancaires sont nécessaires, pas forcément les banques.</p>
+<p>Des acteurs qui ne sont pas des banques peuvent jouer des rôles comparables (idée attribuée à Bill Gates dans le cours).</p>
+<h3>Fintech et big tech</h3>
+<div class="tablebox"><table><tr><th></th><th>Fintech</th><th>Big tech</th></tr>
+<tr><td>Définition</td><td>Entreprises innovantes (applis, IA, blockchain) offrant des services financiers plus rapides, accessibles, moins chers</td><td>Grandes entreprises technologiques qui développent la finance (Apple Pay)</td></tr>
+<tr><td>Information</td><td>Peu</td><td>Beaucoup</td></tr>
+<tr><td>Taille</td><td>Insuffisante face aux banques</td><td>Très grande</td></tr>
+<tr><td>Atout</td><td>Agilité : grignotent les activités annexes, fragilisent les banques à terme</td><td>Moins régulées, position favorable</td></tr></table></div>
+<h3>Les nouvelles formes monétaires</h3>
+<ul><li><b>Monnaie numérique de banque centrale :</b> sera-t-elle accessible au public ? Si oui, elle met en danger les banques.</li>
+<li><b>Monnaie numérique privée</b> (bitcoin) et stablecoins : vraie monnaie ou outil spéculatif ? Si c’est une monnaie, elle remet en cause les banques et la BC : l’État perd sa <b>souveraineté monétaire</b>.</li>
+<li>Produits de l’<b>innovation technique</b> : pas émises par une BC, processus <b>décentralisé</b>, <b>pas de politique monétaire</b>.</li></ul>
+<h3>Le bitcoin est-il une monnaie ?</h3>
+<div class="tablebox"><table><tr><th>Si la monnaie est…</th><th>Le bitcoin ?</th></tr>
+<tr><td>Une marchandise intermédiaire des échanges</td><td>Non</td></tr>
+<tr><td>Un actif financier</td><td>Non : il n’est la dette de personne (même s’il s’échange sur les marchés)</td></tr>
+<tr><td>Une institution qui permet les paiements</td><td>Oui, on peut payer avec ; mais est-il assez bien conçu pour concurrencer les monnaies souveraines ?</td></tr></table></div>`}
+];
+
+/* ---------- données : cartes (id, chapitre, question, réponse) ---------- */
+const CARDS=[
+[1,1,"Comment est organisée l’évaluation ?","2 DS à réponse courte (un sur le chapitre 1, un sur le chapitre 2), puis un examen de 1 h 30 plus développé."],
+[2,1,"Quelles sont les trois fonctions de la monnaie ?","Unité de compte, réserve de valeur, intermédiaire des échanges (et moyen de paiement)."],
+[3,1,"Pourquoi la monnaie est-elle une bonne réserve de valeur ?","Parce que c’est l’actif le plus liquide : il se transforme immédiatement en moyen de paiement."],
+[4,1,"Définition de la liquidité ?","La facilité et la rapidité avec laquelle un actif se transforme en monnaie."],
+[5,1,"Quel problème la monnaie évite-t-elle comme intermédiaire des échanges ?","La double coïncidence des besoins du troc : l’échange devient moins coûteux."],
+[6,1,"Pourquoi parle-t-on aussi de « moyen de paiement » ?","Parce que la monnaie règle aussi des transactions sans échange, comme les impôts."],
+[7,1,"Qui crée la monnaie centrale ?","La BCE : billets (monopole) et monnaie scripturale centrale, accessible aux seules banques commerciales."],
+[8,1,"Qui crée la monnaie bancaire, et comment ?","Les banques commerciales, à partir de rien, par une simple écriture scripturale quand elles accordent un crédit."],
+[9,1,"Que signifie « les crédits font les dépôts » ?","Le crédit vient d’abord : en l’accordant, la banque inscrit un dépôt sur le compte du client. Le dépôt en découle."],
+[10,1,"De qui vient l’initiative de la création monétaire ?","Des banques commerciales. La BCE doit ensuite fournir la monnaie centrale (billets, paiements interbancaires, réserves)."],
+[11,1,"Les banques commerciales peuvent-elles émettre des billets ?","Non. La monnaie bancaire est uniquement scripturale ; la BCE a le monopole des billets."],
+[12,1,"Un particulier peut-il détenir de la monnaie centrale scripturale ?","Non : il faudrait un compte à la BCE, réservé aux banques commerciales."],
+[13,1,"Les trois façons d’utiliser l’argent prêté ?","Retirer des espèces ; payer un client de la même banque ; payer un client d’une autre banque (la banque paie alors en monnaie centrale)."],
+[14,1,"Si un client retire des espèces, comment fait la banque ?","Elle emprunte à la BCE, ou utilise les dépôts d’autres clients."],
+[15,1,"La monnaie bancaire circule-t-elle dans toute l’économie ?","Non, seulement dans le circuit bancaire (les clients d’une même banque). Pour sortir, elle est détruite et passe par la monnaie centrale."],
+[16,1,"Pourquoi les banques veulent-elles une grosse part de marché ?","Pour que moins de monnaie parte vers d’autres banques, ce qui réduit leurs besoins en monnaie centrale."],
+[17,1,"Quelle est la limite de la création monétaire ?","L’accès à la monnaie centrale."],
+[18,2,"Qu’est-ce que la neutralité de la monnaie ?","La monnaie n’est qu’une étiquette : doubler sa quantité double les prix sans rien changer à l’économie réelle. Elle ne crée que de l’inflation."],
+[19,2,"Qu’est-ce que la non-neutralité (Keynes) ?","La monnaie est un carburant : plus de monnaie stimule achats et investissements, donc emplois et production réels, au moins à court terme."],
+[20,2,"À quelle condition la monnaie est-elle non neutre ?","Si son intervention modifie les variables réelles (quantités échangées) ou les désirs des agents."],
+[21,2,"Pour les tenants de la non-neutralité, d’où vient la monnaie ?","Du paiement, pas de l’échange : sa fonction première est de mesurer ce qui est dû et de régler la dette."],
+[22,2,"Exemple de non-neutralité du cours ?","Entreprise et salariés : sans monnaie, pas de promesse de paie, donc pas de travail mobilisé et pas de production."],
+[23,3,"Que sont les ACF et les ABF ?","Agents à capacité de financement (épargnants) et agents à besoin de financement (emprunteurs)."],
+[24,3,"Les 5 conditions de la CPP ?","Atomicité, homogénéité du produit, fluidité (libre entrée et sortie), transparence, mobilité des facteurs de production."],
+[25,3,"Qu’est-ce que l’atomicité ?","Un très grand nombre d’acheteurs et de vendeurs : aucun ne peut influencer le prix seul."],
+[26,3,"Qu’est-ce que la transparence en CPP ?","Une information totale, gratuite et instantanée sur les prix et les produits."],
+[27,3,"Qu’est-ce que l’optimum ?","Une situation qu’on ne peut pas améliorer collectivement sans dégrader celle d’autres agents."],
+[28,3,"Y a-t-il des banques dans un marché en CPP ?","Non : tout se fait sur le marché, la banque gênerait le libre-échange et pourrait influencer les prix."],
+[29,3,"Finance directe : schéma et nom ?","ACF ↔ ABF ; intermédiation hors bilan (courtier, trader)."],
+[30,3,"Finance indirecte : schéma et nom ?","ACF ↔ intermédiaire financier ↔ ABF ; intermédiation de bilan. Impossible en CPP."],
+[31,3,"Pourquoi existe-t-il des intermédiaires financiers selon l’approche standard ?","Pour pallier les défaillances de marché : nous ne sommes pas en CPP."],
+[32,3,"Les trois défaillances de marché du cours ?","Asymétrie d’information (et aléa moral), coûts de transaction, problème de liquidité."],
+[33,3,"La banque élimine-t-elle l’asymétrie d’information ?","Non, elle la réduit en produisant chaque jour de l’information sur son client, sans l’éliminer."],
+[34,4,"Quel rôle des banques décrivent Gurley et Shaw ?","La transformation des échéances : les ACF prêtent à court terme, les ABF empruntent à moyen et long terme."],
+[35,4,"Qu’est-ce qu’une ruée bancaire ?","Les déposants perdent confiance et retirent tous leurs fonds en même temps : la banque fait faillite."],
+[36,4,"Pourquoi la menace de ruée bancaire est-elle utile ?","Elle discipline la banque : rester liquide et bien choisir à qui prêter."],
+[37,4,"Quel exemple utilise Akerlof ?","Le marché des voitures d’occasion : on ne sait jamais avant l’achat si le vendeur dit vrai."],
+[38,4,"Qu’est-ce que la sélection adverse ?","Prêter à la mauvaise personne, faute d’information."],
+[39,4,"Quels risques la banque réduit-elle en produisant de l’information ?","La sélection adverse et le rationnement du crédit."],
+[40,4,"Qu’est-ce que le contrôle délégué ?","La banque surveille le débiteur au nom des créanciers, pendant toute la relation, sans attendre le défaut."],
+[41,4,"Pourquoi la banque est-elle plus efficace qu’un agent seul ?","Elle surveille en grande quantité : économies d’échelle."],
+[42,4,"Les réformes depuis 1980 ont-elles entraîné une désintermédiation ?","Non : les marchés ont grandi, mais les banques y vont pour leurs clients. Leur rôle a changé sans se réduire."],
+[43,4,"Que montrent Allen et Santomero ?","Les IF sont devenus des spécialistes de la tarification, de la transformation et du transfert des risques."],
+[44,4,"Qu’est-ce que le négoce des risques ?","Concevoir, acheter et revendre des instruments complexes (dérivés, options, contrats à terme) pour redistribuer les risques."],
+[45,4,"Pourquoi les particuliers n’accèdent-ils pas aux marchés de dérivés ?","Ce sont des marchés très sophistiqués, d’intermédiaires."],
+[46,5,"Selon les PK, qu’est-ce qui distingue la banque ?","Son pouvoir de création monétaire."],
+[47,5,"Économie d’échange ou de production ?","Classiques : économie d’échange (l’épargne préexiste). Keynes : économie de production (on produit avant d’échanger)."],
+[48,5,"Pour les classiques, qu’est-ce que le stock d’épargne ?","Une production antérieure non consommée : une forme réelle."],
+[49,5,"Exemple patron / salariés chez les PK ?","La banque crée la monnaie que le patron emprunte pour payer les salaires ; elle certifie la promesse de paie. Sans elle, pas de production."],
+[50,5,"Les 5 étapes du processus de financement PK ?","1) Anticipations des firmes ; 2) plans de production (demande effective) ; 3) crédit et création monétaire ; 4) flux de monnaie devenu revenu ; 5) flux de revenu équivalent (besoins résiduels)."],
+[51,5,"Qu’est-ce que la demande effective ?","Chez Keynes, la demande anticipée par les firmes, à laquelle elles comparent leurs coûts pour fixer leurs plans de production."],
+[52,5,"Rôle premier et rôle final de la banque selon les PK ?","Premier : création monétaire. Final : intermédiaire financier (financer les besoins résiduels avec l’épargne)."],
+[53,5,"Pourquoi les PK disent-ils l’offre de monnaie endogène ?","Elle est déterminée par les demandes de crédit des agents non bancaires."],
+[54,5,"Pourquoi le rôle de la banque est-il « passif » chez les PK ?","Ce ne sont pas les banques mais les agents non financiers qui sont à l’origine de la création monétaire."],
+[55,5,"Le rôle des banques dépend-il des imperfections de marché pour les PK ?","Non : même sur un marché parfait, il faut des banques. La création monétaire n’est pas un processus de marché."],
+[56,6,"Que soutiennent les horizontalistes ?","L’offre de monnaie est totalement endogène : toute demande solvable et crédible est acceptée, la BC fixe le taux."],
+[57,6,"Pourquoi l’offre de monnaie n’est-elle pas totalement endogène ?","La banque doit pouvoir se procurer de la monnaie centrale ; sinon elle est illiquide et refuse même un projet solide."],
+[58,6,"Peut-on être solvable et illiquide ?","Oui : solvable, mais incapable d’honorer une échéance le jour J."],
+[59,6,"De quoi dépend l’offre de monnaie (version nuancée) ?","Du niveau de la demande et de la décision des banques liée à leur liquidité."],
+[60,6,"Économie standard : que fixe la BC ?","La quantité de monnaie ; le marché détermine le taux d’intérêt."],
+[61,6,"Horizontalistes : que fixe la BC ?","Le taux d’intérêt ; la demande à ce taux détermine la quantité de monnaie créée."],
+[62,7,"Les trois transformations de l’industrie bancaire ?","La financiarisation, le numérique et les nouveaux acteurs, la finance verte."],
+[63,7,"Logique de l’économie fordiste ?","Forte demande portée par des salaires croissants, financés par de forts gains de productivité sans nuire aux profits."],
+[64,7,"Système financier sous le fordisme ?","Administré : contrôle des changes, limites de crédit, pas de vrais marchés financiers ni de dérivés, liquidité limitée."],
+[65,7,"Que se passe-t-il à la fin des années 1960 ?","Les gains de productivité ralentissent, les hausses de salaires deviennent difficiles, le taux de profit baisse."],
+[66,7,"Qu’arrive-t-il dans les années 1970 ?","L’inflation s’installe : stagflation. Le mécanisme de croissance fordiste n’est plus viable."],
+[67,7,"Comment le salaire est-il vu après le fordisme ?","Comme un coût à réduire, ce qui limite les débouchés."],
+[68,7,"Qu’est-ce que l’effet richesse ?","La consommation est une fonction croissante du revenu mais aussi du patrimoine."],
+[69,7,"Pourquoi les subprimes sont-ils le paroxysme de la financiarisation ?","On prêtait sur la valeur future de la maison sans regarder les revenus ; les crédits étaient titrisés et vendus sur les marchés."],
+[70,7,"Contexte international de la financiarisation ?","Déséquilibres des balances des paiements, abandon des changes fixes ; besoin de marchés liquides pour attirer ou placer les capitaux."],
+[71,7,"Quel courant d’idées porte la déréglementation ?","Le néolibéralisme : une économie performante repose sur des marchés efficients, qu’il faut libérer."],
+[72,7,"Dates du mouvement de déréglementation ?","Né dans les années 1980, renforcé dans les années 1990, jusqu’en 2008."],
+[73,8,"Pourquoi les marchés bancaires étaient-ils peu concurrentiels ?","On ne changeait pas de banque : trop complexe et sans intérêt."],
+[74,8,"Mesures pour la concurrence bancaire ?","Simplification du changement de banque, arrivée de banques étrangères et en ligne, extension des activités."],
+[75,8,"Qu’est-ce qu’une banque systémique ?","Une banque too big to fail : sa faillite entraînerait tout le système bancaire."],
+[76,8,"Problèmes posés par les banques systémiques ?","Distorsion de concurrence (refinancement moins cher), gains privatisés et pertes socialisées."],
+[77,8,"Chiffres 2016 sur les banques systémiques ?","30 banques systémiques = 65 % du PIB mondial ; une dépréciation d’environ 5 % de leurs actifs absorbait leur capital."],
+[78,8,"Les banques de dépôt se sont-elles internationalisées ?","Non, contrairement aux autres activités bancaires."],
+[79,8,"Quelle fonction bancaire décline avec la financiarisation ?","La transformation des échéances, au profit des activités de marché."],
+[80,8,"Phénomène nouveau dans la gestion des crédits ?","La banque accorde le crédit puis revend la créance au lieu de la garder (cf. subprimes)."],
+[81,8,"Qu’est-ce que le shadow banking ?","Intermédiation financière non bancaire : non réglementée, sans accès direct au refinancement de la BC, centrale pour la liquidité des marchés."],
+[82,8,"Qu’est-ce qu’une banque universelle ?","Une banque qui fait tout. Avant, seule l’Allemagne en avait."],
+[83,9,"Qu’est-ce qu’une fintech ?","Une entreprise innovante qui utilise le numérique (applis, IA, blockchain) pour des services financiers plus rapides, accessibles et moins chers."],
+[84,9,"Forces et faiblesses des fintech ?","Agiles, elles grignotent les activités annexes des banques ; mais peu d’informations et trop petites pour les concurrencer directement."],
+[85,9,"Qu’est-ce qu’une big tech en finance ?","Une grande entreprise technologique qui développe des activités financières (Apple Pay), avec beaucoup d’informations et moins de régulation."],
+[86,9,"Danger d’une monnaie numérique de banque centrale ?","Si elle est accessible au public, elle met en danger les banques."],
+[87,9,"Danger d’une monnaie numérique privée ?","Si c’est une vraie monnaie, elle échappe à la BC : l’État perd sa souveraineté monétaire."],
+[88,9,"Quelle est l’innovation de ces monnaies ?","Pas émises par une BC, processus décentralisé, pas de politique monétaire."],
+[89,9,"Le bitcoin est-il un actif financier ?","Non : il n’est la dette de personne, même s’il s’échange sur les marchés financiers."],
+[90,9,"Le bitcoin est-il une monnaie au sens institutionnel ?","Il permet des paiements, mais on doute qu’il soit assez bien conçu pour concurrencer les monnaies souveraines."]
+].map(([id,ch,q,a])=>({id,ch,q,a}));
+
+/* ---------- données : QCM [chapitre, question, choix, bonne réponse (index 0), explication] ---------- */
+const QCM=[
+[1,"Laquelle n’est PAS une fonction de la monnaie ?",["Facteur de production","Unité de compte","Réserve de valeur","Intermédiaire des échanges"],0,"Les trois fonctions : unité de compte, réserve de valeur, intermédiaire des échanges."],
+[1,"La liquidité d’un actif, c’est…",["sa facilité à se transformer en monnaie","son rendement","son risque","sa durée"],0,"Facilité et rapidité de conversion en monnaie."],
+[1,"Payer ses impôts illustre la monnaie comme…",["moyen de paiement","unité de compte","réserve de valeur","marchandise"],0,"Une transaction sans échange : la monnaie règle une dette."],
+[1,"Qui a le monopole d’émission des billets ?",["La BCE","Les banques commerciales","Le Trésor","Les fintech"],0,"Les banques commerciales ne peuvent plus créer de billets."],
+[1,"La monnaie bancaire est…",["uniquement scripturale","uniquement fiduciaire","créée par la BCE","réservée aux banques"],0,"Elle est créée par simple écriture lors d’un crédit."],
+[1,"« Les crédits font les dépôts » signifie que…",["le crédit crée le dépôt","les dépôts financent les crédits","la BCE prête aux déposants","le dépôt précède le crédit"],0,"Le dépôt découle du crédit accordé."],
+[1,"L’initiative de la création monétaire vient…",["des banques commerciales","de la BCE","de l’État","des ménages épargnants"],0,"La BCE suit en fournissant la monnaie centrale."],
+[1,"Qui peut avoir un compte à la BCE ?",["Les banques commerciales","Tout particulier","Les entreprises cotées","Personne"],0,"Les particuliers n’ont pas accès à la monnaie centrale scripturale."],
+[1,"Un client paie un client d’une autre banque. La banque règle en…",["monnaie centrale","monnaie bancaire","billets","bitcoin"],0,"Les transferts interbancaires passent par la monnaie centrale."],
+[1,"Le circuit bancaire, c’est…",["l’ensemble des clients d’une même banque","le réseau des agences","le marché interbancaire","la chaîne des crédits"],0,"La monnaie bancaire ne circule qu’à l’intérieur."],
+[1,"La limite de la création monétaire est…",["l’accès à la monnaie centrale","le montant des dépôts","le capital de la banque","la demande de billets uniquement"],0,"Retraits et paiements interbancaires exigent de la monnaie centrale."],
+[1,"Pourquoi une banque veut-elle une grosse part de marché ?",["Moins de monnaie part vers d’autres banques","Pour émettre des billets","Pour fixer le taux directeur","Pour éviter l’inflation"],0,"Elle a alors moins besoin de monnaie centrale."],
+[2,"Si la monnaie est neutre, doubler la masse monétaire…",["double les prix sans effet réel","double la production","crée des emplois","fait baisser les prix"],0,"Seulement de l’inflation."],
+[2,"Pour Keynes, la monnaie est…",["un carburant, non neutre","un voile neutre","une marchandise","sans effet à court terme"],0,"Elle stimule achats, investissements, emplois."],
+[2,"Pour les tenants de la non-neutralité, l’origine de la monnaie est…",["le paiement et la dette","l’échange","le troc","l’or"],0,"Sa fonction première : mesurer et régler ce qui est dû."],
+[3,"Les ACF sont…",["les agents à capacité de financement","les agents à besoin de financement","les autorités de contrôle","les actionnaires"],0,"Les épargnants."],
+[3,"Laquelle n’est PAS une condition de la CPP ?",["La concentration","L’atomicité","La transparence","La fluidité"],0,"La concentration est l’inverse de l’atomicité."],
+[3,"La fluidité en CPP, c’est…",["la libre entrée et sortie du marché","la circulation de l’information","la mobilité du capital","la liquidité des titres"],0,"Aucune barrière à l’entrée ou à la sortie."],
+[3,"En CPP, les banques…",["n’existent pas","sont indispensables","fixent les prix","transforment les échéances"],0,"Tout se fait sur le marché."],
+[3,"L’intermédiation de bilan correspond à…",["la finance indirecte","la finance directe","le courtage","le trading"],0,"La créance est portée au bilan de l’IF."],
+[3,"Un courtier fait de…",["la finance directe (hors bilan)","la finance indirecte","la création monétaire","l’intermédiation de bilan"],0,"Il met en relation sans porter la créance."],
+[3,"La finance indirecte est impossible…",["en CPP","dans la zone euro","pour les PME","depuis 2008"],0,"En CPP, seule la finance directe existe."],
+[3,"Laquelle n’est PAS une défaillance de marché du cours ?",["L’atomicité","L’asymétrie d’information","Les coûts de transaction","Le problème de liquidité"],0,"L’atomicité est une condition de la CPP."],
+[3,"Face à l’asymétrie d’information, la banque…",["la réduit sans l’éliminer","l’élimine totalement","l’aggrave","l’ignore"],0,"Elle produit de l’information au quotidien."],
+[4,"La transformation des échéances est associée à…",["Gurley et Shaw","Akerlof","Allen et Santomero","Keynes"],0,"Prêter long avec des ressources courtes."],
+[4,"Akerlof a étudié…",["le marché des voitures d’occasion","les ruées bancaires","la demande effective","les dérivés"],0,"Exemple fondateur de l’asymétrie d’information."],
+[4,"La sélection adverse, c’est…",["prêter à la mauvaise personne","refuser tout crédit","changer de comportement après le prêt","vendre ses créances"],0,"Faute d’information sur l’emprunteur."],
+[4,"Le contrôle délégué signifie que la banque…",["surveille le débiteur au nom des créanciers","délègue le contrôle à la BCE","laisse le client se contrôler","contrôle les prix"],0,"Pendant toute la relation."],
+[4,"Ce qui discipline la banque dans la transformation des échéances :",["la menace de ruée bancaire","la BCE","les fintech","la concurrence pure"],0,"Elle doit garder la confiance des déposants."],
+[4,"Les économies d’échelle de la banque viennent…",["du contrôle en grande quantité","des billets","des taux directeurs","de la titrisation"],0,"Un agent seul ne surveille qu’un débiteur."],
+[4,"Depuis les années 1980, le rôle des banques…",["a changé sans se réduire","a disparu","s’est limité aux dépôts","est passé aux fintech"],0,"Pas de désintermédiation."],
+[4,"Allen et Santomero : les IF sont devenus spécialistes…",["des risques","des billets","de la politique monétaire","de l’immobilier"],0,"Tarification, transformation, transfert des risques."],
+[4,"Les marchés de dérivés sont avant tout…",["des marchés d’intermédiaires","ouverts aux particuliers","des marchés de dépôts","réglementés par la BCE"],0,"Inaccessibles aux investisseurs individuels."],
+[5,"Pour les PK, la caractéristique distinctive des banques est…",["la création monétaire","l’intermédiation de l’épargne","la gestion des risques","la collecte des dépôts"],0,"C’est pour cela qu’on a besoin d’elles."],
+[5,"Keynes décrit une économie…",["de production","d’échange","de troc","de rente"],0,"On produit avant de pouvoir échanger."],
+[5,"Dans l’exemple patron / salariés, la banque…",["crée la monnaie qui paie les salaires","prête l’épargne des ménages","fixe les salaires","garantit les profits"],0,"Sans cette création, pas de production."],
+[5,"Première étape du processus de financement PK ?",["Les anticipations des firmes","Le crédit","L’épargne des ménages","La demande de billets"],0,"Puis plans de production, crédit, flux de monnaie, flux de revenu."],
+[5,"La demande effective intervient à l’étape…",["des plans de production","du crédit","du flux de revenu","des anticipations"],0,"Comparer coûts de production et demande attendue."],
+[5,"Le rôle final de la banque chez les PK est…",["intermédiaire financier","créateur de monnaie","prêteur en dernier ressort","assureur"],0,"Le rôle premier est la création monétaire."],
+[5,"Chez les PK, l’offre de monnaie est…",["endogène","exogène","fixe","déterminée par la BCE seule"],0,"Déterminée par la demande des agents non bancaires."],
+[5,"Le rôle des banques chez les PK est dit…",["passif","dominant","spéculatif","inutile"],0,"Ce sont les agents non financiers qui initient la création monétaire."],
+[5,"Pour les PK, les banques existeraient sur un marché parfait ?",["Oui","Non","Seulement en crise","Seulement pour les billets"],0,"Leur rôle n’est pas lié aux imperfections."],
+[6,"Les horizontalistes pensent que…",["toute demande solvable et crédible est financée","la BC fixe la quantité de monnaie","les banques rationnent toujours","la monnaie est neutre"],0,"Offre de monnaie totalement endogène."],
+[6,"Pourquoi une banque peut refuser un projet solide ?",["Manque de monnaie centrale","Projet trop rentable","Interdiction de la BCE","Taux trop bas"],0,"Elle risque d’être illiquide."],
+[6,"Pour les horizontalistes, la BC fixe…",["le taux d’intérêt","la quantité de monnaie","les salaires","le prix des actions"],0,"La quantité suit la demande à ce taux."],
+[6,"Dans l’économie standard, la BC fixe…",["la quantité de monnaie","le taux d’intérêt","le volume de crédit des ménages","les prix"],0,"Le marché détermine le taux."],
+[6,"Être solvable mais illiquide signifie…",["ne pas pouvoir payer une échéance le jour J","être en faillite","ne pas avoir d’actifs","avoir trop de liquidités"],0,"Les actifs couvrent les dettes, mais pas à temps."],
+[7,"Laquelle n’est PAS une des trois transformations du chapitre 2 ?",["La nationalisation des banques","La financiarisation","Le numérique","La finance verte"],0,"Les trois : financiarisation, numérique, finance verte."],
+[7,"Sous le fordisme, la croissance repose sur…",["des salaires croissants","l’effet richesse","les marchés dérivés","la titrisation"],0,"Permis par de forts gains de productivité."],
+[7,"La stagflation s’installe dans…",["les années 1970","les années 1950","les années 1990","les années 2010"],0,"Inflation et crise du modèle fordiste."],
+[7,"Après le fordisme, le salaire est vu comme…",["un coût à réduire","un moteur de la demande","une épargne","un actif"],0,"Ce qui limite les débouchés."],
+[7,"L’effet richesse : la consommation dépend aussi…",["du patrimoine","du taux de change","des impôts","du chômage"],0,"Fonction croissante du patrimoine."],
+[7,"Les subprimes illustrent…",["le prêt fondé sur la valeur future du bien","le fordisme","la transformation des échéances classique","la neutralité de la monnaie"],0,"Crédits titrisés et vendus sur les marchés."],
+[7,"La déréglementation financière va…",["des années 1980 à 2008","de 1945 à 1970","de 2008 à aujourd’hui","de 1970 à 1980"],0,"Renforcée dans les années 1990."],
+[7,"Le courant qui prône la déréglementation :",["le néolibéralisme","le keynésianisme","le fordisme","le post-keynésianisme"],0,"Marchés efficients, donc libres."],
+[8,"« Too big to fail » désigne…",["les banques systémiques","les fintech","les banques régionales","le shadow banking"],0,"Leur faillite entraînerait tout le système."],
+[8,"En 2016, 30 banques systémiques représentaient…",["65 % du PIB mondial","5 % du PIB mondial","30 % du PIB mondial","100 % du PIB mondial"],0,"Une dépréciation de 5 % de leurs actifs absorbait leur capital."],
+[8,"Avec les banques systémiques, les pertes sont…",["socialisées","privatisées","annulées","assurées par les fintech"],0,"Et les gains privatisés."],
+[8,"Le shadow banking est…",["non réglementé, sans accès direct à la BC","une banque centrale parallèle","une banque en ligne","réservé aux États"],0,"Mais central pour la liquidité des marchés."],
+[8,"Avant la financiarisation, les banques universelles existaient…",["seulement en Allemagne","partout en Europe","seulement aux États-Unis","nulle part"],0,"Banques qui font tout."],
+[8,"Quelles banques ne se sont pas internationalisées ?",["Les banques de dépôt","Les banques systémiques","Les banques universelles","Les banques d’affaires"],0,"L’internationalisation concerne d’autres activités."],
+[8,"Avec la financiarisation, la banque…",["revend ses créances","garde toujours ses créances","cesse de prêter","émet des billets"],0,"Phénomène nouveau, cf. subprimes."],
+[9,"Les fintech sont limitées par…",["leur taille et leur manque d’informations","leur lenteur","une régulation trop forte","leur coût"],0,"Mais elles sont agiles."],
+[9,"Apple Pay est un exemple de…",["big tech","fintech","banque centrale numérique","stablecoin"],0,"Grande entreprise technologique qui fait de la finance."],
+[9,"Une monnaie privée numérique menace…",["la souveraineté monétaire de l’État","l’existence d’Internet","le monopole des fintech","la finance verte"],0,"Elle ne dépend pas de la BC."],
+[9,"Le bitcoin n’est pas un actif financier car…",["il n’est la dette de personne","il n’a pas de prix","il est interdit","il ne s’échange pas"],0,"Même s’il s’échange sur les marchés."],
+[9,"L’innovation des cryptomonnaies est…",["l’émission décentralisée, sans politique monétaire","la création par la BCE","le papier-monnaie","le crédit bancaire"],0,"Produit de l’innovation technique."]
+].map(([ch,q,o,a,e])=>({ch,q,o,a,e}));
+
+/* ---------- questions de DS (réponse courte) : [chapitre, question, réponse type, mots-clés attendus] ---------- */
+const DS=[
+[1,"Citez et expliquez les trois fonctions de la monnaie.","Unité de compte (étalon de valeur) ; réserve de valeur (épargne, car actif le plus liquide) ; intermédiaire des échanges (évite la double coïncidence du troc), et plus largement moyen de paiement (impôts).",["unité de compte","réserve de valeur","intermédiaire","liquidité|liquid","double coïncidence"]],
+[1,"Qui crée la monnaie aujourd’hui ?","Les banques commerciales créent la monnaie bancaire, scripturale, en accordant des crédits ; la BCE crée la monnaie centrale (billets et réserves des banques). L’initiative vient des banques commerciales.",["banques commerciales","crédit","BCE","monnaie centrale","scriptural"]],
+[1,"Expliquez la formule « les crédits font les dépôts ».","Quand la banque accorde un crédit, elle crédite le compte du client : le dépôt naît du crédit. La monnaie est créée par une simple écriture, à partir de rien.",["crédit","dépôt","écriture","à partir de rien"]],
+[1,"Pourquoi la monnaie bancaire ne circule-t-elle pas dans toute l’économie ?","Elle ne circule qu’entre clients d’une même banque (circuit bancaire). Pour payer un client d’une autre banque, elle est détruite et remplacée par un transfert de monnaie centrale.",["circuit bancaire","même banque","monnaie centrale","interbancaire"]],
+[1,"Existe-t-il une limite à la création monétaire des banques ?","Oui : l’accès à la monnaie centrale, nécessaire pour les retraits en espèces et les paiements interbancaires.",["monnaie centrale","retrait","interbancaire"]],
+[2,"Opposez neutralité et non-neutralité de la monnaie.","Neutre : simple étiquette, plus de monnaie ne fait que monter les prix (inflation). Non neutre (Keynes) : carburant, elle stimule achats et investissements, donc production et emploi, au moins à court terme.",["étiquette","inflation","Keynes","production","emploi"]],
+[3,"Pourquoi n’y a-t-il pas de banque dans un marché en CPP ?","En CPP, ACF et ABF se rencontrent directement et l’échange est optimal : il n’y a pas de défaillance à corriger. La banque gênerait le libre-échange et pourrait influencer les prix.",["CPP","ACF","ABF","optimum","défaillance"]],
+[3,"Distinguez finance directe et finance indirecte.","Directe : ACF et ABF se rencontrent sur le marché, avec au plus un courtier (intermédiation hors bilan). Indirecte : un intermédiaire financier s’interpose et porte la créance à son bilan (intermédiation de bilan).",["hors bilan","de bilan","courtier","intermédiaire"]],
+[3,"Quelles défaillances de marché justifient les banques dans l’approche standard ?","L’asymétrie d’information (et l’aléa moral), les coûts de transaction et l’imparfaite liquidité des marchés.",["asymétrie","aléa moral","coûts de transaction","liquidité"]],
+[3,"Citez les cinq conditions de la concurrence pure et parfaite.","Atomicité, homogénéité du produit, fluidité (libre entrée et sortie), transparence de l’information, mobilité des facteurs de production.",["atomicité","homogénéité","fluidité","transparence","mobilité"]],
+[4,"Qu’est-ce que la transformation des échéances et quel risque comporte-t-elle ?","Gurley et Shaw : la banque collecte des ressources courtes (ACF) et prête à moyen et long terme (ABF). Risque de ruée bancaire si les déposants perdent confiance, ce qui la discipline.",["Gurley","Shaw","court terme","long terme","ruée"]],
+[4,"Comment la banque réduit-elle l’asymétrie d’information ?","Elle connaît les ressources et les moyens de paiement de ses clients et produit de l’information au quotidien. Elle réduit la sélection adverse et le rationnement du crédit (Akerlof).",["information","sélection adverse","rationnement","Akerlof"]],
+[4,"Qu’est-ce que le contrôle délégué ?","La banque surveille le débiteur au nom des créanciers pendant toute la relation, sans attendre le défaut. Elle est plus efficace qu’un agent seul grâce aux économies d’échelle.",["au nom","créanciers","surveillance|surveill","économies d’échelle"]],
+[4,"La montée des marchés depuis les années 1980 a-t-elle réduit le rôle des banques ?","Non : pas de désintermédiation, les banques vont sur les marchés pour leurs clients. Selon Allen et Santomero, elles sont devenues spécialistes des risques (négoce, accès au marché). Leur rôle a changé sans se réduire.",["désintermédiation","Allen","Santomero","risque","changé"]],
+[5,"Pourquoi les post-keynésiens jugent-ils les banques indispensables ?","Parce qu’elles créent la monnaie qui finance la production avant tout échange (économie de production). Sans crédit, pas de salaires, donc pas de production ; c’est vrai même sur un marché parfait.",["création monétaire","production","salaire","marché parfait"]],
+[5,"Décrivez le processus de financement selon les PK.","Anticipations des firmes, plans de production (demande effective), demande de crédit et création monétaire, flux de monnaie devenu revenu (consommé, investi, épargné), puis la banque, comme IF, finance les besoins résiduels.",["anticipation","demande effective","crédit","revenu","besoins résiduels"]],
+[5,"Rôle premier et rôle final de la banque chez les PK ?","Rôle premier : création monétaire (financer la production). Rôle final, secondaire : intermédiaire financier pour l’épargne non dépensée.",["création monétaire","intermédiaire","secondaire"]],
+[5,"Pourquoi l’offre de monnaie est-elle endogène chez les PK ?","Elle est déterminée par les demandes de crédit des agents non bancaires ; la banque répond, son rôle est passif.",["demande","agents non bancaires","passif"]],
+[6,"L’offre de monnaie est-elle totalement endogène ?","Les horizontalistes disent oui. Mais la banque doit se procurer de la monnaie centrale pour rester liquide ; elle peut refuser un projet solvable. L’offre dépend de la demande et de la liquidité des banques.",["horizontaliste","monnaie centrale","liquidité|liquid","solvabilité|solvab"]],
+[6,"Qui fixe la quantité de monnaie et le taux d’intérêt, selon les approches ?","Standard : la BC fixe la quantité, le marché fait le taux. Horizontalistes : la BC fixe le taux, la demande fait la quantité.",["quantité","taux","BC","horizontaliste"]],
+[7,"Pourquoi l’économie fordiste entre-t-elle en crise ?","Fin des années 1960, les gains de productivité ralentissent, le profit baisse ; on monte les prix pour payer les salaires, d’où l’inflation et la stagflation des années 1970.",["productivité","profit","inflation","stagflation"]],
+[7,"Comment la finance relance-t-elle la croissance après le fordisme ?","Les salaires deviennent des coûts à réduire ; la demande est soutenue par des marchés financiers liquides et l’effet richesse (la consommation dépend aussi du patrimoine).",["coût","marchés financiers","effet richesse","patrimoine"]],
+[7,"En quoi les subprimes sont-ils le paroxysme de la financiarisation ?","On prêtait sans regarder les revenus, sur la valeur future de la maison ; les banques ont titrisé ces crédits et les ont vendus sur les marchés.",["valeur future","revenu","titrisation|titris","marché"]],
+[8,"Qu’est-ce qu’une banque systémique et quel problème pose-t-elle ?","Une banque trop grosse pour faire faillite (too big to fail). Elle crée une distorsion de concurrence (refinancement moins cher) et ses pertes sont socialisées alors que ses gains sont privatisés. En 2016, 30 d’entre elles = 65 % du PIB mondial.",["too big to fail","distorsion","pertes socialisées|socialis","65"]],
+[8,"Qu’est-ce que le shadow banking ?","L’intermédiation financière non bancaire : non réglementée, sans accès direct au refinancement de la BC, mais centrale pour la liquidité des marchés.",["non bancaire","réglementation|réglement","banque centrale","liquidité"]],
+[9,"Fintech et big tech : quelles différences ?","Fintech : innovantes et agiles, mais petites et peu informées ; elles grignotent les activités annexes. Big tech : géantes, très informées, moins régulées (Apple Pay).",["agilité|agil","taille","information","régulation|régul"]],
+[9,"Le bitcoin est-il une monnaie ?","Ce n’est pas une marchandise d’échange ni un actif financier (la dette de personne). Il permet des paiements, mais on doute qu’il puisse concurrencer les monnaies souveraines.",["dette de personne","paiement","souverain"]]
+].map(([ch,q,a,k],i)=>({id:i+1,ch,q,a,k}));
+
+
+const VIEWS=["cours","connaissances","quiz","evaluation"];
+function showView(v){
+  if(!VIEWS.includes(v))v="cours";
+  VIEWS.forEach(n=>{$("#view-"+n).hidden=n!==v;$("#tab-"+n).setAttribute("aria-selected",String(n===v))});
+  if(v==="evaluation")renderEval();
+  store.set("view",v);
+}
+function go(v){location.hash=v;}
+addEventListener("hashchange",()=>showView(location.hash.slice(1)));
+document.querySelectorAll("nav [data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
+
+/* ---------- vue Cours ---------- */
+const cours={cur:store.get("chap",1),read:store.get("read",{})};
+function renderCours(){
+  const c=CH.find(x=>x.id===cours.cur)||CH[0];
+  const i=CH.indexOf(c);
+  $("#view-cours").innerHTML=`
+  <div class="course">
+    <aside class="toc" aria-label="Chapitres">${CH.map(x=>`<button data-ch="${x.id}" ${x.id===c.id?'aria-current="true"':""}><span>${x.id}. ${esc(x.t)}</span>${cours.read[x.id]?'<span class="done" aria-label="lu">lu</span>':""}</button>`).join("")}</aside>
+    <article class="chap">
+      <h2>${c.id}. ${esc(c.t)}</h2>
+      ${c.html}
+      <div class="chapfoot">
+        <button class="btn" id="c-prev" ${i===0?"disabled":""}>Précédent</button>
+        <button class="btn" id="c-next" ${i===CH.length-1?"disabled":""}>Suivant</button>
+        <span class="sp"></span>
+        <button class="btn" id="c-cards">Réviser en cartes</button>
+        <button class="btn" id="c-quiz">Quiz du chapitre</button>
+        <button class="btn ${cours.read[c.id]?"":"primary"}" id="c-read">${cours.read[c.id]?"Marquer comme non lu":"Marquer comme lu"}</button>
+      </div>
+    </article>
+  </div>`;
+  document.querySelectorAll(".toc [data-ch]").forEach(b=>b.addEventListener("click",()=>setChap(+b.dataset.ch)));
+  $("#c-prev").onclick=()=>setChap(CH[i-1].id);
+  $("#c-next").onclick=()=>setChap(CH[i+1].id);
+  $("#c-read").onclick=()=>{cours.read[c.id]=!cours.read[c.id];store.set("read",cours.read);renderCours();renderStats()};
+  $("#c-cards").onclick=()=>{fc.ch=String(c.id);fc.only=false;fc.build();renderCards();go("connaissances")};
+  $("#c-quiz").onclick=()=>{qz.ch=String(c.id);qz.sub="qcm";qz.start();renderQuiz();go("quiz")};
+}
+function setChap(id){cours.cur=id;store.set("chap",id);renderCours();scrollTo({top:0})}
+
+/* ---------- vue Connaissances ---------- */
+const fc={ch:"all",only:false,known:store.get("known",{}),deck:[],i:0,flip:false,
+  build(){
+    let d=CARDS.filter(c=>fc.ch==="all"||String(c.ch)===fc.ch);
+    if(fc.only)d=d.filter(c=>!fc.known[c.id]);
+    fc.deck=d;fc.i=0;fc.flip=false;
+  }};
+function renderCards(){
+  const total=fc.deck.length,c=fc.deck[fc.i];
+  const knownAll=CARDS.filter(x=>fc.known[x.id]).length;
+  const chInDeck=CARDS.filter(x=>fc.ch==="all"||String(x.ch)===fc.ch);
+  const knownIn=chInDeck.filter(x=>fc.known[x.id]).length;
+  $("#view-connaissances").innerHTML=`
+  <h2>Connaissances</h2>
+  <p class="lead">${CARDS.length} cartes pour apprendre les définitions, les mécanismes et les auteurs. Lis la question, réponds de tête, retourne la carte, puis dis si tu savais.</p>
+  <div class="deckbar">
+    <select id="f-ch" aria-label="Chapitre"><option value="all">Tous les chapitres</option>${CH.map(x=>`<option value="${x.id}" ${String(x.id)===fc.ch?"selected":""}>${x.id}. ${esc(x.t)}</option>`).join("")}</select>
+    <label><input type="checkbox" id="f-only" ${fc.only?"checked":""}> Seulement celles pas encore sues</label>
+    <button class="btn" id="f-shuffle">Mélanger</button>
+    <button class="btn ghost" id="f-reset">Tout remettre à zéro</button>
+  </div>
+  <p class="stat"><b>${knownIn}</b> sues sur <b>${chInDeck.length}</b> dans cette sélection · <b>${knownAll}</b> sur <b>${CARDS.length}</b> au total</p>
+  <div class="progress" aria-hidden="true"><i style="width:${chInDeck.length?knownIn/chInDeck.length*100:0}%"></i></div>
+  <div style="height:16px"></div>
+  ${c?`
+  <div class="card ${fc.flip?"back":""}" id="card" aria-live="polite">
+    <div class="tag">Chapitre ${c.ch} · carte ${fc.i+1} sur ${total}${fc.known[c.id]?" · sue":""}</div>
+    <div class="face">${fc.flip?esc(c.a):esc(c.q)}</div>
+    <div class="actions">
+      ${fc.flip?`<button class="btn primary" id="k-yes">Je savais</button><button class="btn" id="k-no">À revoir</button>`:`<button class="btn primary" id="k-flip">Retourner la carte</button>`}
+      <button class="btn ghost" id="k-prev" ${fc.i===0?"disabled":""}>Précédente</button>
+      <button class="btn ghost" id="k-next" ${fc.i>=total-1?"disabled":""}>Suivante</button>
+    </div>
+  </div>`:`<div class="empty">${fc.only?"Toutes les cartes de cette sélection sont sues. Décoche le filtre pour les revoir.":"Aucune carte dans cette sélection."}</div>`}`;
+  $("#f-ch").onchange=e=>{fc.ch=e.target.value;fc.build();renderCards()};
+  $("#f-only").onchange=e=>{fc.only=e.target.checked;fc.build();renderCards()};
+  $("#f-shuffle").onclick=()=>{fc.deck=shuffle(fc.deck);fc.i=0;fc.flip=false;renderCards()};
+  $("#f-reset").onclick=()=>{fc.known={};store.set("known",fc.known);fc.build();renderCards();renderStats()};
+  if(c){
+    const nxt=()=>{if(fc.i<total-1){fc.i++;fc.flip=false;renderCards()}else{fc.flip=false;renderCards()}};
+    const mark=v=>{fc.known[c.id]=v;store.set("known",fc.known);renderStats();
+      if(fc.only&&v){fc.deck.splice(fc.i,1);if(fc.i>=fc.deck.length)fc.i=Math.max(0,fc.deck.length-1);fc.flip=false;renderCards()}else nxt()};
+    const flip=$("#k-flip");if(flip)flip.onclick=()=>{fc.flip=true;renderCards()};
+    const y=$("#k-yes");if(y)y.onclick=()=>mark(true);
+    const n=$("#k-no");if(n)n.onclick=()=>mark(false);
+    $("#k-prev").onclick=()=>{fc.i--;fc.flip=false;renderCards()};
+    $("#k-next").onclick=()=>{fc.i++;fc.flip=false;renderCards()};
+  }
+}
+
+/* ---------- vue Quiz et exos ---------- */
+const qz={sub:"qcm",ch:"all",pool:[],i:0,score:0,chosen:null,done:false,best:store.get("best",{}),
+  start(){
+    QCM.forEach(q=>{delete q._o});
+    qz.pool=shuffle(QCM.filter(q=>qz.ch==="all"||String(q.ch)===qz.ch));
+    qz.i=0;qz.score=0;qz.chosen=null;qz.done=false;
+  }};
+function renderQuiz(){
+  const el=$("#view-quiz");
+  const bestAll=qz.best.all;
+  el.innerHTML=`
+  <h2>Quiz et exos</h2>
+  <p class="lead">Des QCM pour tester le cours, et des questions de DS à réponse courte, corrigées avec une réponse type et les mots-clés attendus.</p>
+  <div class="subtabs" role="tablist">
+    <button role="tab" data-sub="qcm" aria-selected="${qz.sub==="qcm"}">QCM</button>
+    <button role="tab" data-sub="ds" aria-selected="${qz.sub==="ds"}">Questions de DS</button>
+  </div>
+  <div id="q-body"></div>`;
+  el.querySelectorAll("[data-sub]").forEach(b=>b.onclick=()=>{qz.sub=b.dataset.sub;renderQuiz()});
+  if(qz.sub==="qcm")renderQcm();else renderDs();
+}
+function chapSelect(id,val){return `<select id="${id}" aria-label="Chapitre"><option value="all">Tous les chapitres</option>${CH.map(x=>`<option value="${x.id}" ${String(x.id)===val?"selected":""}>${x.id}. ${esc(x.t)}</option>`).join("")}</select>`}
+function renderQcm(){
+  const b=$("#q-body");
+  const top=`<div class="row" style="margin-bottom:18px">${chapSelect("q-ch",qz.ch)}<button class="btn" id="q-restart">Recommencer</button>${qz.best[qz.ch]!=null?`<span class="stat">Meilleur score : <b>${qz.best[qz.ch]} %</b></span>`:""}</div>`;
+  if(!qz.pool.length)qz.start();
+  if(!qz.pool.length){b.innerHTML=top+`<div class="empty">Aucune question pour ce chapitre.</div>`;bindQcmTop();return}
+  if(qz.done){
+    const pct=Math.round(qz.score/qz.pool.length*100);
+    b.innerHTML=top+`<div class="qbox"><p class="stat">Terminé</p><div class="score num">${qz.score} / ${qz.pool.length}</div><p>${pct} % de bonnes réponses. ${pct>=80?"Ce chapitre est solide.":pct>=50?"Relis les explications des erreurs et recommence.":"Reprends le cours de ce chapitre puis les cartes."}</p><button class="btn primary" id="q-again">Rejouer</button></div>`;
+    bindQcmTop();$("#q-again").onclick=()=>{qz.start();renderQcm()};return;
+  }
+  const q=qz.pool[qz.i];
+  if(!q._o)q._o=shuffle(q.o.map((t,k)=>({t,ok:k===q.a})));
+  const answered=qz.chosen!==null;
+  b.innerHTML=top+`<div class="qbox">
+    <div class="qmeta"><span>Question ${qz.i+1} sur ${qz.pool.length} · chapitre ${q.ch}</span><span>Score : <b class="num">${qz.score}</b></span></div>
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts">${q._o.map((o,k)=>`<button class="opt ${answered?(o.ok?"good":(qz.chosen===k?"bad":"")):""}" data-k="${k}" ${answered?"disabled":""}>${esc(o.t)}</button>`).join("")}</div>
+    ${answered?`<div class="explain"><span class="verdict ${q._o[qz.chosen].ok?"good":"bad"}">${q._o[qz.chosen].ok?"Bonne réponse.":"Pas tout à fait."}</span> ${esc(q.e)}</div>
+    <div style="margin-top:14px"><button class="btn primary" id="q-next">${qz.i+1<qz.pool.length?"Question suivante":"Voir le score"}</button></div>`:""}
+  </div>`;
+  bindQcmTop();
+  b.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
+    const k=+btn.dataset.k;qz.chosen=k;if(q._o[k].ok){qz.score++;ev.qcm[q.q]=1;saveEv()}renderQcm();
+  });
+  const nx=$("#q-next");if(nx)nx.onclick=()=>{
+    if(qz.i+1<qz.pool.length){qz.i++;qz.chosen=null}else{
+      qz.done=true;const pct=Math.round(qz.score/qz.pool.length*100);
+      if(qz.best[qz.ch]==null||pct>qz.best[qz.ch]){qz.best[qz.ch]=pct;store.set("best",qz.best)}renderStats()}
+    renderQcm();
+  };
+}
+function bindQcmTop(){
+  $("#q-ch").onchange=e=>{qz.ch=e.target.value;qz.start();renderQcm()};
+  $("#q-restart").onclick=()=>{qz.start();renderQcm()};
+}
+
+const MARKS=[["ok","Juste"],["part","Partiel"],["ko","À revoir"]];
+const dsv={ch:"all",open:{},draft:store.get("dsdraft",{})};
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’']/g,"'");
+const kwOf=k=>{const[l,st]=k.split("|");return {label:l,stem:norm(st||l)}};
+function renderDs(){
+  const b=$("#q-body");
+  const items=DS.filter(d=>dsv.ch==="all"||String(d.ch)===dsv.ch);
+  b.innerHTML=`<div class="row" style="margin-bottom:18px">${chapSelect("x-ch",dsv.ch)}<span class="stat">Écris ta réponse comme au DS (2 à 4 lignes), puis compare avec la réponse type et note-toi.</span></div>
+  <div class="exgrid">${items.map(d=>{const open=dsv.open[d.id],txt=dsv.draft[d.id]||"",mark=ev.ds[d.id];
+    const hit=d.k.map(kwOf).map(k=>Object.assign(k,{ok:norm(txt).includes(k.stem)}));
+    const mk=MARKS.find(m=>m[0]===mark);
+    return `<div class="ex">
+      <span class="chip">Chapitre ${d.ch}${mk?" · "+mk[1]:""}</span>
+      <h3>${esc(d.q)}</h3>
+      <textarea data-ta="${d.id}" rows="4" aria-label="Ta réponse" placeholder="Ta réponse…">${esc(txt)}</textarea>
+      <div class="row"><button class="btn ${open?"":"primary"}" data-show="${d.id}">${open?"Masquer la correction":"Voir la réponse type"}</button></div>
+      ${open?`<div class="sol"><b>Réponse type.</b> ${esc(d.a)}
+        <div class="kw">${hit.map(h=>`<span class="kwi ${h.ok?"ok":""}">${h.ok?"✓ ":""}${esc(h.label)}</span>`).join("")}</div>
+        <p class="stat" style="margin:8px 0">Mots-clés présents dans ta réponse : <b>${hit.filter(h=>h.ok).length} / ${hit.length}</b></p>
+        <div class="row" role="group" aria-label="Auto-correction"><span class="stat">Je me note :</span>${MARKS.map(([k,t])=>`<button class="btn ${mark===k?"primary":"ghost"}" data-mark="${d.id}:${k}">${t}</button>`).join("")}</div></div>`:""}
+    </div>`}).join("")}</div>`;
+  $("#x-ch").onchange=e=>{dsv.ch=e.target.value;renderDs()};
+  b.querySelectorAll("[data-ta]").forEach(t=>t.oninput=()=>{dsv.draft[t.dataset.ta]=t.value;store.set("dsdraft",dsv.draft)});
+  b.querySelectorAll("[data-show]").forEach(x=>x.onclick=()=>{const id=x.dataset.show;dsv.open[id]=!dsv.open[id];renderDs()});
+  b.querySelectorAll("[data-mark]").forEach(x=>x.onclick=()=>{const[id,k]=x.dataset.mark.split(":");ev.ds[id]=ev.ds[id]===k?undefined:k;saveEv();renderDs();renderStats()});
+}
+
+/* ---------- évaluation : points, niveaux, auto-évaluation, examen blanc ---------- */
+const ev={qcm:store.get("evq",{}),ds:store.get("evd",{}),self:store.get("evs",{}),mock:store.get("evm",[])};
+function saveEv(){store.set("evq",ev.qcm);store.set("evd",ev.ds);store.set("evs",ev.self);store.set("evm",ev.mock)}
+const LEVELS=[[0,"Débutant"],[25,"En progression"],[50,"Intermédiaire"],[70,"Avancé"],[88,"Expert"]];
+const lvl=p=>LEVELS.filter(l=>p>=l[0]).pop()[1];
+function chapStats(c){
+  const cards=CARDS.filter(x=>x.ch===c.id),qs=QCM.filter(x=>x.ch===c.id),xs=DS.filter(x=>x.ch===c.id);
+  const parts=[];
+  parts.push({k:"Lu",v:cours.read[c.id]?1:0,n:"cours"});
+  if(cards.length)parts.push({k:"Cartes sues",v:cards.filter(x=>fc.known[x.id]).length/cards.length,n:cards.filter(x=>fc.known[x.id]).length+"/"+cards.length});
+  if(qs.length)parts.push({k:"QCM réussis",v:qs.filter(x=>ev.qcm[x.q]).length/qs.length,n:qs.filter(x=>ev.qcm[x.q]).length+"/"+qs.length});
+  if(xs.length){const sc=x=>ev.ds[x.id]==="ok"?1:ev.ds[x.id]==="part"?.5:0;const tot=xs.reduce((s,x)=>s+sc(x),0);parts.push({k:"Questions de DS",v:tot/xs.length,n:fr(tot,1)+"/"+xs.length})}
+  const pct=Math.round(parts.reduce((s,p)=>s+p.v,0)/parts.length*100);
+  return {parts,pct};
+}
+function points(){
+  const read=CH.filter(c=>cours.read[c.id]).length*10;
+  const cards=CARDS.filter(x=>fc.known[x.id]).length*2;
+  const q=Object.keys(ev.qcm).length*5;
+  const x=DS.reduce((s,d)=>s+(ev.ds[d.id]==="ok"?10:ev.ds[d.id]==="part"?5:0),0);
+  const m=ev.mock.length?Math.max(...ev.mock.map(r=>r.note))*5:0;
+  const max=CH.length*10+CARDS.length*2+QCM.length*5+DS.length*10+100;
+  return {read,cards,q,x,m,total:read+cards+q+x+m,max};
+}
+const SELF=[["bas","À revoir"],["moy","Moyen"],["haut","Maîtrisé"]];
+const mock={on:false,pool:[],i:0,score:0,chosen:null,done:false,t0:0,tick:null,wrong:[]};
+function mockStart(){
+  mock.pool=shuffle(QCM).slice(0,20).map(q=>Object.assign({},q,{_o:shuffle(q.o.map((t,k)=>({t,ok:k===q.a})))}));
+  Object.assign(mock,{on:true,i:0,score:0,chosen:null,done:false,t0:Date.now(),wrong:[]});
+}
+const fmtT=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+" min "+String(s%60).padStart(2,"0")+" s"};
+function renderEval(){
+  const el=$("#view-evaluation");clearInterval(mock.tick);
+  const P=points(),stats=CH.map(c=>({c,s:chapStats(c)})),glob=Math.round(stats.reduce((s,x)=>s+x.s.pct,0)/stats.length);
+  const best=ev.mock.length?Math.max(...ev.mock.map(r=>r.note)):null;
+  let h=`<h2>Évaluation</h2><p class="lead">Un score de points, un niveau global, une note par chapitre et un examen blanc noté sur 20. Tout se met à jour quand tu lis, révises les cartes, fais les QCM et les questions de DS.</p>
+  <div class="evtop"><div class="evcard"><span class="stat">Niveau global</span><div class="score num">${glob} %</div><b>${lvl(glob)}</b></div>
+  <div class="evcard"><span class="stat">Points</span><div class="score num">${P.total}</div><span class="stat">sur ${P.max}</span></div>
+  <div class="evcard"><span class="stat">Meilleur examen blanc</span><div class="score num">${best===null?"–":fr(best,1)+" / 20"}</div><span class="stat">${ev.mock.length} passage${ev.mock.length>1?"s":""}</span></div></div>
+  <div class="evpts"><span>Cours lus <b class="num">${P.read}</b></span><span>Cartes sues <b class="num">${P.cards}</b></span><span>QCM <b class="num">${P.q}</b></span><span>Questions de DS <b class="num">${P.x}</b></span><span>Examen blanc <b class="num">${P.m}</b></span></div>
+  <p class="stat" style="margin-top:6px">Barème : 10 pts par chapitre lu, 2 par carte sue, 5 par QCM réussi (une fois), 10 par question de DS juste (5 si partielle), 5 × la meilleure note à l’examen blanc.</p>
+  <h3 style="margin-top:28px">Mes chapitres</h3><p class="lead">Note objective (mesurée) et auto-évaluation (ton ressenti). Un écart signale un chapitre à retravailler.</p><div class="evlist">`;
+  stats.forEach(({c,s})=>{
+    const sv=ev.self[c.id],warn=sv==="haut"&&s.pct<50?"Tu te sens sûr, mais les résultats disent le contraire : reviens dessus.":sv==="bas"&&s.pct>=70?"Tu doutes, mais tes résultats sont bons.":"";
+    h+=`<div class="evrow"><div class="evh"><b>${c.id}. ${esc(c.t)}</b><span class="num">${s.pct} % · ${lvl(s.pct)}</span></div>
+    <div class="progress" style="max-width:none"><i style="width:${s.pct}%"></i></div>
+    <div class="evd">${s.parts.map(p=>`<span>${p.k}${p.k==="Lu"?" : "+(p.v?"oui":"non"):" : "+p.n}</span>`).join("")}</div>
+    <div class="row" role="group" aria-label="Auto-évaluation chapitre ${c.id}"><span class="stat">Mon ressenti :</span>${SELF.map(([k,t])=>`<button class="btn ${sv===k?"primary":"ghost"}" data-self="${c.id}:${k}">${t}</button>`).join("")}<button class="btn ghost" data-open="${c.id}">Réviser</button></div>
+    ${warn?`<div class="explain">${warn}</div>`:""}</div>`;
+  });
+  h+=`</div><h3 style="margin-top:28px">Examen blanc</h3><div id="ev-mock"></div>`;
+  if(ev.mock.length)h+=`<h3 style="margin-top:28px">Historique</h3><div class="evd" style="gap:8px">${ev.mock.slice(-8).reverse().map(r=>`<span class="chip2">${r.date} · <b class="num">${fr(r.note,1)} / 20</b> · ${r.dur}</span>`).join("")}</div><div style="margin-top:10px"><button class="btn ghost" id="ev-reset">Réinitialiser toute l’évaluation</button></div>`;
+  el.innerHTML=h;renderMock();
+  el.querySelectorAll("[data-self]").forEach(b=>b.onclick=()=>{const[c,k]=b.dataset.self.split(":");ev.self[c]=ev.self[c]===k?undefined:k;saveEv();renderEval()});
+  el.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{cours.cur=+b.dataset.open;store.set("chap",cours.cur);renderCours();go("cours")});
+  const rs=$("#ev-reset");if(rs)rs.onclick=()=>{if(rs.dataset.sure){ev.qcm={};ev.ds={};ev.self={};ev.mock=[];saveEv();renderEval()}else{rs.dataset.sure=1;rs.textContent="Confirmer : effacer points, notes et historique"}};
+}
+function renderMock(){
+  const b=$("#ev-mock");if(!b)return;
+  if(!mock.on){b.innerHTML=`<div class="qbox"><p style="margin:0 0 12px">20 questions tirées au hasard dans tous les chapitres, sans correction pendant l’épreuve, chronométrées. Note finale sur 20, avec la liste des erreurs à revoir.</p><button class="btn primary" id="m-go">Lancer l’examen blanc</button></div>`;$("#m-go").onclick=()=>{mockStart();renderMock()};return}
+  if(mock.done){
+    const note=Math.round(mock.score/mock.pool.length*20*10)/10,dur=fmtT(mock.end-mock.t0);
+    b.innerHTML=`<div class="qbox"><p class="stat">Terminé en ${dur}</p><div class="score num">${fr(note,1)} / 20</div><p>${note>=16?"Très bien : tu es prêt.":note>=12?"Bien, il reste quelques points à consolider.":note>=10?"Moyen : retravaille les chapitres ci-dessous.":"Insuffisant pour l’instant : reprends le cours et les cartes."}</p>
+    ${mock.wrong.length?`<p><b>À revoir :</b></p>${mock.wrong.map(q=>`<div class="explain" style="margin-bottom:8px"><b>Ch. ${q.ch} · ${esc(q.q)}</b><br>Réponse : ${esc(q.o[q.a])}. ${esc(q.e)}</div>`).join("")}`:"<p>Aucune erreur.</p>"}
+    <button class="btn primary" id="m-go">Nouvel examen blanc</button></div>`;$("#m-go").onclick=()=>{mockStart();renderMock()};return}
+  const q=mock.pool[mock.i],ans=mock.chosen!==null;
+  b.innerHTML=`<div class="qbox"><div class="qmeta"><span>Question ${mock.i+1} sur ${mock.pool.length}</span><span class="num" id="m-t"></span></div>
+  <p class="qtext">${esc(q.q)}</p><div class="opts">${q._o.map((o,k)=>`<button class="opt ${ans&&mock.chosen===k?"good":""}" data-k="${k}" ${ans?"disabled":""}>${esc(o.t)}</button>`).join("")}</div>
+  ${ans?`<div style="margin-top:14px"><button class="btn primary" id="m-next">${mock.i+1<mock.pool.length?"Question suivante":"Terminer et voir la note"}</button></div>`:""}</div>`;
+  const tick=()=>{const t=$("#m-t");if(t)t.textContent=fmtT(Date.now()-mock.t0)};tick();mock.tick=setInterval(tick,1000);
+  b.querySelectorAll(".opt").forEach(x=>x.onclick=()=>{mock.chosen=+x.dataset.k;if(q._o[mock.chosen].ok){mock.score++;ev.qcm[q.q]=1}else mock.wrong.push(q);renderMock()});
+  const nx=$("#m-next");if(nx)nx.onclick=()=>{
+    if(mock.i+1<mock.pool.length){mock.i++;mock.chosen=null}else{
+      mock.done=true;mock.end=Date.now();clearInterval(mock.tick);
+      const note=Math.round(mock.score/mock.pool.length*20*10)/10;
+      ev.mock.push({note,date:new Date().toLocaleDateString("fr-FR"),dur:fmtT(mock.end-mock.t0)});saveEv();renderEval();return}
+    renderMock()};
+}
+function renderStats(){if(!$("#view-evaluation").hidden)renderEval()}
+
+/* ---------- init ---------- */
+renderCours();
+fc.build();renderCards();
+qz.start();renderQuiz();
+showView(location.hash.slice(1)||store.get("view","cours"));
+</script>
+
+</body></html>
