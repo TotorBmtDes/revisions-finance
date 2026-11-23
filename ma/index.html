@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prépa entretiens M&amp;A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday learning, precise like a bank analyst's pitch book
+   IDEA a pitch book: cobalt title strips, exact panels, a football field valuation chart
+   PICTURE the football field (valuation ranges by method, offer line) across the first screen
+   COLOUR white ground, black ink, cobalt #1240e0 fields, pale #eef2ff zones, signal orange for pitfalls; night #0a0d18
+   TYPE Space Grotesk 600 + Inter
+   LAYOUT cobalt nav strip, title across top, football field full width beneath; stacks on phone */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0a0d18);--ink:light-dark(#0b0b10,#eef1fb);--mute:light-dark(#4a4f63,#a9b0c8);--pale:light-dark(#eef2ff,#131a33);--line:light-dark(#d5dcf2,#26304f);--co:#1240e0;--coT:light-dark(#1240e0,#7d9bff);--warn:light-dark(#c2410c,#ff9a6b);--ok:light-dark(#0f7a3d,#5fd893);--card:light-dark(#ffffff,#0f1427)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px;scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,h4{font-family:"Space Grotesk",Inter,sans-serif;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin:0}
+h1{font-size:clamp(34px,5vw,52px);text-wrap:balance}
+h2{font-size:clamp(28px,3.4vw,38px);text-wrap:balance}
+h3{font-size:24px}
+h4{font-size:18px;margin:26px 0 8px}
+p{margin:0 0 12px}
+a{color:var(--coT)}
+.band{padding-block:clamp(28px,4vw,60px);padding-inline:max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.top{position:sticky;top:0;z-index:20;background:var(--co);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:20px;padding:10px max(5vw,16px);flex-wrap:wrap}
+.brand{font:700 19px "Space Grotesk",sans-serif;color:#fff;text-decoration:none;margin-right:auto}
+.nav{display:flex;gap:4px;overflow-x:auto}
+.nav a{flex:none;color:#fff;text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:500}
+.nav a:hover,.nav a:focus-visible{background:rgba(255,255,255,.16);outline:none}
+.lede{font-size:17px;color:var(--mute);max-width:62ch;margin-top:14px}
+.heroGrid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.stats{display:flex;gap:28px;flex-wrap:wrap}
+.stat b{display:block;font:600 34px/1 "Space Grotesk",sans-serif;color:var(--coT)}
+.stat span{font-size:14px;color:var(--mute)}
+.ff{margin-top:28px;background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:22px clamp(14px,2.4vw,28px) 16px}
+.ffHead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:14px}
+.ffHead h3{font-size:20px}
+.ffHead small{color:var(--mute);font-size:13px}
+.ffRow{display:grid;grid-template-columns:15em minmax(0,1fr) 6.5em;align-items:center}
+.ffLab{font-size:15px;font-weight:500;padding-right:12px;line-height:1.25}
+.ffLab small{display:block;color:var(--mute);font-weight:400;font-size:13px}
+.trk{position:relative;height:46px}
+.trk .bar{position:absolute;top:12px;height:22px;background:var(--co);border-radius:3px;transform-origin:left;animation:grow .9s ease-out both}
+.trk .bar.alt{background:color-mix(in srgb,var(--co) 45%,var(--bg))}
+.trk .offer{position:absolute;top:0;bottom:0;border-left:2px dashed var(--warn)}
+.trk .grid{position:absolute;top:0;bottom:0;border-left:1px solid var(--line)}
+.ffVal{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;font-size:15px}
+.axis .trk{height:30px}
+.axis .tick{position:absolute;top:6px;transform:translateX(-50%);font-size:13px;color:var(--mute);white-space:nowrap}
+.axis .offLab{position:absolute;top:4px;transform:translateX(-50%);font-size:13px;font-weight:600;color:var(--warn);white-space:nowrap;background:var(--pale);padding:0 4px}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ffNote{font-size:14px;color:var(--mute);margin:12px 0 0}
+.paths{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.paths a{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:var(--card)}
+.paths a:hover,.paths a:focus-visible{border-color:var(--co);outline:none}
+.paths b{display:block;font-family:"Space Grotesk",sans-serif;font-size:17px;color:var(--coT)}
+.paths span{font-size:14px;color:var(--mute)}
+.secHead{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.secHead p{color:var(--mute);margin:8px 0 0;max-width:62ch}
+.pale{background:var(--pale)}
+.strip{background:var(--co);color:#fff}
+.strip .secHead p{color:#dfe6ff}
+.vids{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.vid{background:var(--card);color:var(--ink);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.tag{display:inline-block;font-size:13px;font-weight:600;color:var(--coT);background:var(--pale);border-radius:4px;padding:2px 8px;align-self:flex-start}
+.vid h3{font-size:19px;line-height:1.25}
+.beat{font-size:15px;line-height:1.5}
+.beat b{display:block;font-size:13px;color:var(--mute);font-weight:600}
+.beat.trap b{color:var(--warn)}
+.vidFoot{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-top:6px;border-top:1px solid var(--line)}
+.vidFoot input{flex:1 1 12em}
+.addVid{margin-top:18px;background:rgba(255,255,255,.1);border-radius:10px;padding:16px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,1fr) auto;gap:10px;align-items:end}
+.addVid label{font-size:14px;display:grid;gap:4px}
+input,select{font:16px Inter,sans-serif;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);min-height:44px}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid color-mix(in srgb,var(--co) 55%,transparent);outline-offset:2px}
+button,.btn{font:600 15px Inter,sans-serif;min-height:44px;padding:10px 16px;border-radius:6px;border:1px solid var(--co);background:var(--co);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button.ghost,.btn.ghost{background:transparent;color:var(--coT);border-color:var(--line)}
+button.ghost:hover{border-color:var(--co)}
+.addVid button.ghost{color:#fff;border-color:rgba(255,255,255,.6)}
+.layout{display:grid;grid-template-columns:16em minmax(0,1fr);gap:32px;align-items:start}
+.tabs{display:grid;gap:6px;position:sticky;top:80px}
+.tabs button{justify-content:flex-start;text-align:left;background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
+.tabs button[aria-selected=true]{background:var(--co);color:#fff;border-color:var(--co)}
+.tabs button small{margin-left:auto;padding-left:8px;opacity:.75;font-weight:400;white-space:nowrap}
+.mod{max-width:76ch}
+.mod>p.intro{font-size:17px;color:var(--mute);margin:10px 0 6px}
+.mod ul,.mod ol{padding-left:1.3em;margin:0 0 12px}
+.mod li{margin-bottom:6px}
+.formula{font-family:"Space Grotesk",sans-serif;background:var(--pale);border-left:3px solid var(--co);padding:10px 14px;margin:10px 0 14px;border-radius:0 6px 6px 0;overflow-wrap:anywhere}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:15px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-weight:600;background:var(--pale)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.express{border:1px solid var(--co);border-radius:8px;padding:14px 18px;margin-top:24px}
+.express h4{margin-top:0;color:var(--coT)}
+.trapBox{border-left:3px solid var(--warn);padding:8px 14px;margin:12px 0;background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500;min-height:40px;padding:6px 12px}
+.chip[aria-pressed=true]{background:var(--co);color:#fff;border-color:var(--co)}
+.qTools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-bottom:12px}
+.prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mute);white-space:nowrap}
+.prog i{display:block;width:140px;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.prog i span{display:block;height:100%;background:var(--ok)}
+.qList{display:grid;gap:8px}
+details.q{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+details.q summary{cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;list-style:none;font-weight:500}
+details.q summary::-webkit-details-marker{display:none}
+details.q[open] summary{border-bottom:1px solid var(--line)}
+.lvl{font-size:13px;color:var(--mute);white-space:nowrap}
+.ans{padding:14px 16px}
+.ans p:last-child{margin:0}
+.ansFoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:14px}
+.ansFoot label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.ansFoot input{min-height:auto;width:20px;height:20px}
+.done summary{color:var(--ok)}
+.empty{color:var(--mute);padding:20px;text-align:center;border:1px dashed var(--line);border-radius:8px}
+.fcWrap{display:grid;grid-template-columns:minmax(0,1fr) 16em;gap:28px;align-items:start}
+.flash{perspective:1400px;cursor:pointer;min-height:300px}
+.flashIn{position:relative;min-height:300px;transition:transform .5s;transform-style:preserve-3d}
+.flash.flip .flashIn{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:clamp(20px,4vw,40px);display:flex;flex-direction:column;justify-content:center;gap:12px}
+.front{background:var(--co);color:#fff}
+.front h3{font-size:clamp(28px,4vw,44px)}
+.back{background:var(--card);border:2px solid var(--co);transform:rotateY(180deg);font-size:17px;overflow:auto}
+.face small{font-size:13px;opacity:.8}
+.fcCtl{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.fcSide{display:grid;gap:14px}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.score div{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.score b{display:block;font:600 28px/1 "Space Grotesk",sans-serif}
+.score span{font-size:13px;color:var(--mute)}
+.quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.qz{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--card)}
+.qz p.qq{font-weight:600;margin-bottom:10px}
+.opts{display:grid;gap:6px}
+.opts button{justify-content:flex-start;text-align:left;background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
+.opts button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opts button.wrong{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent)}
+.expl{font-size:15px;color:var(--mute);margin:10px 0 0}
+.quizTop{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.quizTop b{font:600 34px/1 "Space Grotesk",sans-serif;color:var(--coT)}
+footer{background:#0b0b10;color:#c9cfe4}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px}
+footer b{color:#fff;font-family:"Space Grotesk",sans-serif}
+@media(max-width:980px){.vids{grid-template-columns:repeat(2,minmax(0,1fr))}.paths{grid-template-columns:repeat(2,minmax(0,1fr))}.addVid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:860px){.layout,.fcWrap{grid-template-columns:minmax(0,1fr)}.tabs{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:4px}.tabs button{flex:none}.tabs button small{display:none}.quiz{grid-template-columns:minmax(0,1fr)}.heroGrid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.ffRow{grid-template-columns:minmax(0,1fr) 5.6em}.ffLab{grid-column:1/-1;padding-top:8px}.axis .ffLab{display:none}.axis .tick.near{display:none}.ffRow .ffVal.sp{display:none}.vids,.addVid{grid-template-columns:minmax(0,1fr)}.paths{grid-template-columns:minmax(0,1fr)}.qTools{grid-template-columns:minmax(0,1fr)}table{font-size:13px}th,td{padding:6px 4px}.trk{height:34px}.trk .bar{top:7px;height:20px}.top .wrap{gap:6px}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#accueil">Prépa M&amp;A</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#videos">Vidéos</a><a href="#cours">Cours</a><a href="#questions">Questions</a><a href="#fiches">Fiches</a><a href="#quiz">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="band" id="accueil">
+  <div class="wrap">
+    <div class="heroGrid">
+      <div>
+        <h1>Réussir ses entretiens M&amp;A, une question à la fois</h1>
+        <p class="lede">Les vidéos expliquent en 60 secondes. Les cours vont au fond du sujet. Les fiches et le quiz servent à réviser la veille de l'entretien.</p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="ff" aria-label="Exemple de football field">
+      <div class="ffHead">
+        <h3>L'offre à 50 € se situe dans le haut des fourchettes de valorisation</h3>
+        <small>Football field d'une cible fictive, en € par action</small>
+      </div>
+      <div id="ff"></div>
+      <p class="ffNote">C'est la synthèse que tout banquier met dans un pitch : chaque barre est une méthode, la ligne pointillée est le prix proposé. Tout est expliqué dans le module <a href="#cours" data-open="valo">Valorisation</a>.</p>
+    </div>
+
+    <div class="paths">
+      <a href="#videos"><b>Vidéos</b><span>Une question d'entretien, une réponse courte</span></a>
+      <a href="#cours"><b>7 modules de cours</b><span>Du deal process au LBO</span></a>
+      <a href="#questions"><b>Banque de questions</b><span>Avec réponses et suivi de progression</span></a>
+      <a href="#fiches"><b>Fiches et quiz</b><span>Révision active avant le jour J</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="band strip" id="videos">
+  <div class="wrap">
+    <div class="secHead">
+      <div>
+        <h2>Les vidéos explicatives</h2>
+        <p>Chaque vidéo suit le même format : une accroche, la réponse attendue, le piège à éviter. Colle le lien TikTok sous chaque fiche pour relier la vidéo au cours.</p>
+      </div>
+    </div>
+    <div class="vids" id="vids"></div>
+    <form class="addVid" id="addVid">
+      <label>Question traitée<input id="nvTitle" required placeholder="Ex. Pourquoi ajouter les minoritaires à la VE ?"></label>
+      <label>Lien TikTok<input id="nvUrl" type="url" required placeholder="https://www.tiktok.com/@…/video/…"></label>
+      <label>Module<select id="nvMod"></select></label>
+      <button type="submit" class="ghost">Ajouter la vidéo</button>
+    </form>
+  </div>
+</section>
+
+<section class="band" id="cours">
+  <div class="wrap">
+    <div class="secHead">
+      <div>
+        <h2>Les cours</h2>
+        <p>Sept modules, dans l'ordre où les questions arrivent en entretien. Chaque module se termine par une fiche express.</p>
+      </div>
+    </div>
+    <div class="layout">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div>
+
+<article class="mod" id="m-proc" role="tabpanel">
+  <h3>Le M&amp;A et le déroulé d'une opération</h3>
+  <p class="intro">Avant toute question technique, le recruteur veut savoir si tu comprends ce que fait une équipe M&amp;A au quotidien.</p>
+  <h4>Ce que fait le conseil M&amp;A</h4>
+  <p>La banque (ou la boutique, ou l'équipe Transaction Services d'un cabinet) conseille soit le <b>vendeur</b> (sell-side), soit l'<b>acheteur</b> (buy-side). En sell-side, elle organise la vente pour obtenir le meilleur prix et les meilleures conditions. En buy-side, elle aide l'acquéreur à identifier, valoriser et négocier une cible. Les honoraires sont surtout un <b>success fee</b> en pourcentage du prix, payé au closing.</p>
+  <p>L'équipe type : analyste (modèles, pitch, data room), associate (contrôle du modèle, coordination), VP / director (gestion du deal), MD (relation client, origination).</p>
+  <h4>Un processus de cession par enchères, étape par étape</h4>
+  <ol>
+    <li><b>Préparation</b> (environ 4 à 8 semaines) : signature du mandat, analyse de la société, business plan, <i>teaser</i> anonyme, mémo d'information (IM), liste d'acquéreurs potentiels, souvent une vendor due diligence (VDD).</li>
+    <li><b>Premier tour</b> (environ 4 à 6 semaines) : envoi du teaser, signature d'un accord de confidentialité (NDA), envoi de l'IM et de la <i>process letter</i>, remise d'<b>offres indicatives</b> non engageantes.</li>
+    <li><b>Second tour</b> (environ 6 à 8 semaines) : short list, ouverture de la data room, management presentation, questions-réponses, due diligences des acquéreurs, commentaires sur le projet de contrat, puis <b>offres fermes</b>.</li>
+    <li><b>Négociation et signing</b> : exclusivité avec un acquéreur, finalisation du SPA (contrat de cession) et de la garantie d'actif et de passif. En France, quand le CSE doit être consulté, l'acquéreur signe d'abord une <b>promesse unilatérale d'achat</b> (put option) et le SPA n'est signé qu'après l'avis du CSE.</li>
+    <li><b>Closing</b> : levée des conditions suspensives (autorisation de concurrence, contrôle des investissements étrangers…), paiement du prix et transfert des titres.</li>
+  </ol>
+  <h4>Les documents à connaître</h4>
+  <div class="scroll"><table class="stack">
+    <thead><tr><th>Document</th><th>À quoi il sert</th></tr></thead>
+    <tbody>
+      <tr><td>Teaser</td><td>2 à 3 pages anonymes pour susciter l'intérêt</td></tr>
+      <tr><td>NDA</td><td>Engagement de confidentialité avant d'envoyer l'information détaillée</td></tr>
+      <tr><td>Mémo d'information (IM)</td><td>Présentation complète : activité, marché, chiffres, business plan</td></tr>
+      <tr><td>Process letter</td><td>Règles du jeu : calendrier, contenu attendu des offres</td></tr>
+      <tr><td>Data room</td><td>Espace sécurisé avec tous les documents juridiques, financiers, sociaux</td></tr>
+      <tr><td>SPA</td><td>Contrat de cession des titres : prix, mécanisme d'ajustement, conditions, garanties</td></tr>
+      <tr><td>GAP</td><td>Garantie d'actif et de passif : le vendeur indemnise l'acheteur pour les passifs antérieurs non révélés</td></tr>
+    </tbody>
+  </table></div>
+  <h4>Enchères ou gré à gré ?</h4>
+  <p>Les <b>enchères</b> créent de la concurrence et maximisent le prix, mais exposent l'information à plusieurs concurrents et prennent du temps. Le <b>gré à gré</b> (un seul acquéreur) est plus rapide et plus confidentiel, mais donne moins de pouvoir de négociation au vendeur.</p>
+  <h4>Locked box ou completion accounts</h4>
+  <p>Avec une <b>locked box</b>, le prix est fixé sur un bilan de référence passé ; il ne bouge plus et l'acheteur est protégé par une clause interdisant toute fuite de valeur (leakage : dividendes, frais…) jusqu'au closing. Avec des <b>completion accounts</b>, le prix est ajusté après le closing selon la dette nette et le BFR réels à la date du closing. La locked box favorise le vendeur (certitude du prix), les completion accounts protègent l'acheteur.</p>
+  <div class="express"><h4>Fiche express</h4><ul><li>Sell-side = maximiser le prix ; buy-side = ne pas surpayer.</li><li>Teaser → NDA → IM → offres indicatives → data room → offres fermes → SPA → closing.</li><li>Locked box : prix fixe + clause anti-leakage. Completion accounts : prix ajusté après closing.</li></ul><button class="ghost" data-qmod="proc">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-compta" role="tabpanel" hidden>
+  <h3>Comptabilité : les trois états financiers</h3>
+  <p class="intro">La question « Je t'amortis 10 € » tombe dans presque tous les premiers tours. Elle teste ta compréhension des liens entre les états.</p>
+  <h4>Les trois états et leurs liens</h4>
+  <ul>
+    <li><b>Compte de résultat</b> : chiffre d'affaires → EBITDA → EBIT (après dotations aux amortissements) → résultat avant impôt → <b>résultat net</b>.</li>
+    <li><b>Tableau des flux de trésorerie</b> : il part du résultat net, réintègre les éléments sans impact cash (amortissements), retire la hausse du BFR, puis ajoute les flux d'investissement (capex) et de financement (dette, dividendes).</li>
+    <li><b>Bilan</b> : la trésorerie de fin de période vient du tableau des flux ; le résultat net non distribué s'ajoute aux capitaux propres.</li>
+  </ul>
+  <h4>Exemple : l'amortissement augmente de 10 € (impôt à 25 %)</h4>
+  <div class="scroll"><table>
+    <thead><tr><th>État</th><th>Effet</th><th class="n">Montant</th></tr></thead>
+    <tbody>
+      <tr><td>Compte de résultat</td><td>EBIT</td><td class="n">−10</td></tr>
+      <tr><td></td><td>Impôt (économie de 25 %)</td><td class="n">+2,5</td></tr>
+      <tr><td></td><td>Résultat net</td><td class="n">−7,5</td></tr>
+      <tr><td>Flux de trésorerie</td><td>Résultat net</td><td class="n">−7,5</td></tr>
+      <tr><td></td><td>Réintégration de l'amortissement</td><td class="n">+10</td></tr>
+      <tr><td></td><td>Variation de trésorerie</td><td class="n">+2,5</td></tr>
+      <tr><td>Bilan – actif</td><td>Immobilisations −10, trésorerie +2,5</td><td class="n">−7,5</td></tr>
+      <tr><td>Bilan – passif</td><td>Capitaux propres (résultat)</td><td class="n">−7,5</td></tr>
+    </tbody>
+  </table></div>
+  <p>Le bilan reste équilibré : l'actif et le passif baissent tous les deux de 7,5. La trésorerie <b>augmente</b> grâce à l'économie d'impôt, c'est le point que le recruteur attend.</p>
+  <h4>Les variantes classiques</h4>
+  <ul>
+    <li><b>Achat de stock de 10 € payé comptant</b> : rien au compte de résultat ; le BFR augmente donc la trésorerie baisse de 10 ; au bilan, stocks +10 et trésorerie −10.</li>
+    <li><b>Emprunt de 100 €</b> : trésorerie +100 et dette +100 ; les intérêts passeront ensuite au compte de résultat (après impôt).</li>
+    <li><b>Dépréciation d'un actif de 10 €</b> : même logique que l'amortissement si elle est déductible fiscalement ; sinon le résultat net baisse de 10 et la trésorerie ne bouge pas.</li>
+    <li><b>Capex de 10 €</b> : pas d'effet immédiat sur le résultat ; trésorerie −10 et immobilisations +10.</li>
+  </ul>
+  <h4>Définitions à connaître par cœur</h4>
+  <div class="formula">BFR = stocks + créances clients − dettes fournisseurs</div>
+  <div class="formula">EBITDA = EBIT + dotations aux amortissements et provisions</div>
+  <div class="trapBox"><b>Piège :</b> une hausse du BFR consomme de la trésorerie. Si les clients paient plus tard, le résultat ne change pas mais la trésorerie baisse.</div>
+  <div class="express"><h4>Fiche express</h4><ul><li>Raconte toujours dans l'ordre : compte de résultat → flux → bilan.</li><li>Amortissement +10 à 25 % : résultat net −7,5, trésorerie +2,5.</li><li>Vérifie à voix haute que le bilan s'équilibre.</li></ul><button class="ghost" data-qmod="compta">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-ve" role="tabpanel" hidden>
+  <h3>Valeur d'entreprise et valeur des fonds propres</h3>
+  <p class="intro">La valeur d'entreprise (VE) mesure ce que vaut l'outil industriel pour tous les financeurs ; la valeur des fonds propres, ce qui revient aux actionnaires.</p>
+  <h4>Le passage de l'une à l'autre</h4>
+  <div class="formula">VE = valeur des fonds propres + dettes financières − trésorerie + intérêts minoritaires + actions de préférence − participations non consolidées</div>
+  <p>Selon les pratiques, on ajoute aussi les provisions pour retraites et certains passifs assimilés à de la dette (dettes locatives IFRS 16 si l'EBITDA est post-IFRS 16).</p>
+  <ul>
+    <li><b>Pourquoi ajouter les minoritaires ?</b> L'EBITDA consolidé intègre 100 % des filiales contrôlées. Pour rester cohérent, la VE doit aussi inclure la part des fonds propres qui n'appartient pas au groupe.</li>
+    <li><b>Pourquoi retirer les participations non consolidées ?</b> Leurs résultats ne sont pas dans l'EBITDA ; on les valorise à part.</li>
+    <li><b>Pourquoi retirer la trésorerie ?</b> Un acquéreur pourrait l'utiliser immédiatement pour réduire le prix effectivement payé.</li>
+  </ul>
+  <h4>Calculer la valeur des fonds propres diluée</h4>
+  <p>On multiplie le cours par le nombre d'actions <b>dilué</b>. Pour les options dans la monnaie, on applique la <b>méthode du rachat d'actions</b> (treasury stock method).</p>
+  <p>Exemple : 10 options au prix d'exercice de 20 €, cours de 50 €. Les porteurs paient 200 €, qui permettent de racheter 4 actions. Dilution nette : 10 − 4 = <b>6 actions</b>.</p>
+  <h4>La cohérence des multiples</h4>
+  <div class="scroll"><table class="stack">
+    <thead><tr><th>Numérateur</th><th>Dénominateurs cohérents</th><th>À ne pas faire</th></tr></thead>
+    <tbody>
+      <tr><td>VE</td><td>Chiffre d'affaires, EBITDA, EBIT</td><td>VE / résultat net</td></tr>
+      <tr><td>Valeur des fonds propres</td><td>Résultat net (P/E), capitaux propres (P/B)</td><td>Fonds propres / EBITDA</td></tr>
+    </tbody>
+  </table></div>
+  <p>Règle : si l'indicateur revient à tous les financeurs (avant intérêts), on utilise la VE. S'il ne revient qu'aux actionnaires (après intérêts), on utilise la valeur des fonds propres.</p>
+  <h4>Les questions pièges</h4>
+  <ul>
+    <li><b>Rachat d'actions de 100 € payé en cash</b> : fonds propres −100, trésorerie −100, VE inchangée.</li>
+    <li><b>Levée de dette de 100 € gardée en trésorerie</b> : dette +100, trésorerie +100, VE inchangée.</li>
+    <li><b>Une VE peut-elle être négative ?</b> Oui, si la trésorerie dépasse la capitalisation plus la dette ; c'est rare et souvent signe d'une entreprise en difficulté.</li>
+  </ul>
+  <div class="express"><h4>Fiche express</h4><ul><li>VE = fonds propres + dette nette + minoritaires + préférentielles − participations.</li><li>Les opérations de financement ne changent pas la VE.</li><li>Multiple cohérent : même population de financeurs au numérateur et au dénominateur.</li></ul><button class="ghost" data-qmod="ve">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-valo" role="tabpanel" hidden>
+  <h3>Valorisation : comparables, transactions, DCF</h3>
+  <p class="intro">On croise toujours plusieurs méthodes et on présente le résultat dans un football field, comme celui en haut de page.</p>
+  <h4>Les comparables boursiers</h4>
+  <ol>
+    <li>Choisir un échantillon de sociétés cotées proches : secteur, taille, géographie, croissance, marges.</li>
+    <li>Calculer leurs multiples (VE/EBITDA, VE/EBIT, P/E) sur les mêmes périodes, souvent sur les 12 prochains mois.</li>
+    <li>Retenir la médiane ou une fourchette entre quartiles, puis l'appliquer aux agrégats de la cible.</li>
+  </ol>
+  <p>Avantages : données de marché récentes et faciles à justifier. Limites : pas de vrais comparables parfaits, sensibilité au sentiment de marché, pas de prime de contrôle.</p>
+  <h4>Les transactions comparables</h4>
+  <p>Même logique avec les multiples payés lors de rachats récents dans le secteur. Ils incluent une <b>prime de contrôle</b> et des synergies, donc donnent souvent les valeurs les plus élevées. Limites : peu de transactions, informations parfois incomplètes, conditions de marché différentes.</p>
+  <h4>Le DCF en six étapes</h4>
+  <ol>
+    <li>Construire un business plan sur 5 à 10 ans.</li>
+    <li>Calculer les flux de trésorerie disponibles pour tous les financeurs :</li>
+  </ol>
+  <div class="formula">FCF = EBIT × (1 − t) + amortissements − capex − variation du BFR</div>
+  <ol start="3">
+    <li>Calculer le coût moyen pondéré du capital :</li>
+  </ol>
+  <div class="formula">WACC = E/(D+E) × Ke + D/(D+E) × Kd × (1 − t)</div>
+  <div class="formula">Ke (MEDAF) = Rf + β × (Rm − Rf)</div>
+  <ol start="4">
+    <li>Calculer la valeur terminale, avec la formule de Gordon ou un multiple de sortie :</li>
+  </ol>
+  <div class="formula">VT = FCF(n) × (1 + g) / (WACC − g)</div>
+  <ol start="5">
+    <li>Actualiser les flux et la valeur terminale au WACC : on obtient la VE.</li>
+    <li>Passer à la valeur des fonds propres avec le bridge du module précédent, puis diviser par le nombre d'actions dilué.</li>
+  </ol>
+  <h4>Le bêta des comparables</h4>
+  <p>On désendette le bêta de chaque comparable, on prend la médiane, puis on le réendette avec la structure cible de l'entreprise :</p>
+  <div class="formula">β désendetté = β endetté / (1 + (1 − t) × D/E)</div>
+  <div class="trapBox"><b>Piège :</b> la valeur terminale pèse souvent environ 60 à 80 % de la VE d'un DCF. Vérifie toujours le multiple implicite qu'elle donne et la cohérence de g avec la croissance de long terme de l'économie.</div>
+  <h4>Les autres méthodes</h4>
+  <ul>
+    <li><b>LBO</b> : le prix maximal qu'un fonds peut payer pour atteindre son TRI cible ; c'est souvent un plancher.</li>
+    <li><b>Somme des parties</b> : on valorise chaque activité séparément, utile pour les conglomérats.</li>
+    <li><b>Cours de bourse</b> : plus haut et plus bas sur 52 semaines, cours moyens pondérés, pour les sociétés cotées.</li>
+  </ul>
+  <div class="express"><h4>Fiche express</h4><ul><li>Transactions &gt; comparables en général, à cause de la prime de contrôle.</li><li>FCF = EBIT(1−t) + D&amp;A − capex − ΔBFR, actualisé au WACC.</li><li>WACC en hausse ou g en baisse → valeur en baisse.</li></ul><button class="ghost" data-qmod="valo">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-fusion" role="tabpanel" hidden>
+  <h3>Modèle de fusion : relution ou dilution</h3>
+  <p class="intro">La question : le bénéfice par action (BPA) de l'acquéreur augmente-t-il après l'opération ?</p>
+  <h4>Le calcul du BPA pro forma</h4>
+  <div class="formula">BPA pro forma = (RN acquéreur + RN cible + synergies après impôt − coût du financement après impôt − amortissement des actifs réévalués après impôt) / (actions acquéreur + actions nouvelles)</div>
+  <h4>La règle rapide</h4>
+  <ul>
+    <li><b>100 % en actions</b> : l'opération est relutive si le P/E de l'acquéreur est supérieur au P/E payé pour la cible.</li>
+    <li><b>En cash ou en dette</b> : elle est relutive si le rendement de la cible (1 / P/E payé) dépasse le coût après impôt du financement.</li>
+    <li>On compare donc trois coûts : 1 / P/E de l'acquéreur (coût des actions), Kd × (1 − t) (coût de la dette), rendement perdu sur la trésorerie.</li>
+  </ul>
+  <h4>Exemple chiffré</h4>
+  <p>Acquéreur : résultat net 100, 100 actions, cours 20 € (BPA 1,00 €, P/E 20). Cible : résultat net 40, rachetée 600 (P/E payé 15). Impôt 25 %.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Financement</th><th class="n">Résultat net</th><th class="n">Actions</th><th class="n">BPA</th><th class="n">Effet</th></tr></thead>
+    <tbody>
+      <tr><td>100 % actions (30 actions émises à 20 €)</td><td class="n">140</td><td class="n">130</td><td class="n">1,08 €</td><td class="n">+7,7 %</td></tr>
+      <tr><td>100 % dette à 5 % (coût après impôt 22,5)</td><td class="n">117,5</td><td class="n">100</td><td class="n">1,18 €</td><td class="n">+17,5 %</td></tr>
+    </tbody>
+  </table></div>
+  <p>La dette est ici plus relutive car son coût après impôt (3,75 %) est inférieur au coût implicite des actions (1/20 = 5 %).</p>
+  <h4>Goodwill et allocation du prix (PPA)</h4>
+  <div class="formula">Goodwill = prix payé − juste valeur de l'actif net identifiable</div>
+  <p>Les actifs identifiés (marques, relations clients, technologies) sont réévalués et amortis, ce qui pèse sur le BPA. En IFRS, le goodwill n'est pas amorti mais testé chaque année et déprécié si besoin.</p>
+  <div class="trapBox"><b>Piège :</b> une opération relutive n'est pas forcément créatrice de valeur. Elle crée de la valeur si le prix payé est inférieur à la valeur de la cible plus les synergies.</div>
+  <h4>Les synergies</h4>
+  <p>Les <b>synergies de coûts</b> (achats, sites, fonctions support) sont plus crédibles que les <b>synergies de revenus</b> (ventes croisées). Il faut toujours tenir compte des coûts de mise en œuvre et du délai de réalisation.</p>
+  <div class="express"><h4>Fiche express</h4><ul><li>Actions : relutif si P/E acquéreur &gt; P/E payé.</li><li>Dette : relutif si 1/P/E payé &gt; Kd × (1 − t).</li><li>Relution ≠ création de valeur.</li></ul><button class="ghost" data-qmod="fusion">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-lbo" role="tabpanel" hidden>
+  <h3>Le LBO</h3>
+  <p class="intro">Un fonds rachète une société via une holding largement financée par de la dette, remboursée par les flux de la cible.</p>
+  <h4>La structure</h4>
+  <ul>
+    <li>Une <b>holding</b> (NewCo) achète la cible. Elle se finance avec des fonds propres du fonds et du management, et de la dette d'acquisition.</li>
+    <li>La dette est remboursée grâce aux dividendes remontés par la cible, et l'intégration fiscale permet d'imputer les intérêts de la holding sur les bénéfices de la cible.</li>
+    <li>Les tranches : dette senior (tranche amortissable et tranche in fine), unitranche proposée par les fonds de dette, mezzanine, puis les fonds propres (actions et quasi-fonds propres comme les obligations convertibles).</li>
+    <li>Le <b>management package</b> aligne les dirigeants : ils investissent aux côtés du fonds avec un effet de levier sur leur gain.</li>
+  </ul>
+  <h4>Les trois sources de création de valeur</h4>
+  <ol>
+    <li><b>Croissance de l'EBITDA</b> (chiffre d'affaires et marges).</li>
+    <li><b>Désendettement</b> : chaque euro de dette remboursé revient aux actionnaires.</li>
+    <li><b>Expansion du multiple</b> : revendre à un multiple plus élevé qu'à l'achat (la moins maîtrisable).</li>
+  </ol>
+  <h4>Paper LBO : l'exemple à savoir faire de tête</h4>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th class="n">Entrée</th><th class="n">Sortie (an 5)</th></tr></thead>
+    <tbody>
+      <tr><td>EBITDA</td><td class="n">100</td><td class="n">150</td></tr>
+      <tr><td>Multiple</td><td class="n">10,0x</td><td class="n">10,0x</td></tr>
+      <tr><td>Valeur d'entreprise</td><td class="n">1 000</td><td class="n">1 500</td></tr>
+      <tr><td>Dette nette</td><td class="n">600</td><td class="n">300</td></tr>
+      <tr><td>Fonds propres</td><td class="n">400</td><td class="n">1 200</td></tr>
+    </tbody>
+  </table></div>
+  <p>Multiple de l'investissement : 1 200 / 400 = <b>3,0x</b>. TRI : 3,0^(1/5) − 1 ≈ <b>24,6 %</b>. Le gain de 800 vient de la croissance de l'EBITDA (50 × 10 = 500) et du désendettement (300) ; le multiple n'a rien apporté.</p>
+  <h4>Les repères de TRI</h4>
+  <div class="scroll"><table>
+    <thead><tr><th>Multiple</th><th class="n">3 ans</th><th class="n">5 ans</th></tr></thead>
+    <tbody>
+      <tr><td>2,0x</td><td class="n">≈ 26 %</td><td class="n">≈ 15 %</td></tr>
+      <tr><td>2,5x</td><td class="n">≈ 36 %</td><td class="n">≈ 20 %</td></tr>
+      <tr><td>3,0x</td><td class="n">≈ 44 %</td><td class="n">≈ 25 %</td></tr>
+    </tbody>
+  </table></div>
+  <h4>La cible idéale</h4>
+  <p>Des flux de trésorerie stables et prévisibles, peu de capex, une position de marché solide, peu de dette existante, des leviers d'amélioration opérationnelle, une bonne équipe de direction et des voies de sortie claires (cession industrielle, autre fonds, introduction en bourse).</p>
+  <div class="trapBox"><b>Piège :</b> plus de levier augmente le TRI mais aussi le risque de défaut. Et un <b>dividend recap</b> (nouvelle dette pour verser un dividende) augmente le TRI sans augmenter le multiple total de manière proportionnelle.</div>
+  <div class="express"><h4>Fiche express</h4><ul><li>Valeur créée = croissance d'EBITDA + désendettement + expansion de multiple.</li><li>2x en 5 ans ≈ 15 % ; 3x en 5 ans ≈ 25 %.</li><li>Cible idéale = cash flows stables et peu de capex.</li></ul><button class="ghost" data-qmod="lbo">Voir les questions de ce module</button></div>
+</article>
+
+<article class="mod" id="m-fit" role="tabpanel" hidden>
+  <h3>Questions fit et actualité des deals</h3>
+  <p class="intro">Beaucoup de candidats perdent l'entretien ici, pas sur la technique.</p>
+  <h4>« Pourquoi le M&amp;A ? »</h4>
+  <p>Réponse en trois temps, environ 90 secondes : ce qui t'a fait découvrir le métier (un stage, un cours, un deal), ce que tu aimes concrètement (l'analyse, le rythme, l'impact sur une décision stratégique), et pourquoi c'est cohérent avec ton parcours. Sois précis : un exemple vaut mieux que trois adjectifs.</p>
+  <h4>« Pourquoi notre banque ? »</h4>
+  <p>Montre que tu connais leur positionnement : bulge bracket, banque française, boutique ou Transaction Services. Cite deux ou trois de leurs deals récents, la taille des équipes (plus d'exposition dans une boutique), les secteurs couverts, et les personnes que tu as rencontrées.</p>
+  <h4>« Parle-moi d'un deal récent »</h4>
+  <p>Prépare deux deals que tu maîtrises vraiment, et suis toujours cette grille :</p>
+  <ol>
+    <li>Les parties et leurs conseils.</li>
+    <li>La taille, le prix et le multiple payé.</li>
+    <li>Le rationnel stratégique : pourquoi l'acquéreur achète, pourquoi le vendeur vend.</li>
+    <li>La structure : financement, mode de paiement, prime.</li>
+    <li>Ton avis : le prix est-il justifié, quels risques (intégration, concurrence, régulation) ?</li>
+  </ol>
+  <h4>Le marché</h4>
+  <p>Sache dire en deux phrases où en sont les taux d'intérêt, les volumes M&amp;A et le private equity en ce moment, et pourquoi. Lis la presse financière dans les jours qui précèdent l'entretien.</p>
+  <h4>Les questions comportementales</h4>
+  <p>Travail sous pression, erreur commise, conflit en équipe : utilise la méthode <b>STAR</b> (situation, tâche, action, résultat) et termine toujours par ce que tu en as appris.</p>
+  <div class="trapBox"><b>Piège :</b> ne cite jamais un deal dont tu ne connais pas le multiple ou le rationnel. Le recruteur creusera toujours le deal que tu as choisi.</div>
+  <div class="express"><h4>Fiche express</h4><ul><li>Deux deals préparés selon la grille en cinq points.</li><li>Trois questions intelligentes à poser à la fin.</li><li>STAR pour les questions comportementales.</li></ul><button class="ghost" data-qmod="fit">Voir les questions de ce module</button></div>
+</article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band pale" id="questions">
+  <div class="wrap">
+    <div class="secHead">
+      <div>
+        <h2>La banque de questions</h2>
+        <p>Les questions qu'on pose réellement en entretien, avec la réponse attendue. Coche celles que tu maîtrises.</p>
+      </div>
+    </div>
+    <div class="qTools">
+      <input id="qSearch" type="search" placeholder="Chercher : WACC, goodwill, minoritaires…" aria-label="Chercher une question">
+      <div class="prog"><i><span id="progBar" style="width:0"></span></i><span id="progTxt"></span></div>
+    </div>
+    <div class="filters" id="qFilters"></div>
+    <div class="filters" id="qLevels"></div>
+    <div class="qList" id="qList"></div>
+  </div>
+</section>
+
+<section class="band" id="fiches">
+  <div class="wrap">
+    <div class="secHead">
+      <div>
+        <h2>Les fiches de révision</h2>
+        <p>Lis le terme, donne la définition à voix haute, puis retourne la carte. Touche la carte ou la barre d'espace pour la retourner.</p>
+      </div>
+    </div>
+    <div class="fcWrap">
+      <div>
+        <div class="flash" id="flash" tabindex="0" role="button" aria-label="Retourner la fiche">
+          <div class="flashIn">
+            <div class="face front"><small id="fcMod"></small><h3 id="fcFront"></h3><small>Touche pour voir la réponse</small></div>
+            <div class="face back"><div id="fcBack"></div></div>
+          </div>
+        </div>
+        <div class="fcCtl">
+          <button class="ghost" id="fcPrev">Précédente</button>
+          <button id="fcOk">Je savais</button>
+          <button class="ghost" id="fcKo">À revoir</button>
+          <button class="ghost" id="fcNext">Suivante</button>
+        </div>
+      </div>
+      <div class="fcSide">
+        <div class="score">
+          <div><b id="scOk">0</b><span>Je savais</span></div>
+          <div><b id="scKo">0</b><span>À revoir</span></div>
+        </div>
+        <p id="fcPos" style="margin:0;color:var(--mute)"></p>
+        <label style="display:grid;gap:4px;font-size:14px">Thème<select id="fcFilter"></select></label>
+        <button class="ghost" id="fcShuffle">Mélanger les fiches</button>
+        <button class="ghost" id="fcReview">Revoir seulement « À revoir »</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band pale" id="quiz">
+  <div class="wrap">
+    <div class="secHead">
+      <div>
+        <h2>Le quiz de la veille</h2>
+        <p>Dix questions techniques. Une seule réponse par question, l'explication s'affiche tout de suite.</p>
+      </div>
+      <div class="quizTop"><b id="qzScore">0 / 10</b><button class="ghost" id="qzReset">Recommencer</button></div>
+    </div>
+    <div class="quiz" id="qz"></div>
+  </div>
+</section>
+</main>
+
+<footer class="band">
+  <div class="wrap">
+    <div><b>Prépa M&amp;A</b><br>Vidéos, cours et fiches pour les entretiens en M&amp;A, Transaction Services et private equity.</div>
+    <div>Les ordres de grandeur sont indicatifs ; vérifie les pratiques de la banque que tu vises.</div>
+  </div>
+</footer>
+
+<script>
+{
+const MODS=[
+ {id:"proc",t:"Deal process",d:"20 min"},
+ {id:"compta",t:"Comptabilité",d:"25 min"},
+ {id:"ve",t:"VE et fonds propres",d:"20 min"},
+ {id:"valo",t:"Valorisation",d:"35 min"},
+ {id:"fusion",t:"Relution / dilution",d:"25 min"},
+ {id:"lbo",t:"LBO",d:"30 min"},
+ {id:"fit",t:"Fit et deals",d:"15 min"}];
+const modName=id=>(MODS.find(m=>m.id===id)||{}).t||"";
+
+const FF=[
+ {l:"Cours de bourse",s:"plus bas / plus haut 52 sem.",a:34,b:44,alt:1},
+ {l:"Comparables boursiers",s:"VE/EBITDA 7,0x – 9,0x",a:38,b:47},
+ {l:"Transactions comparables",s:"VE/EBITDA 8,5x – 11,0x",a:44,b:56},
+ {l:"DCF",s:"WACC 8–10 %, g 1,5–2,5 %",a:41,b:58},
+ {l:"Analyse LBO",s:"TRI 20–25 %",a:36,b:45}];
+const LO=30,HI=60,OFFER=50;
+const pc=v=>((v-LO)/(HI-LO)*100).toFixed(2)+"%";
+const ticks=[30,35,40,45,50,55,60];
+const grid=ticks.map(t=>`<div class="grid" style="left:${pc(t)}"></div>`).join("");
+document.getElementById("ff").innerHTML=
+ `<div class="ffRow axis"><div class="ffLab"></div><div class="trk">${ticks.filter(t=>t!==OFFER).map(t=>`<span class="tick${Math.abs(t-OFFER)<=5?" near":""}" style="left:${pc(t)}">${t}</span>`).join("")}<span class="offLab" style="left:${pc(OFFER)}">Offre ${OFFER} €</span></div><div class="ffVal sp"></div></div>`+
+ FF.map((r,i)=>`<div class="ffRow"><div class="ffLab">${r.l}<small>${r.s}</small></div><div class="trk">${grid}<div class="bar${r.alt?" alt":""}" style="left:${pc(r.a)};width:${((r.b-r.a)/(HI-LO)*100).toFixed(2)}%;animation-delay:${i*.08}s"></div><div class="offer" style="left:${pc(OFFER)}"></div></div><div class="ffVal">${r.a}–${r.b} €</div></div>`).join("");
+
+const Q=[
+ {m:"proc",d:1,q:"Quelle est la différence entre sell-side et buy-side ?",a:"En sell-side, on conseille le vendeur : on prépare la société, on organise le processus et on cherche le meilleur prix et les meilleures conditions. En buy-side, on conseille l'acquéreur : identification de cibles, valorisation, structuration de l'offre et négociation, avec l'objectif de ne pas surpayer."},
+ {m:"proc",d:1,q:"Décris les étapes d'un processus de cession par enchères.",a:"Préparation (mandat, business plan, teaser, IM, liste d'acquéreurs), premier tour (NDA, IM, offres indicatives), second tour (data room, management presentation, due diligences, offres fermes), négociation et signing (exclusivité, SPA, GAP), puis closing après la levée des conditions suspensives."},
+ {m:"proc",d:2,q:"Locked box ou completion accounts : quelle différence ?",a:"La locked box fixe le prix sur un bilan de référence antérieur, sans ajustement ultérieur ; l'acheteur est protégé par une clause anti-leakage. Les completion accounts ajustent le prix après le closing en fonction de la dette nette et du BFR réels. La première donne de la certitude au vendeur, la seconde protège l'acheteur."},
+ {m:"proc",d:2,q:"Qu'est-ce qu'un earn-out et quand l'utilise-t-on ?",a:"Un complément de prix versé plus tard si la société atteint des objectifs (EBITDA, chiffre d'affaires). On l'utilise quand vendeur et acheteur ne sont pas d'accord sur le business plan : il comble l'écart de valorisation. Inconvénient : source fréquente de litiges sur le calcul."},
+ {m:"proc",d:2,q:"Pourquoi signe-t-on souvent une promesse d'achat avant le SPA en France ?",a:"Parce que le CSE doit être consulté avant toute décision définitive sur l'opération. L'acquéreur s'engage donc par une promesse unilatérale d'achat (put option) ; le vendeur ne l'exerce et ne signe le SPA qu'une fois l'avis du CSE rendu."},
+ {m:"proc",d:3,q:"Qu'est-ce qu'une clause MAC ?",a:"Une clause de changement défavorable significatif (material adverse change) qui permet à l'acheteur de ne pas finaliser l'opération si un événement grave affecte la cible entre le signing et le closing. Sa définition est très négociée et les vendeurs cherchent à la limiter."},
+ {m:"compta",d:1,q:"Comment les trois états financiers sont-ils liés ?",a:"Le résultat net du compte de résultat est la première ligne du tableau des flux et alimente les capitaux propres au bilan. Le tableau des flux corrige le résultat des éléments non cash et du BFR et ajoute les flux d'investissement et de financement ; la trésorerie de fin de période est reportée au bilan."},
+ {m:"compta",d:1,q:"L'amortissement augmente de 10 €, impôt à 25 %. Que se passe-t-il ?",a:"EBIT −10, impôt −2,5, résultat net −7,5. Au tableau des flux, résultat net −7,5 et réintégration de +10 : trésorerie +2,5. Au bilan, immobilisations −10 et trésorerie +2,5 à l'actif (−7,5), capitaux propres −7,5 au passif. Le bilan est équilibré."},
+ {m:"compta",d:2,q:"Les stocks augmentent de 10 € payés comptant. Effets ?",a:"Aucun effet au compte de résultat. Le BFR augmente de 10, donc la trésorerie baisse de 10 au tableau des flux. Au bilan, stocks +10 et trésorerie −10 : l'actif total ne change pas."},
+ {m:"compta",d:2,q:"Pourquoi l'EBITDA est-il si utilisé ?",a:"C'est une approximation du cash généré par l'activité, indépendante de la structure financière (avant intérêts), de la fiscalité et des politiques d'amortissement. Cela facilite la comparaison entre sociétés. Limite : il ignore les capex et le BFR, donc il peut surestimer le cash réellement disponible."},
+ {m:"compta",d:3,q:"Une société peut-elle être rentable et faire faillite ?",a:"Oui. Le résultat peut être positif alors que la trésorerie est négative, par exemple si le BFR explose (clients qui paient tard, stocks qui gonflent) ou si les capex et remboursements de dette dépassent le cash généré. On fait faillite par manque de trésorerie, pas par manque de résultat."},
+ {m:"ve",d:1,q:"Quelle est la différence entre valeur d'entreprise et valeur des fonds propres ?",a:"La VE est la valeur de l'outil d'exploitation pour tous les financeurs (actionnaires et prêteurs). La valeur des fonds propres est la part qui revient aux actionnaires. On passe de l'une à l'autre avec la dette nette, les minoritaires, les actions de préférence et les participations non consolidées."},
+ {m:"ve",d:2,q:"Pourquoi ajoute-t-on les intérêts minoritaires à la VE ?",a:"Parce que l'EBITDA consolidé intègre 100 % des filiales contrôlées, y compris la part qui ne nous appartient pas. Pour que le multiple VE/EBITDA soit cohérent, la VE doit aussi refléter 100 % de ces filiales, donc inclure la valeur des minoritaires."},
+ {m:"ve",d:2,q:"Une entreprise rachète ses actions pour 100 €. Effet sur la VE ?",a:"Aucun. La valeur des fonds propres baisse de 100 et la trésorerie baisse de 100, donc la dette nette augmente de 100. Les deux effets se compensent."},
+ {m:"ve",d:2,q:"Pourquoi le ratio VE / résultat net est-il incohérent ?",a:"Le résultat net est calculé après les intérêts : il ne revient qu'aux actionnaires. Il faut le rapporter à la valeur des fonds propres (P/E). La VE se rapporte à des agrégats avant intérêts : chiffre d'affaires, EBITDA, EBIT."},
+ {m:"ve",d:3,q:"Comment calcule-t-on le nombre d'actions dilué ?",a:"On ajoute aux actions existantes les instruments dilutifs dans la monnaie. Pour les options, méthode du rachat d'actions : les porteurs paient le prix d'exercice, et cet argent sert à racheter des actions au cours. Exemple : 10 options à 20 € avec un cours à 50 € donnent 10 − 200/50 = 6 actions supplémentaires."},
+ {m:"valo",d:1,q:"Quelles sont les principales méthodes de valorisation ?",a:"Les comparables boursiers, les transactions comparables et le DCF, complétés selon les cas par l'analyse LBO, la somme des parties et l'analyse du cours de bourse. On présente les résultats dans un football field."},
+ {m:"valo",d:1,q:"Explique-moi un DCF.",a:"On projette les flux de trésorerie disponibles sur 5 à 10 ans (EBIT après impôt + amortissements − capex − variation de BFR), on calcule une valeur terminale, puis on actualise le tout au WACC. On obtient la VE, dont on déduit la dette nette et les autres ajustements pour obtenir la valeur des fonds propres."},
+ {m:"valo",d:2,q:"Quelle méthode donne en général la valeur la plus élevée ?",a:"Les transactions comparables, car les prix payés incluent une prime de contrôle et souvent une partie des synergies. Le DCF peut être plus haut ou plus bas selon les hypothèses ; l'analyse LBO donne souvent un plancher."},
+ {m:"valo",d:2,q:"Comment calcule-t-on le WACC ?",a:"WACC = E/(D+E) × Ke + D/(D+E) × Kd × (1 − t). Le coût des fonds propres vient du MEDAF : Rf + β × prime de risque du marché. On utilise une structure financière cible, souvent celle des comparables."},
+ {m:"valo",d:2,q:"Pourquoi désendette-t-on puis réendette-t-on le bêta ?",a:"Le bêta observé d'un comparable mélange risque d'activité et risque financier lié à sa dette. On le désendette pour isoler le risque d'activité, on prend la médiane, puis on le réendette avec la structure de la cible : β désendetté = β endetté / (1 + (1 − t) × D/E)."},
+ {m:"valo",d:3,q:"Gordon ou multiple de sortie pour la valeur terminale ?",a:"Gordon (FCF × (1 + g) / (WACC − g)) est plus théorique et cohérent avec le DCF, mais très sensible à g. Le multiple de sortie est ancré dans le marché, mais réintroduit une méthode relative dans un DCF. On calcule les deux et on vérifie que le multiple implicite et le g implicite sont raisonnables."},
+ {m:"valo",d:3,q:"Que se passe-t-il si le WACC passe de 8 % à 9 % ?",a:"La valeur baisse : les flux sont actualisés plus fortement, et surtout la valeur terminale chute, car le dénominateur WACC − g augmente. Avec g à 2 %, il passe de 6 % à 7 %, soit une baisse d'environ 14 % de la valeur terminale à flux égal."},
+ {m:"fusion",d:1,q:"Qu'est-ce qu'une opération relutive ?",a:"Une opération qui augmente le bénéfice par action de l'acquéreur après l'acquisition. Dilutive : elle le diminue."},
+ {m:"fusion",d:2,q:"Une société avec un P/E de 12 rachète en actions une cible à un P/E de 18. Relutif ?",a:"Non, dilutif. En payant en actions, l'acquéreur « paie » avec un coût de 1/12 ≈ 8,3 % et achète un rendement de 1/18 ≈ 5,6 %. Sans synergies, le BPA baisse."},
+ {m:"fusion",d:2,q:"Comment se calcule le goodwill ?",a:"Prix payé moins la juste valeur de l'actif net identifiable, après réévaluation des actifs et passifs (PPA). En IFRS, le goodwill n'est pas amorti : il fait l'objet d'un test de dépréciation au moins une fois par an."},
+ {m:"fusion",d:3,q:"Une opération relutive crée-t-elle forcément de la valeur ?",a:"Non. La relution dépend du mode de financement et de la comparaison des P/E, pas de la valeur. On crée de la valeur si le prix payé est inférieur à la valeur intrinsèque de la cible plus les synergies nettes des coûts d'intégration."},
+ {m:"lbo",d:1,q:"Explique-moi un LBO.",a:"Un fonds rachète une société via une holding financée par des fonds propres et beaucoup de dette. La dette est remboursée par les flux de la cible. À la sortie, la valeur des fonds propres a augmenté grâce à la croissance de l'EBITDA, au désendettement et parfois à l'expansion du multiple."},
+ {m:"lbo",d:1,q:"Qu'est-ce qu'une bonne cible de LBO ?",a:"Des flux de trésorerie stables et prévisibles, peu de capex, une position de marché solide, peu de dette existante, des leviers d'amélioration, une bonne équipe et des options de sortie claires."},
+ {m:"lbo",d:2,q:"Paper LBO : EBITDA 100, entrée à 10x, 60 % de dette, EBITDA 150 en année 5, sortie à 10x, dette restante 300. TRI ?",a:"VE d'entrée 1 000, fonds propres 400. VE de sortie 1 500, fonds propres 1 200. Multiple 3,0x en 5 ans, donc TRI ≈ 25 % (24,6 % exactement). Repères : 2x en 5 ans ≈ 15 %, 3x en 5 ans ≈ 25 %."},
+ {m:"lbo",d:2,q:"Pourquoi utiliser de la dette dans un LBO ?",a:"La dette coûte moins cher que les fonds propres et les intérêts sont déductibles. Elle réduit le montant de fonds propres investi, ce qui augmente le TRI à valeur créée égale. Le prix : un risque de défaut plus élevé."},
+ {m:"lbo",d:3,q:"Qu'est-ce qu'un dividend recap ?",a:"La société lève une nouvelle dette pour verser un dividende exceptionnel aux actionnaires. Le fonds récupère une partie de son investissement plus tôt, ce qui augmente le TRI, mais augmente aussi le levier et le risque."},
+ {m:"fit",d:1,q:"Pourquoi le M&A ?",a:"Trois temps : comment tu as découvert le métier (stage, deal, cours), ce qui te plaît concrètement (analyse, rythme, impact sur des décisions stratégiques) et pourquoi c'est cohérent avec ton parcours. Environ 90 secondes, avec un exemple précis."},
+ {m:"fit",d:2,q:"Parle-moi d'un deal récent.",a:"Suis la grille : les parties et leurs conseils, la taille et le multiple, le rationnel stratégique des deux côtés, la structure (financement, prime), puis ton avis sur le prix et les risques. Choisis un deal que tu maîtrises en détail."},
+ {m:"fit",d:2,q:"Quelles questions poser à la fin de l'entretien ?",a:"Des questions qui montrent ta curiosité sur le travail réel : comment l'équipe est staffée sur les deals, quelle exposition ont les juniors avec les clients, quels secteurs sont les plus actifs en ce moment, ce que le recruteur préfère dans son métier."}];
+
+const VIDS=[
+ {id:"v1",m:"compta",t:"Je t'amortis 10 €, que se passe-t-il ?",h:"La question numéro un des premiers tours, et la moitié des candidats se trompent sur la trésorerie.",r:"Résultat net −7,5, trésorerie +2,5 grâce à l'économie d'impôt, bilan équilibré à −7,5 des deux côtés.",p:"Dire que la trésorerie ne bouge pas : l'amortissement est non cash, mais l'impôt, lui, est payé en cash."},
+ {id:"v2",m:"ve",t:"Valeur d'entreprise ou valeur des fonds propres ?",h:"Si tu confonds les deux, ton multiple est faux.",r:"VE = fonds propres + dette nette + minoritaires + préférentielles − participations. La VE revient à tous les financeurs.",p:"Calculer un VE / résultat net. Le résultat net est après intérêts : il va avec la valeur des fonds propres."},
+ {id:"v3",m:"ve",t:"Un rachat d'actions change-t-il la VE ?",h:"Question piège favorite des VP.",r:"Non : fonds propres −100 et trésorerie −100, la dette nette augmente de 100, la VE est inchangée.",p:"Répondre que la VE baisse parce que la capitalisation baisse."},
+ {id:"v4",m:"valo",t:"Le DCF en 60 secondes",h:"Six étapes, une formule, et le piège de la valeur terminale.",r:"FCF = EBIT(1−t) + D&A − capex − ΔBFR, actualisés au WACC, plus une valeur terminale de Gordon.",p:"Oublier que la valeur terminale fait souvent 60 à 80 % de la valeur : il faut la vérifier."},
+ {id:"v5",m:"fusion",t:"Relutif ou dilutif en 10 secondes",h:"La règle des P/E que tous les banquiers utilisent.",r:"En actions, relutif si le P/E de l'acquéreur est supérieur au P/E payé pour la cible.",p:"Confondre relution et création de valeur."},
+ {id:"v6",m:"lbo",t:"D'où vient le TRI d'un LBO ?",h:"Trois leviers, et un seul est vraiment maîtrisable.",r:"Croissance de l'EBITDA, désendettement et expansion du multiple. 3x en 5 ans ≈ 25 % de TRI.",p:"Compter sur l'expansion du multiple dans un business plan d'entrée."}];
+
+let store={};
+try{store=JSON.parse(localStorage.getItem("prepaMA")||"{}")}catch(e){store={}}
+store.links=store.links||{};store.extra=store.extra||[];store.done=store.done||{};store.fc=store.fc||{};
+const save=()=>{try{localStorage.setItem("prepaMA",JSON.stringify(store))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const okUrl=u=>/^https:\/\/([a-z]+\.)?tiktok\.com\//i.test(u||"");
+
+/* stats */
+const FC=[
+ {m:"ve",r:"Valeur d'entreprise",v:"Valeur de l'outil d'exploitation pour tous les financeurs. VE = fonds propres + dette nette + minoritaires + préférentielles − participations."},
+ {m:"ve",r:"Dette nette",v:"Dettes financières (y compris dettes locatives selon la convention retenue) moins trésorerie et équivalents."},
+ {m:"compta",r:"EBITDA",v:"Résultat d'exploitation avant dotations aux amortissements et provisions. Approximation du cash généré par l'activité."},
+ {m:"compta",r:"BFR",v:"Stocks + créances clients − dettes fournisseurs. Une hausse du BFR consomme de la trésorerie."},
+ {m:"valo",r:"Free cash flow (unlevered)",v:"EBIT × (1 − t) + amortissements − capex − variation du BFR. Flux disponible pour tous les financeurs."},
+ {m:"valo",r:"WACC",v:"E/(D+E) × Ke + D/(D+E) × Kd × (1 − t). Taux d'actualisation des flux d'un DCF."},
+ {m:"valo",r:"MEDAF (CAPM)",v:"Ke = Rf + β × (Rm − Rf). Coût des fonds propres exigé par les actionnaires."},
+ {m:"valo",r:"Bêta désendetté",v:"β endetté / (1 + (1 − t) × D/E). Mesure le seul risque d'activité."},
+ {m:"valo",r:"Valeur terminale (Gordon)",v:"FCF(n) × (1 + g) / (WACC − g). Pèse souvent 60 à 80 % de la VE d'un DCF."},
+ {m:"valo",r:"Prime de contrôle",v:"Surplus payé au-dessus du cours de bourse pour prendre le contrôle. Souvent de l'ordre de 20 à 40 %, selon le secteur et le marché."},
+ {m:"fusion",r:"Goodwill",v:"Prix payé − juste valeur de l'actif net identifiable. Non amorti en IFRS, testé chaque année."},
+ {m:"fusion",r:"PPA",v:"Purchase price allocation : réévaluation à la juste valeur des actifs et passifs de la cible après l'acquisition."},
+ {m:"fusion",r:"Relution",v:"Hausse du BPA de l'acquéreur après l'opération. En actions : P/E acquéreur > P/E payé."},
+ {m:"fusion",r:"Synergies",v:"Gains liés au rapprochement. Coûts (plus crédibles) et revenus (plus incertains), nets des coûts d'intégration."},
+ {m:"lbo",r:"LBO",v:"Rachat via une holding financée par beaucoup de dette, remboursée par les flux de la cible."},
+ {m:"lbo",r:"TRI",v:"Taux de rendement annuel de l'investissement. 2x en 5 ans ≈ 15 %, 3x en 5 ans ≈ 25 %."},
+ {m:"lbo",r:"Multiple de l'investissement (MOIC)",v:"Montant récupéré / montant investi. Ne tient pas compte de la durée, contrairement au TRI."},
+ {m:"lbo",r:"Unitranche",v:"Dette unique proposée par un fonds de dette, qui remplace senior et subordonnée. Plus chère, plus souple, exécution rapide."},
+ {m:"proc",r:"Locked box",v:"Prix fixé sur un bilan de référence antérieur, sans ajustement ; protection par une clause anti-leakage."},
+ {m:"proc",r:"Completion accounts",v:"Prix ajusté après le closing selon la dette nette et le BFR réels à la date du closing."},
+ {m:"proc",r:"Earn-out",v:"Complément de prix conditionné à des objectifs futurs ; comble un écart de valorisation."},
+ {m:"proc",r:"GAP",v:"Garantie d'actif et de passif : le vendeur indemnise l'acheteur pour des passifs antérieurs non révélés."},
+ {m:"proc",r:"Vendor due diligence",v:"Audit commandé par le vendeur et mis à disposition des acquéreurs pour accélérer et sécuriser le processus."},
+ {m:"proc",r:"Teaser",v:"Présentation anonyme de 2 à 3 pages envoyée aux acquéreurs potentiels pour susciter l'intérêt."},
+ {m:"proc",r:"Clause MAC",v:"Material adverse change : permet à l'acheteur de ne pas finaliser si un événement grave touche la cible avant le closing."}];
+
+const QZ=[
+ {q:"L'amortissement augmente de 10 €, impôt à 25 %. Effet sur la trésorerie ?",o:["−10 €","−7,5 €","0 €","+2,5 €"],c:3,e:"Résultat net −7,5, réintégration de +10 : la trésorerie augmente de 2,5 grâce à l'économie d'impôt."},
+ {q:"Rachat d'actions de 100 € financé par la trésorerie. Effet sur la VE ?",o:["Baisse de 100","Hausse de 100","Inchangée","Dépend du cours"],c:2,e:"Les fonds propres baissent de 100 et la dette nette augmente de 100 : la VE ne bouge pas."},
+ {q:"Quel multiple est incohérent ?",o:["VE / EBITDA","VE / résultat net","Cours / BPA","VE / chiffre d'affaires"],c:1,e:"Le résultat net est après intérêts : il se rapporte à la valeur des fonds propres, pas à la VE."},
+ {q:"Pour passer de la VE à la valeur des fonds propres, on ajoute :",o:["La dette financière","Les intérêts minoritaires","La trésorerie","Les actions de préférence"],c:2,e:"Fonds propres = VE − dette + trésorerie − minoritaires − préférentielles + participations."},
+ {q:"Quel élément ne fait pas partie du FCF unlevered ?",o:["Capex","Variation du BFR","Intérêts financiers","Amortissements"],c:2,e:"Le FCF unlevered est calculé avant le service de la dette : les intérêts n'y figurent pas, ils sont dans le WACC."},
+ {q:"Quelle méthode intègre une prime de contrôle ?",o:["Comparables boursiers","Transactions comparables","Cours de bourse","Aucune"],c:1,e:"Les prix payés lors des rachats incluent la prime de contrôle et souvent des synergies."},
+ {q:"Le WACC passe de 8 % à 10 %. La valeur DCF :",o:["Augmente","Baisse","Ne change pas","Dépend de la dette"],c:1,e:"Les flux sont plus actualisés et la valeur terminale chute car WACC − g augmente."},
+ {q:"P/E acquéreur 12, P/E payé pour la cible 18, paiement 100 % en actions :",o:["Relutif","Dilutif","Neutre","Impossible à dire"],c:1,e:"Le coût des actions (1/12) dépasse le rendement acheté (1/18) : sans synergies, le BPA baisse."},
+ {q:"Un LBO fait 2,0x en 5 ans. Le TRI est d'environ :",o:["10 %","15 %","20 %","25 %"],c:1,e:"2^(1/5) ≈ 1,149, soit environ 15 % par an."},
+ {q:"Dans une locked box, l'acheteur est protégé par :",o:["Un earn-out","Une clause anti-leakage","Des completion accounts","Une clause MAC"],c:1,e:"Le prix est figé sur un bilan passé ; la clause anti-leakage interdit toute sortie de valeur jusqu'au closing."}];
+
+document.getElementById("stats").innerHTML=[[MODS.length,"modules"],[Q.length,"questions"],[FC.length,"fiches"],[QZ.length,"quiz"]].map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
+
+/* videos */
+const vidsEl=document.getElementById("vids");
+const renderVids=()=>{
+ const all=VIDS.concat(store.extra);
+ vidsEl.innerHTML=all.map(v=>{
+  const url=v.url||store.links[v.id]||"";
+  const beats=v.h?`<div class="beat"><b>Accroche</b>${esc(v.h)}</div><div class="beat"><b>Réponse</b>${esc(v.r)}</div><div class="beat trap"><b>Piège</b>${esc(v.p)}</div>`:"";
+  const open=okUrl(url)?`<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">Voir sur TikTok</a>`:"";
+  const input=v.url?`<button class="ghost" data-del="${esc(v.id)}">Retirer</button>`:`<input aria-label="Lien TikTok" data-link="${v.id}" placeholder="Coller le lien TikTok" value="${esc(url)}">`;
+  return `<article class="vid"><span class="tag">${esc(modName(v.m))}</span><h3>${esc(v.t)}</h3>${beats}<div class="vidFoot">${open}${input}<button class="ghost" data-open="${v.m}">Le cours</button></div></article>`}).join("");
+};
+renderVids();
+vidsEl.addEventListener("change",e=>{const id=e.target.dataset.link;if(!id)return;const u=e.target.value.trim();if(u&&!okUrl(u)){e.target.setCustomValidity("Lien tiktok.com attendu");e.target.reportValidity();return}e.target.setCustomValidity("");store.links[id]=u;save();renderVids()});
+vidsEl.addEventListener("click",e=>{const d=e.target.dataset.del;if(d){store.extra=store.extra.filter(v=>v.id!==d);save();renderVids()}});
+const nvMod=document.getElementById("nvMod");
+nvMod.innerHTML=MODS.map(m=>`<option value="${m.id}">${m.t}</option>`).join("");
+document.getElementById("addVid").addEventListener("submit",e=>{
+ e.preventDefault();
+ const t=document.getElementById("nvTitle"),u=document.getElementById("nvUrl");
+ if(!okUrl(u.value.trim())){u.setCustomValidity("Lien tiktok.com attendu");u.reportValidity();return}
+ u.setCustomValidity("");
+ store.extra.push({id:"x"+Date.now(),m:nvMod.value,t:t.value.trim(),url:u.value.trim()});
+ save();renderVids();t.value="";u.value="";
+});
+document.getElementById("nvUrl").addEventListener("input",e=>e.target.setCustomValidity(""));
+
+/* courses */
+const tabs=document.getElementById("tabs");
+tabs.innerHTML=MODS.map((m,i)=>`<button role="tab" id="tab-${m.id}" aria-controls="m-${m.id}" aria-selected="${i===0}" data-tab="${m.id}">${m.t}<small>${m.d}</small></button>`).join("");
+const openMod=(id,scroll)=>{
+ MODS.forEach(m=>{document.getElementById("m-"+m.id).hidden=m.id!==id;document.getElementById("tab-"+m.id).setAttribute("aria-selected",m.id===id)});
+ try{store.mod=id;save()}catch(e){}
+ if(scroll)document.getElementById("cours").scrollIntoView();
+};
+tabs.addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){openMod(b.dataset.tab,false);if(innerWidth<860)document.getElementById("m-"+b.dataset.tab).scrollIntoView()}});
+document.addEventListener("click",e=>{
+ const o=e.target.closest("[data-open]");if(o){e.preventDefault();openMod(o.dataset.open,true)}
+ const q=e.target.closest("[data-qmod]");if(q){qMod=q.dataset.qmod;renderQ();document.getElementById("questions").scrollIntoView()}
+});
+if(store.mod&&MODS.some(m=>m.id===store.mod))openMod(store.mod,false);
+
+/* questions */
+let qMod="all",qLvl=0;
+const LV=["","Facile","Intermédiaire","Avancé"];
+const qList=document.getElementById("qList"),qSearch=document.getElementById("qSearch");
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const renderQ=()=>{
+ document.getElementById("qFilters").innerHTML=[{id:"all",t:"Tous les modules"}].concat(MODS).map(m=>`<button class="chip" aria-pressed="${qMod===m.id}" data-qf="${m.id}">${m.t}</button>`).join("");
+ document.getElementById("qLevels").innerHTML=[0,1,2,3].map(l=>`<button class="chip" aria-pressed="${qLvl===l}" data-ql="${l}">${l?LV[l]:"Tous niveaux"}</button>`).join("");
+ const s=norm(qSearch.value.trim());
+ const rows=Q.map((x,i)=>({...x,i})).filter(x=>(qMod==="all"||x.m===qMod)&&(!qLvl||x.d===qLvl)&&(!s||norm(x.q+" "+x.a).includes(s)));
+ qList.innerHTML=rows.length?rows.map(x=>`<details class="q${store.done[x.i]?" done":""}"><summary><span>${esc(x.q)}</span><span class="lvl">${modName(x.m)} · ${LV[x.d]}</span></summary><div class="ans"><p>${esc(x.a)}</p><div class="ansFoot"><label><input type="checkbox" data-done="${x.i}"${store.done[x.i]?" checked":""}> Je maîtrise</label><button class="ghost" data-open="${x.m}">Revoir le cours</button></div></div></details>`).join(""):`<div class="empty">Aucune question ne correspond. Essaie un autre mot ou un autre filtre.</div>`;
+ const n=Object.keys(store.done).filter(k=>store.done[k]).length;
+ document.getElementById("progBar").style.width=(n/Q.length*100)+"%";
+ document.getElementById("progTxt").textContent=`${n} / ${Q.length} maîtrisées`;
+};
+renderQ();
+qSearch.addEventListener("input",renderQ);
+document.getElementById("questions").addEventListener("click",e=>{
+ const f=e.target.closest("[data-qf]");if(f){qMod=f.dataset.qf;renderQ()}
+ const l=e.target.closest("[data-ql]");if(l){qLvl=+l.dataset.ql;renderQ()}
+});
+qList.addEventListener("change",e=>{const i=e.target.dataset.done;if(i==null)return;store.done[i]=e.target.checked;save();const d=e.target.closest("details");d.classList.toggle("done",e.target.checked);const n=Object.keys(store.done).filter(k=>store.done[k]).length;document.getElementById("progBar").style.width=(n/Q.length*100)+"%";document.getElementById("progTxt").textContent=`${n} / ${Q.length} maîtrisées`});
+
+/* flashcards */
+const flash=document.getElementById("flash"),fcFilter=document.getElementById("fcFilter");
+fcFilter.innerHTML=`<option value="all">Tous les thèmes</option>`+MODS.filter(m=>FC.some(f=>f.m===m.id)).map(m=>`<option value="${m.id}">${m.t}</option>`).join("");
+let deck=FC.map((f,i)=>i),pos=0;
+const build=(onlyKo)=>{deck=FC.map((f,i)=>i).filter(i=>(fcFilter.value==="all"||FC[i].m===fcFilter.value)&&(!onlyKo||store.fc[i]==="ko"));pos=0;showFc()};
+const showFc=()=>{
+ flash.classList.remove("flip");
+ const sc=Object.values(store.fc);
+ document.getElementById("scOk").textContent=sc.filter(v=>v==="ok").length;
+ document.getElementById("scKo").textContent=sc.filter(v=>v==="ko").length;
+ if(!deck.length){document.getElementById("fcFront").textContent="Aucune fiche ici";document.getElementById("fcMod").textContent="";document.getElementById("fcBack").textContent="Change de thème ou marque des fiches « À revoir ».";document.getElementById("fcPos").textContent="";return}
+ const f=FC[deck[pos]];
+ document.getElementById("fcMod").textContent=modName(f.m);
+ document.getElementById("fcFront").textContent=f.r;
+ document.getElementById("fcBack").innerHTML=`<p style="margin:0">${esc(f.v)}</p>`;
+ const st=store.fc[deck[pos]];
+ document.getElementById("fcPos").textContent=`Fiche ${pos+1} sur ${deck.length}`+(st?(st==="ok"?" · déjà sue":" · à revoir"):"");
+};
+const step=d=>{if(!deck.length)return;pos=(pos+d+deck.length)%deck.length;showFc()};
+const mark=v=>{if(!deck.length)return;store.fc[deck[pos]]=v;save();step(1)};
+flash.addEventListener("click",()=>flash.classList.toggle("flip"));
+flash.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flash.classList.toggle("flip")}if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1)});
+document.getElementById("fcNext").addEventListener("click",()=>step(1));
+document.getElementById("fcPrev").addEventListener("click",()=>step(-1));
+document.getElementById("fcOk").addEventListener("click",()=>mark("ok"));
+document.getElementById("fcKo").addEventListener("click",()=>mark("ko"));
+fcFilter.addEventListener("change",()=>build(false));
+document.getElementById("fcReview").addEventListener("click",()=>build(true));
+document.getElementById("fcShuffle").addEventListener("click",()=>{for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}pos=0;showFc()});
+showFc();
+
+/* quiz */
+const qz=document.getElementById("qz");let ans={};
+const renderQz=()=>{
+ qz.innerHTML=QZ.map((x,i)=>{const a=ans[i];return `<div class="qz"><p class="qq">${esc(x.q)}</p><div class="opts">${x.o.map((o,j)=>{let c="";if(a!=null){if(j===x.c)c="right";else if(j===a)c="wrong"}return `<button class="${c}" data-qz="${i}" data-o="${j}"${a!=null?" disabled":""}>${esc(o)}</button>`}).join("")}</div>${a!=null?`<p class="expl"><b>${a===x.c?"Bonne réponse.":"Pas tout à fait."}</b> ${esc(x.e)}</p>`:""}</div>`}).join("");
+ const s=Object.keys(ans).filter(k=>ans[k]===QZ[k].c).length;
+ document.getElementById("qzScore").textContent=`${s} / ${QZ.length}`;
+};
+qz.addEventListener("click",e=>{const b=e.target.closest("[data-qz]");if(!b)return;ans[b.dataset.qz]=+b.dataset.o;renderQz()});
+document.getElementById("qzReset").addEventListener("click",()=>{ans={};renderQz()});
+renderQz();
+}
+</script>
+</body>
+</html>
